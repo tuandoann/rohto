@@ -1,0 +1,184 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using HRM_ROHTO.Models;
+using HRM_ROHTO.Models.BUS;
+using HRM_ROHTO.Models.ListExt;
+using System.IO;
+using System.Data;
+using System.Data.SqlClient;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using OfficeOpenXml.Table;
+using HRM_ROHTO.Util;
+
+namespace HRM_ROHTO.Controllers
+{
+    public class ReportMealCardTomorrowController : BaseController
+    {
+        //
+        // GET: /ScheduleMenu/
+        static DataTable dtToExcel;
+        static string c = string.Empty;
+        static string date;
+        public ActionResult Index(int year = 0, int month = 0, int day = 0)
+        {
+            date = day.ToString() + '-' + month.ToString() + '-' + year.ToString();
+            //ViewBag.FromDate = DateTime.Now.ToString("dd-MM-yyyy");
+            if (!CheckPermission("ReportMealCardTomorrow", 1))
+                return RedirectToAction("Login", "Login", "Login");
+            int Year = year == 0 ? DateTime.Now.Year : year;
+            int Month = month == 0 ? DateTime.Now.Month : month;
+            int Day = day == 0 ? DateTime.Now.Month : day;
+            DateTime FromDate = new DateTime(Year, Month, Day);
+            List<SqlParameter> lstParam = new List<SqlParameter>();
+            //DateTime FromDate = getFromDateFromNow();
+            lstParam.Add(new SqlParameter("@day", day));
+            lstParam.Add(new SqlParameter("@month", Month));
+            lstParam.Add(new SqlParameter("@year", Year));
+            //ViewBag.FromDate = FromDate.ToString("yyyy-MM-dd");
+            //  ViewBag.store = DA_ScheduleMenu.Instance.Exec("pr_ReportMealCardByDay", lstParam.ToArray());
+            // DateTime FromDate = getFromDateFromNow();
+            // ViewBag.FromDate = FromDate.ToString("yyyy-MM-dd");
+            ViewBag.store = DA_ScheduleMenu.Instance.Exec("pr_ReportMealCardByDay", lstParam.ToArray());
+            dtToExcel = pr_GetListMealToomorrow(day, Month, Year);
+            
+            int sum = 0;
+            for (int i = 0; i < dtToExcel.Rows.Count; i++)
+            {
+                sum = sum + (int)dtToExcel.Rows[i]["Quantity"];
+            }
+            ViewBag.FromDate = FromDate.ToString("dd-MM-yyyy");
+            ViewBag.Tong = sum;
+            return View();
+        }
+        // Gọi khi click search
+        [HttpPost]
+        public ActionResult Index(FormCollection fc)
+        {
+            if (!CheckPermission("ReportMealCardTomorrow", 1))
+                return RedirectToAction("Login", "Login", "Login");
+
+            DateTime FromDate = getFromDateFromNow();
+
+            List<SqlParameter> lstParam = new List<SqlParameter>();
+
+            lstParam.Add(new SqlParameter("@day", FromDate.Day));
+            lstParam.Add(new SqlParameter("@month", FromDate.Month));
+            lstParam.Add(new SqlParameter("@year", FromDate.Year));
+            //ViewBag.FromDate = FromDate;
+            BeginLoad(fc, ref FromDate);
+            ViewBag.ListData = DA_ScheduleMenu.Instance.Exec("pr_ReportMealCardByDay", lstParam.ToArray());
+            return PartialView("CustomerDebit_Table", ViewBag.ListData);
+        }
+
+        public void BeginLoad(FormCollection fc, ref DateTime date_year)
+        {
+            if (fc["FromDate"] != null && fc["FromDate"].Trim() != "")
+            {
+                DateTime.TryParseExact(fc["FromDate"].ToString(), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date_year);
+            }
+            ViewBag.FromDate = date_year.ToString("yyyy-MM-dd");
+        }
+        public DateTime getFromDateFromNow()
+        {
+            DateTime oldTime = DateTime.Now.AddMonths(-3);
+            DateTime dtime = new DateTime(oldTime.Year, oldTime.Month, 1, 0, 0, 0);
+            return dtime;
+        }
+
+        [HttpPost]
+        public JsonResult ExportMealCardTomorrow(FormCollection fc)
+        {
+
+            // dtToExcel = pr_GetListMealToomorrow(day, Month, Year);
+
+            using (ExcelPackage pck = new ExcelPackage())
+            {
+                var wsList = pck.Workbook.Worksheets.Add("Báo cáo");
+
+                wsList.Cells["A1"].LoadFromText("THỐNG KÊ SỐ LƯỢNG PHIẾU CƠM ĐĂNG KÝ");
+                wsList.Cells[2, 1].LoadFromText("NGÀY");
+                wsList.Cells["B2"].LoadFromText(date);
+                //string strngay = "Từ : " + FromDate.ToString("dd/MM/yyyy HH:mm:ss") + " - Đến : " + ToDate.ToString("dd/MM/yyyy HH:mm:ss");
+                //Random rand = new Random();
+                // int randomvalue = rand.Next(1000, 9999);
+                //string namefile = "Bao_Cao";
+                //wsList.Cells["B2"].LoadFromText(date);
+                int ncot = dtToExcel.Columns.Count;
+                
+                DataTable dt2 = new DataTable();
+                System.Data.DataView view = new System.Data.DataView(dtToExcel);
+                dt2 = view.ToTable(false, "ShiftName", "ProductName", "Quantity");
+                object sumo = dt2.Compute("Sum(Quantity)", "");
+                int sum = 0;
+                if(sumo != DBNull.Value)
+                {
+                    sum = Convert.ToInt32(sumo);
+                }
+                wsList.Cells[dtToExcel.Rows.Count + 4, 2].LoadFromText("Tổng cộng");
+                wsList.Cells[dtToExcel.Rows.Count + 4, 2].Style.Font.Bold = true;
+
+                    
+                wsList.Cells[dtToExcel.Rows.Count + 4, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                wsList.Cells[dtToExcel.Rows.Count + 4, 3].Style.Font.Size = 11;
+                wsList.Cells[dtToExcel.Rows.Count + 4, 3].Style.Font.Bold = true;
+
+                dt2.Columns["ShiftName"].ColumnName = "CA";
+                dt2.Columns["ProductName"].ColumnName = "TÊN MÓN";
+                dt2.Columns["Quantity"].ColumnName = "SỐ LƯỢNG";
+                wsList.Cells["A3"].LoadFromDataTable(dt2, true, TableStyles.None);
+                wsList.Cells[wsList.Dimension.Address].AutoFitColumns();
+                wsList.Cells[3, 1, 3, ncot - 1].Style.Font.Bold = true;
+               
+                wsList.Cells[1, 1, 1, ncot - 1].Merge = true;
+                wsList.Cells[1, 1, 1, ncot - 1].Style.Font.Bold = true;
+                wsList.Cells[1, 1, 1, ncot - 1].Style.Font.Size = 14;
+                wsList.Cells[1, 1, 1, ncot - 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                
+                wsList.Cells[2, 2, 2, ncot - 1].Merge = true;
+                wsList.Cells[2, 2, 2, ncot - 1].Style.Font.Bold = true;
+                wsList.Cells["A2"].Style.Font.Size = 14;
+                wsList.Cells[2, 2, 2, ncot - 1].Style.Font.Size = 12;
+                wsList.Cells[2, 1, 2, ncot - 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                
+                wsList.Cells[1, 1, dtToExcel.Rows.Count + 4, ncot - 1].Style.Font.Name = "Tahoma";
+                wsList.Cells[1, 1, dtToExcel.Rows.Count + 4, ncot - 1].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                wsList.Cells[1, 1, dtToExcel.Rows.Count + 4, ncot - 1].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                wsList.Cells[1, 1, dtToExcel.Rows.Count + 4, ncot - 1].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                wsList.Cells[1, 1, dtToExcel.Rows.Count + 4, ncot - 1].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+
+                wsList.Cells[3, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                wsList.Row(3).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                wsList.Column(1).Width = 10;
+                wsList.Column(2).Width = 50;
+                wsList.Column(3).Width = 30;
+
+                wsList.Column(2).Style.WrapText = true;
+                wsList.Column(3).Style.WrapText = true;
+                wsList.Column(4).Style.Numberformat.Format = "#,##0";
+                wsList.Column(4).Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                string path = Server.MapPath("/TK_SoLuongPhieuComDangKy.xlsx");
+                Stream stream = System.IO.File.Create(path);
+                pck.SaveAs(stream);
+                stream.Close();
+                return Json("/TK_SoLuongPhieuComDangKy.xlsx");
+            }
+
+        }
+
+        public DataTable pr_GetListMealToomorrow(int day, int month, int year)
+        {
+            Database db1 = new Database();
+            db1.fn_GetData_Pro("pr_ReportMealCardByDay", new SqlParameter("@day", day),
+                                                           new SqlParameter("@month", month),
+                                                            new SqlParameter("@year", year));
+            DataTable dt1 = db1.mn_Table;
+            return dt1;
+        }
+    }
+}

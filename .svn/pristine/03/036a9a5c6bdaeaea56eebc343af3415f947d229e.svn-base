@@ -1,0 +1,466 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    .A1 {
+        background-color: #F7BE81;
+        text-align: center;
+        vertical-align: middle;
+        
+    }
+    .A11 {
+        background-color: #F7BE81;
+        text-align: right;
+        vertical-align: middle;
+        
+    }
+     .A0 {
+        background-color: #A9E2F3;
+        text-align: center;
+        vertical-align: middle;
+        
+    }
+     .A01 {
+        background-color: #A9E2F3;
+        text-align: right;
+        vertical-align: middle;
+        
+    }
+     .A1p {
+        background-color: #86B404;
+        text-align: center;
+        vertical-align: middle;
+       
+    }
+     .A1p1 {
+        background-color: #86B404;
+        text-align: right;
+        vertical-align: middle;
+       
+    }
+     .A0p {
+        background-color:  #00BFFF;
+        text-align: center;
+        vertical-align: middle;
+        
+    }
+     .A0p1 {
+        background-color:  #00BFFF;
+        text-align: right;
+        vertical-align: middle;
+        
+    }
+     .A2 {
+        background-color: #D0FA58;
+        text-align: center;
+        vertical-align: middle;
+        
+    }
+     .A21 {
+        background-color: #D0FA58;
+        text-align: right;
+        vertical-align: middle;
+        
+    }
+    .A3 {
+        background-color: #F5A9F2;
+        text-align: center;
+        vertical-align: middle;
+        
+    }
+    .A31 {
+        background-color: #F5A9F2;
+        text-align: right;
+        vertical-align: middle;
+        
+    }
+     .sum {
+        background-color: #8258FA;
+        text-align: center;
+        vertical-align: middle;
+        
+    }
+     .sum1 {
+        background-color: #8258FA;
+        text-align: right;
+        vertical-align: middle;
+        
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                Thống kê số lượng phần cơm cần thanh toán
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-2 text-right">
+
+                                <button type="button" class="btn btn-warning" onclick="btnExport_Click();">Xuất báo cáo</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-header with-border">
+                    <div class="row" style="padding-bottom:5px;">
+                        <div class="col-md-1 col-xs-2" style="font-weight:bold; text-align:right;">Từ ngày</div>
+                        <div class="col-md-2 col-xs-3">
+                            <input type="date" id="FromDate" name="FromDate" value="@ViewBag.FromDate" class="form-control" />
+                        </div>
+                        <div class="col-md-2 col-xs-1"></div>
+                        <div class="col-md-1 col-xs-2" style="font-weight:bold; text-align:right;">Đến ngày</div>
+                        <div class="col-md-2 col-xs-3 input-group ToDate">
+                            <input type="date" id="ToDate" name="ToDate" value="@ViewBag.ToDate" class="form-control" />
+                        </div>
+                        <div class="col-md-1" style="float: right; margin-right: 10px;">
+                            <button id="btnSearch" class="btn btn-block btn-warning" onclick="filterByMonthAndYear(); return false;">
+                                Tìm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered " >
+                                    <thead >
+                                    <tr style="text-align: center; vertical-align: middle">
+                                        <th rowspan="2" style="text-align: center;vertical-align:middle" >Tháng</th>
+                                        <th colspan="3" style="border-bottom: 1px groove" class="A1">CA 1</th>
+                                        <th colspan="3" style="border-bottom: 1px groove" class="A0">CA 0</th>
+                                        <th colspan="3" style="border-bottom: 1px groove" class="A1p">CA 1+</th>
+                                        <th colspan="3" style="border-bottom: 1px groove" class="A2">CA 2</th>
+                                        <th colspan="3" style="border-bottom: 1px groove" class="A0p">CA 0+</th>
+                                        <th colspan="3" style="border-bottom: 1px groove" class="A3">CA 3</th>
+                                        <th colspan="3" style="border-bottom: 1px groove" class="sum">Tổng</th>
+                                        <th rowspan="2" style="text-align: center;vertical-align:middle; background-color: #DF0101">Payment</th>
+                                    </tr>
+                                    <tr style="text-align: center; vertical-align: middle">
+                                        <th class="A1">Sl đăng ký</th>
+                                        <th class="A1">Sl đã in phiếu</th>
+                                        <th class="A1">Sl in phiếu đột xuất</th>
+                                        <th class="A0">Sl đăng ký</th>
+                                        <th class="A0" >Sl đã in phiếu</th>
+                                        <th class="A0">Sl in phiếu đột xuất</th>
+                                        <th class="A1p">Sl đăng ký</th>
+                                        <th class="A1p">Sl đã in phiếu</th>
+                                        <th class="A1p" >Sl in phiếu đột xuất</th>
+                                        <th class="A2">Sl đăng ký</th>
+                                        <th class="A2">Sl đã in phiếu</th>
+                                        <th class="A2">Sl in phiếu đột xuất</th>
+                                        <th class="A0p">Sl đăng ký</th>
+                                        <th class="A0p">Sl đã in phiếu</th>
+                                        <th class="A0p">Sl in phiếu đột xuất</th>
+                                        <th class="A3">Sl đăng ký</th>
+                                        <th class="A3">Sl đã in phiếu</th>
+                                        <th class="A3">Sl in phiếu đột xuất</th>  
+                                        <th class="sum">Sl đăng ký</th>
+                                        <th class="sum">Sl đã in phiếu</th>
+                                        <th class="sum">Sl in phiếu đột xuất</th>  
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @{
+                                        int sumca1reg = 0;
+                                        int sumca1print = 0;
+                                        int sumca1exp = 0;
+                                        int sumca0reg = 0;
+                                        int sumca0print = 0;
+                                        int sumca0exp = 0;
+                                        int sumca1plusreg = 0;
+                                        int sumca1plusprint = 0;
+                                        int sumca1plusexp = 0;
+                                        int sumca2reg = 0;
+                                        int sumca2print = 0;
+                                        int sumca2exp = 0;
+                                        int sumca0plusreg = 0;
+                                        int sumca0plusprint = 0;
+                                        int sumca0plusexp = 0;
+                                        int sumca3reg = 0;
+                                        int sumca3print = 0;
+                                        int sumca3exp = 0;
+                                        int sumsumreg = 0;
+                                        int sumsumprint = 0;
+                                        int sumsumexp = 0;
+                                        int sumpayment = 0;
+                                     }
+                                    @if (ViewBag.store.Rows.Count != null)
+                                    {
+                                        int dem = 0;
+
+                                        for (int i = 0; i < ViewBag.store.Rows.Count; i++)
+                                        {
+                                            var dt = ViewBag.store;
+                                            var dayOfWeek = dt.Rows[i]["MealDate"].DayOfWeek;
+                                            int payment = (int) dt.Rows[i]["SumPrint"] + (int) dt.Rows[i]["SumExp"];
+
+                                            <tr>
+                                                @if ((dayOfWeek == DayOfWeek.Sunday) || (dayOfWeek == DayOfWeek.Saturday))
+                                                {
+                                                    <td style="background-color: red">
+                                                        @dt.Rows[i]["MealDate"].ToString("dd/MM/yyyy")
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td align="center">
+                                                        @dt.Rows[i]["MealDate"].ToString("dd/MM/yyyy")
+                                                    </td>
+                                                }
+
+                                                <td class="A11">
+                                                    @dt.Rows[i]["Ca1Reg"].ToString()
+                                                </td>
+                                                <td class="A11">
+                                                    @dt.Rows[i]["Ca1Print"].ToString()
+                                                </td>
+                                                <td class="A11">
+                                                    @dt.Rows[i]["Ca1Exp"].ToString()
+                                                </td>
+                                                <td class="A01">
+                                                    @dt.Rows[i]["Ca0Reg"].ToString()
+                                                </td>
+                                                <td class="A01">
+                                                    @dt.Rows[i]["Ca0Print"].ToString()
+                                                </td>
+                                                <td class="A01">
+                                                    @dt.Rows[i]["Ca0Exp"].ToString()
+                                                </td>
+                                                <td class="A1p1">
+                                                    @dt.Rows[i]["Ca1PlusReg"].ToString()
+                                                </td>
+                                                <td class="A1p1">
+                                                    @dt.Rows[i]["Ca1PlusPrint"].ToString()
+                                                </td>
+                                                <td class="A1p1">
+                                                    @dt.Rows[i]["Ca1PlusExp"].ToString()
+                                                </td>
+                                                <td class="A21">
+                                                    @dt.Rows[i]["Ca2Reg"].ToString()
+                                                </td>
+                                                <td class="A21">
+                                                    @dt.Rows[i]["Ca2Print"].ToString()
+                                                </td>
+                                                <td class="A21">
+                                                    @dt.Rows[i]["Ca2Exp"].ToString()
+                                                </td>
+                                                <td class="A0p1">
+                                                    @dt.Rows[i]["Ca0PlusReg"].ToString()
+                                                </td>
+                                                <td class="A0p1">
+                                                    @dt.Rows[i]["Ca0PlusPrint"].ToString()
+                                                </td>
+                                                <td class="A0p1">
+                                                    @dt.Rows[i]["Ca0PlusExp"].ToString()
+                                                </td>
+                                                <td class="A31">
+                                                    @dt.Rows[i]["Ca3Reg"].ToString()
+                                                </td>
+                                                <td class="A31">
+                                                    @dt.Rows[i]["Ca3Print"].ToString()
+                                                </td>
+                                                <td class="A31">
+                                                    @dt.Rows[i]["Ca3Exp"].ToString()
+                                                </td>
+                                                <td class="sum1">
+                                                    @dt.Rows[i]["SumReg"].ToString()
+                                                </td>
+                                                <td class="sum1">
+                                                    @dt.Rows[i]["SumPrint"].ToString()
+                                                </td>
+                                                <td class="sum1">
+                                                    @dt.Rows[i]["SumExp"].ToString()
+                                                </td>
+                                                <td style="text-align: right; vertical-align: middle; background-color: #DF0101">
+                                                    @payment
+                                                </td>
+                                            </tr>
+                                            sumca1reg = sumca1reg + (int) dt.Rows[i]["Ca1Reg"];
+                                            sumca1print = sumca1print + (int) dt.Rows[i]["Ca1Print"];
+                                            sumca1exp = sumca1exp + (int)dt.Rows[i]["Ca1Exp"];
+                                            sumca0reg = sumca0reg + (int)dt.Rows[i]["Ca0Reg"];
+                                            sumca0print = sumca0print + (int)dt.Rows[i]["Ca0Print"];
+                                            sumca0exp = sumca0exp + (int)dt.Rows[i]["Ca0Exp"];
+                                            sumca1plusreg = sumca1plusreg + (int)dt.Rows[i]["Ca1plusReg"];
+                                            sumca1plusprint = sumca1plusprint + (int)dt.Rows[i]["Ca1plusPrint"];
+                                            sumca1plusexp = sumca1plusexp + (int)dt.Rows[i]["Ca1plusExp"];
+                                            sumca2reg = sumca2reg + (int)dt.Rows[i]["Ca2Reg"];
+                                            sumca2print = sumca2print + (int)dt.Rows[i]["Ca2Print"];
+                                            sumca2exp = sumca2exp + (int)dt.Rows[i]["Ca2Exp"];
+                                            sumca0plusreg = sumca0plusreg + (int)dt.Rows[i]["Ca0plusReg"];
+                                            sumca0plusprint = sumca0plusprint + (int)dt.Rows[i]["Ca0plusPrint"];
+                                            sumca0plusexp = sumca0plusexp + (int)dt.Rows[i]["Ca0plusExp"];
+                                            sumca3reg = sumca3reg + (int)dt.Rows[i]["Ca3Reg"];
+                                            sumca3print = sumca3print + (int)dt.Rows[i]["Ca3Print"];
+                                            sumca3exp = sumca3exp + (int)dt.Rows[i]["Ca3Exp"];
+                                            sumsumreg = sumsumreg + (int)dt.Rows[i]["SumReg"];
+                                            sumsumprint = sumsumprint + (int)dt.Rows[i]["SumPrint"];
+                                            sumsumexp = sumsumexp + (int)dt.Rows[i]["SumExp"];
+                                            dem = dem + 1;
+                                            if (dem%7 == 0)
+                                            {
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                    <tr>
+                                        @sumpayment = @sumsumprint + @sumsumexp;
+                                        <td><b>Total</b></td>
+                                        <td class="A11" align="right">@sumca1reg</td>
+                                        <td class="A11" align="right">@sumca1print</td>
+                                        <td class="A11" align="right">@sumca1exp</td>
+                                        <td class="A01" align="right">@sumca0reg</td>
+                                        <td class="A01" align="right">@sumca0print</td>
+                                        <td class="A01" align="right">@sumca0exp</td>
+                                        <td class="A1p1" align="right">@sumca1plusreg</td>
+                                        <td class="A1p1" align="right">@sumca1plusprint</td>
+                                        <td class="A1p1" align="right">@sumca1plusexp</td>
+                                        <td class="A21" align="right">@sumca2reg</td>
+                                        <td class="A21" align="right">@sumca2print</td>
+                                        <td class="A21" align="right">@sumca2exp</td>
+                                        <td class="A0p1" align="right">@sumca0plusreg</td>
+                                        <td class="A0p1" align="right">@sumca0plusprint</td>
+                                        <td class="A0p1" align="right">@sumca0plusexp</td>
+                                        <td class="A31" align="right">@sumca3reg</td>
+                                        <td class="A31" align="right">@sumca3print</td>
+                                        <td class="A31" align="right">@sumca3exp</td>
+                                        <td class="sum1" align="right">@sumsumreg</td>
+                                        <td class="sum1" align="right">@sumsumprint</td>
+                                        <td class="sum1" align="right">@sumsumexp</td>
+                                        <td style="text-align: right; vertical-align: middle; background-color: #DF0101">@sumpayment</td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script>
+    $(function () {
+        $('#lv_list tbody').on('click', '#edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?ScheduleMenuID=" + data["ScheduleMenuID"];
+        });
+        var arrTr = $("#lv_list tbody tr");
+
+        //$('#date_year').datetimepicker({
+        //    viewMode: 'days',
+        //    format: 'dd/MM/YYYY',
+        //    showClear: true,
+        //    showClose: true
+        //});
+    });
+    $.urlParam = function (name) {
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results == null) {
+            return null;
+        }
+        else {
+            return results[1] || 0;
+        }
+    }    
+    var date = new Date();
+    //$("#date_year").val((date.getMonth() + 1) + "/" + date.getFullYear());
+    $("#date_year").val(date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + ((date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate())));
+    if ($.urlParam('FromDate') != null && $.urlParam('ToDate') != null) {
+        var from = $.urlParam('FromDate');
+        var to = $.urlParam('ToDate');
+        $("#FromDate").val(from);
+        $("#ToDate").val(to);
+    }
+    
+    function filterByMonthAndYear() {
+        debugger;
+        //ReloadPartialViewIndex();
+        if ($("#date_year").val() == "") {
+            ShowError("Vui lòng nhập ngày");
+            $("#date_year").focus();
+            return false;
+        }
+        else {
+            var FromDate = $("#FromDate").val();
+            var ToDate = $('#ToDate').val();
+            location.href = "/ReportSoLuongPhanComCanThanhToan/Index?FromDate=" + FromDate + "&&ToDate=" + ToDate;
+        }
+    }
+
+    function ReloadPartialViewIndex() {
+        $('#partial_Invoice').load('/ReportSoLuongPhanComCanThanhToan/Index', $("#frmSearch").serializeArray());
+    }
+
+    function btnSearch_Click() {
+        ReloadPartialViewIndex();
+    }
+
+    function btnExport_Click() {
+        $.ajax({
+            url: '/ReportSoLuongPhanComCanThanhToan/ExportMealCard',
+            type: 'post',
+            datatype: 'json',
+            data: $("#frmSearch").serializeArray(),
+            async: false,
+            cache: false,
+            success: function (data) {
+                if (data == "-1") {
+                    ShowError("Mã khách hàng đã tồn tại, vui lòng nhập lại");
+                    flag = false;
+                }
+                else {
+                    debugger;
+                    window.location.href = window.location.origin + (data);
+                }
+            }
+        })
+    }
+</script>

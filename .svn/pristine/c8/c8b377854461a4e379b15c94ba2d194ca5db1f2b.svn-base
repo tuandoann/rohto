@@ -1,0 +1,263 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                LUNCHEON
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-2 text-right">
+
+                                <button type="button" class="btn btn-warning" onclick="btnExport_Click();">Xuất báo cáo</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-1" style="margin-top:5px;">
+                                <label for="date_year">Tháng/năm: </label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" id="date_year" name="date_year" class="form-control" />
+                            </div>
+                            <div class="col-md-1">
+                                <input type="radio" id="month_before" name="month" value="1" checked="checked" > 15 ngày đầu
+                            </div>
+                            <div class="col-md-1">
+                            <input type="radio" id="month_after" name="month" value="2"> 15 ngày sau
+                            </div>
+                            <div class="col-md-1" style="padding-left:0;">
+                                <button type="button" onclick="return filterByMonthAndYear()" class="btn btn-block btn-vimeo btn-group">Tìm</button>
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                @{
+                                    bool dk = ViewBag.dk;
+                                    int date_start = dk ? 1 : 16;
+                                    int date_finish = dk ? 15 : 31;
+                                    int dem1 = 1;
+                                    <table id="lv_list" class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th colspan="2">Ngày(Date)</th>                                     
+                                            @for (int i = date_start; i <= date_finish; i++)
+                                            {
+                                                <th class="a1">@i</th>
+                                            }
+                                            <th>Tổng</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            
+                                                <td></td>
+                                                <td>DIRECT LABOR</td>
+                                                <td>Mã nhân viên</td>
+                                                <td colspan="16"></td>
+                                        </tr>
+
+                                        
+                                        @if (ViewBag.store.Rows.Count != null)
+                                        {
+
+                                        for (int i = 0; i < ViewBag.store.Rows.Count; i++)
+                                        {
+                                        
+                                            var dt = ViewBag.store;
+                                            if (dt.Rows[i]["EmployeeType"] == 1)
+                                            {
+                                            <tr>
+                                                <td>@dem1</td>
+                                                <td>@dt.Rows[i]["FullName"].ToString() </td>
+                                                <td>@dt.Rows[i]["EmployeeCode"].ToString()</td>
+                                                @for (int j = date_start; j <= date_finish; j++)
+                                                {
+                                                    <td>@dt.Rows[i]["Ngay" + j].ToString() </td>
+                                                }
+                                                <td>@dt.Rows[i]["Total"].ToString()</td>
+                                            </tr>
+                                            }
+
+                                            dem1++;
+
+                                        }
+                                        }
+
+                                        <tr>
+                                            <td></td>
+                                            <td>SUB TOTAL</td>
+                                            @for (int i = date_start; i <= date_finish+2; i++)
+                                            {
+                                                <th class="a1"></th>
+                                            }
+                                        </tr>
+                                        <tr>
+                                            
+                                                <td></td>
+                                                <td>DIRECT LABOR</td>
+                                                <td>Mã nhân viên</td>
+                                                <td colspan="16"></td>
+                                            
+                                        </tr>
+                                        @{
+
+                                            int dem2 = 1;
+                                            bool dk1 = ViewBag.dk;
+                                            if (ViewBag.store.Rows.Count != null)
+                                            {
+
+                                                for (int i = 0; i < ViewBag.store.Rows.Count; i++)
+                                                {
+                                                    var dt = ViewBag.store;
+                                                    if (dt.Rows[i]["EmployeeType"] == 2)
+                                                    {
+                                                        <tr>
+                                                            <td>@dem1</td>
+                                                            <td>@dt.Rows[i]["FullName"].ToString() </td>
+                                                            <td>@dt.Rows[i]["EmployeeCode"].ToString()</td>
+                                                            @for (int j = date_start; j <= date_finish; j++)
+                                                            {
+                                                                <td>@dt.Rows[i]["Ngay" + j].ToString() </td>
+                                                            }
+                                                            <td>@dt.Rows[i]["Total"].ToString()</td>
+                                                        </tr>
+                                                    }
+
+                                                    dem2++;
+
+                                                }
+                                            }
+                                        }
+                                        <tr>
+                                            <td></td>
+                                            <td>SUB TOTAL</td>
+                                            @for (int i = date_start; i <= date_finish + 2; i++)
+                                            {
+                                                <th class="a1"></th>
+                                            }
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>GRAND TOTAL</td>
+                                            @for (int i = date_start; i <= date_finish + 2; i++)
+                                            {
+                                                <th class="a1"></th>
+                                            }
+                                        </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td>TOTAL LUNCHEON:  </td>
+                                                @for (int i = date_start; i <= date_finish + 2; i++)
+                                                {
+                                                    <th class="a1"></th>
+                                                }
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                }
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script>
+    $(function () {
+        $('#lv_list tbody').on('click', '#edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?ScheduleMenuID=" + data["ScheduleMenuID"];
+        });
+        var arrTr = $("#lv_list tbody tr");
+
+        $('#date_year').datetimepicker({
+            viewMode: 'months',
+            format: 'MM/YYYY',
+            showClear: true,
+            showClose: true
+        });
+    });
+   
+    var date = new Date();
+    $("#date_year").val((date.getMonth() + 1) + "/" + date.getFullYear());
+    //$("#date_year").val(date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + ((date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate())));
+
+    function filterByMonthAndYear() {
+        debugger;
+        if ($("#date_year").val() == "") {
+            ShowError("Vui lòng nhập tháng năm");
+            $("#date_year").focus();
+            return false;
+        }
+        else {
+            var dk = $('#month_before').is(':checked') ? true : false;
+            var arrDate = $("#date_year").val().split("/");
+            location.href = "/ReportSoLuongPhanComTheoNhanVien/Index?year=" + arrDate[1] + "&&month=" + arrDate[0] +"&&dk=" + dk ;
+        }
+    }
+
+    function ReloadPartialViewIndex() {
+        $('#partial_Invoice').load('/ReportSoLuongPhanComTheoNhanVien/Index', $("#frmSearch").serializeArray());
+    }
+
+    function btnSearch_Click() {
+        ReloadPartialViewIndex();
+    }
+
+    //function btnExport_Click() {
+    //    $.ajax({
+    //        url: '/ReportSummaryByShift/ExportMealCard',
+    //        type: 'post',
+    //        datatype: 'json',
+    //        data: $("#frmSearch").serializeArray(),
+    //        async: false,
+    //        cache: false,
+    //        success: function (data) {
+    //            if (data == "-1") {
+    //                ShowError("Mã khách hàng đã tồn tại, vui lòng nhập lại");
+    //                flag = false;
+    //            }
+    //            else {
+    //                debugger;
+    //                window.location.href = window.location.origin + (data);
+    //            }
+    //        }
+    //    })
+    //}
+</script>

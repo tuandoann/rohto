@@ -1,0 +1,288 @@
+﻿@model HRM_ROHTO.Models.TBL_MENU
+@using HRM_ROHTO.Models.BUS;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .arrow {
+        margin-top: 50px;
+    }
+
+        .arrow span {
+            font-size: 30px;
+        }
+
+        .arrow a:hover {
+            cursor: pointer;
+        }
+
+    #lv_list tbody tr.selected, #lv_list_2 tbody tr.selected {
+        background: #808080;
+    }
+
+    #lv_list > tbody > tr.selected:nth-child(odd) > td, #lv_list > tbody > tr.selected:nth-child(even) > td {
+        background: #808080;
+        color: #efefef;
+    }
+
+    #lv_list_2 > tbody > tr.selected:nth-child(odd) > td, #lv_list_2 > tbody > tr.selected:nth-child(even) > td {
+        background: #808080;
+        color: #efefef;
+    }
+</style>
+
+@using (@Html.BeginForm(new { id = "form" }))
+{
+    <body onload="setFocus()">
+        <div class="box-body">
+            <div id="lblError"></div>
+            <div id="lblSuccess"></div>
+            <div id="lblInfo"></div>
+            <section class="content-header">
+                <h1 class="MT_Title">
+                    Thêm thực đơn
+                </h1>
+                <ol class="breadcrumb"></ol>
+            </section>
+            <section class="content">
+                <div class="box box-success color-palette-box">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-md-10 col-sm-8 col-xs-6">
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-3">
+                                <button type="submit" class="btn btn-block btn-google" onclick="return btnSaveMenuClick();">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-3">
+                                <a class="btn btn-block bg-purple" href="/Menu/Index"><i class="fa fa-arrow-left"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="content">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box-body">
+                                    <div class="row" style="padding-bottom:5px;">
+                                        <div class="col-md-2">Tên<span style="color:red;">*</span></div>
+                                        <div class="col-md-3">
+                                            @Html.TextBoxFor(u => u.MenuName, new { @class = "form-control" })
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-5">
+                                            <div class="checkbox">
+                                                <label>
+                                                    @Html.CheckBoxFor(x => x.IsActive, new { @checked = true }) Đang dùng
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-bottom:5px;">
+                                        <div class="col-md-2">Ngày<span style="color:red;">*</span></div>
+                                        <div class="col-md-3">
+                                            @Html.DropDownListFor(x => x.MenuDay, (List<SelectListItem>)ViewBag.ListMenuDay, new { @class = "select2 form-control" })
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-3"></div>
+                                    </div>
+                                    <div class="row" style="padding-bottom:5px;">
+                                        <div class="col-md-3">
+                                            <h4 class="text-center">Danh sách món áp dụng</h4>
+                                                <input type="text" class="form-control" onkeyup="SearchTable()" id="Filter" placeholder="Nhập tên món ăn" />
+                                            <table id="lv_list" class="table table-bordered table-striped">
+                                                <tbody>
+                                                    @foreach (var pro in ViewBag.ListProduct)
+                                                    {
+                                                        <tr>
+                                                            <td class="sr-only productID">@pro.ProductID</td>
+                                                            <td class="productName">@pro.ProductName</td>
+                                                            <td width="100px" class="productType">@pro.ProductTypeName</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-1 arrow text-center">
+                                            <a id="add"><span class="fa fa-angle-right"></span></a>
+                                            <br />
+                                            <a id="addAll"><span class="fa fa-angle-double-right"></span></a>
+
+                                            <br /><br /><br /><br />
+
+                                            <a id="remove"><span class="fa fa-angle-left"></span></a>
+                                            <br />
+                                            <a id="removeAll"><span class="fa fa-angle-double-left"></span></a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h4 class="text-center">Danh sách món đã chọn</h4>
+                                            <table id="lv_list_2" class="table table-bordered table-striped">
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-3 col-md-offset-1">
+                                            <h4 class="text-center">Danh sách ca áp dụng</h4>
+                                            <table id="lv_list_3" class="table table-bordered table-striped">
+                                                <tbody>
+                                                    @foreach (var shift in ViewBag.ListShift)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" class="chkShift" value="@shift.ShiftID" /> @shift.ShiftName
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div><!-- /.box-body -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </section>
+                </div>
+            </section>
+        </div>
+    </body>
+}
+
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="../../Content/plugins/select2/select2.full.min.js"></script>
+    <script src="~/App_Script/Menu.js"></script>
+    <script src="~/App_Script/Gobal.js"></script>
+    <script>
+        $(".select2").select2();
+        function setFocus() { document.getElementById("MenuName").focus(); }
+
+        $(function () {
+            function sortTable(table) {
+                debugger;
+                var table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementById(table);
+                switching = true;
+                /*Make a loop that will continue until
+                no switching has been done:*/
+                while (switching) {
+                    //start by saying: no switching is done:
+                    switching = false;
+                    rows = table.getElementsByTagName("tr");
+                    /*Loop through all table rows (except the
+                    first, which contains table headers):*/
+                    for (i = 0; i < rows.length - 1 ; i++) {
+                        //start by saying there should be no switching:
+                        shouldSwitch = false;
+                        /*Get the two elements you want to compare,
+                        one from current row and one from the next:*/
+                        x = rows[i].getElementsByTagName("td")[1];
+                        y = rows[i + 1].getElementsByTagName("td")[1];
+                        //check if the two rows should switch place:
+                        if ((x.innerHTML.toLocaleLowerCase().localeCompare(y.innerHTML.toLocaleLowerCase()) != -1) && x.innerHTML != y.innerHTML) {
+                            //if so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwitch) {
+                        /*If a switch has been marked, make the switch
+                        and mark that a switch has been done:*/
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    }
+                }
+            }
+
+            $("#lv_list tbody").on("click", "tr", function () {
+                $(this).toggleClass("selected");
+            })
+
+            $("#add").click(function () {
+                $("#lv_list tbody .selected").each(function () {
+                    var productID = $(this).find(".productID").text();
+                    var productName = $(this).find(".productName").text();
+                    var productType = $(this).find(".productType").text();
+                    if (productID != "" && productName != "" && productType != "") {
+                        $(this).remove();
+                        $("#lv_list_2 tbody").append("<tr><td class='sr-only productID'>" + productID + "</td><td class='productName'>" + productName + "</td><td width='100px' class='productType'>" + productType + "</td></tr>");
+                    }
+                })
+                sortTable("lv_list_2");
+            });
+
+            $("#lv_list_2 tbody").on("click", "tr", function () {
+                $(this).toggleClass("selected");
+            });
+
+            $("#remove").click(function () {
+                $("#lv_list_2 tbody .selected").each(function () {
+                    var productID = $(this).find(".productID").text();
+                    var productName = $(this).find(".productName").text();
+                    var productType = $(this).find(".productType").text();
+                    if (productID != "" && productName != "") {
+                        $(this).remove();
+                        $("#lv_list tbody").append("<tr><td class='sr-only productID'>" + productID + "</td><td class='productName'>" + productName + "</td><td width='100px' class='productType'>" + productType + "</td></tr>");
+                    }
+                })
+                sortTable("lv_list");
+            });
+
+            $("#addAll").click(function () {
+                debugger;
+                $("#lv_list tbody tr").each(function () {
+                    var productID = $(this).find(".productID").text();
+                    var productName = $(this).find(".productName").text();
+                    var productType = $(this).find(".productType").text();
+                    if (productID != "" && productName != "") {
+                        $(this).remove();
+                        $("#lv_list_2 tbody").append("<tr><td class='sr-only productID'>" + productID + "</td><td class='productName'>" + productName + "</td><td width='100px' class='productType'>" + productType + "</td></tr>");
+                    }
+                })
+                sortTable("lv_list_2");
+            });
+
+            $("#removeAll").click(function () {
+                $("#lv_list_2 tbody tr").each(function () {
+                    debugger;
+                    var productID = $(this).find(".productID").text();
+                    var productName = $(this).find(".productName").text();
+                    var productType = $(this).find(".productType").text();
+                    if (productID != "" && productName != "") {
+                        $(this).remove();
+                        $("#lv_list tbody").append("<tr><td class='sr-only productID'>" + productID + "</td><td class='productName'>" + productName + "</td><td width='100px' class='productType'>" + productType + "</td></tr>");
+                    }
+                })
+                sortTable("lv_list");
+            });
+        });
+
+        function SearchTable() {
+            // Declare variables 
+            var input, filter, table, tr, td, i;
+            input = document.getElementById("Filter");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("lv_list");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+}
+
+

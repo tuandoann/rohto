@@ -1,0 +1,232 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using HRM_ROHTO.Models;
+using HRM_ROHTO.Models.BUS;
+using HRM_ROHTO.Models.ListExt;
+using System.IO;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace HRM_ROHTO.Controllers
+{
+    public class ScheduleMenuController : BaseController
+    {
+        //
+        // GET: /ScheduleMenu/
+
+        public ActionResult Index(int year = 0, int month = 0)
+        {
+            if (!CheckPermission("ScheduleMenu", 1))
+                return RedirectToAction("Login", "Login", "Login");
+
+            int Year = year == 0 ? DateTime.Now.Year : year;
+            int Month = month == 0 ? DateTime.Now.Month : month;
+
+            //Schedule_All_Ext Schedule_All_Ext = new Schedule_All_Ext
+            //{
+            //    Schedule_Menu_Ext = DA_ScheduleMenu.Instance.GetDateMealScheduleMenu(Year, Month),
+            //    Schedule_Menu_Product_Shift_Ext = DA_ScheduleMenu.Instance.GetDataScheduleMenu(),
+            //    ScheduleMenuID = DA_ScheduleMenu.Instance.GetAll().ToList()
+            //};
+
+            int lastDay = DateTime.DaysInMonth(Year, Month);
+
+            List<SqlParameter> lstParam = new List<SqlParameter>();
+            lstParam.Add(new SqlParameter("@FromDate", Year + "-" + Month + "-01"));
+            lstParam.Add(new SqlParameter("@ToDate", Year + "-" + Month + "-" + lastDay));
+            ViewBag.store = DA_ScheduleMenu.Instance.Exec("pr_getScheduleMenu", lstParam.ToArray());
+
+            //return View(Schedule_All_Ext);
+
+            Schedule_All_Ext Schedule_All_Ext = new Schedule_All_Ext
+            {
+                Schedule_Menu_Ext = DA_ScheduleMenu.Instance.GetScheduleMenu(Year, Month),
+                Schedule_Menu_Product_Ext = DA_ScheduleMenu.Instance.GetScheduleProduct(),
+                Schedule_Menu_Shift_Ext = DA_ScheduleMenu.Instance.GetScheduleMenuShift()
+            };
+
+            return View(Schedule_All_Ext);
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult SaveData(FormCollection fc, string update = null, string cancel = null)
+        {
+            DateTime From = DateTime.Parse(fc["From"]);
+            DateTime To = DateTime.Parse(fc["To"]);
+
+            for (DateTime date = From; date <= To; date = date.AddDays(1.0))
+            {
+                if (update != null)
+                {
+                    //delete Schedule_Menu
+                    List<TBL_SCHEDULE_MENU> lstSchedule_Menu = DA_ScheduleMenu.Instance.GetAll().Where(x => x.MealDate == date).ToList();
+                    foreach (var menu in lstSchedule_Menu)
+                    {
+                        //Ghi log
+                        TBL_SCHEDULE_MENU oldSchedule_Menu = DA_ScheduleMenu.Instance.GetById(menu.ScheduleMenuID);
+                        WriteLog("ScheduleMenu", "Delete", oldSchedule_Menu);
+
+                        //delete Schedule_Menu
+                        DA_ScheduleMenu.Instance.Delete(menu);
+
+                        //delete Schedule_Menu_Product
+                        List<TBL_SCHEDULE_MENU_PRODUCT> lstSchedule_Menu_Product = DA_ScheduleMenuProduct.Instance.GetAll().Where(x => x.ScheduleMenuID == menu.ScheduleMenuID).ToList();
+                        // List Old Schedule Menu Product
+                        List<TBL_SCHEDULE_MENU_PRODUCT> lstOldSchedule_Menu_Product = new List<TBL_SCHEDULE_MENU_PRODUCT>();
+                        foreach (var item in lstSchedule_Menu_Product)
+                        {
+                            //Add Vào List Old Schedule Menu Product
+                            TBL_SCHEDULE_MENU_PRODUCT oldSchedule_Menu_Product = DA_ScheduleMenuProduct.Instance.GetById(item.ScheduleMenuID);
+                            lstOldSchedule_Menu_Product.Add(oldSchedule_Menu_Product);
+
+                            DA_ScheduleMenuProduct.Instance.Delete(item);
+                        }
+                        // Ghi log
+                        WriteLog("ScheduleMenuProduct", "Delete", lstOldSchedule_Menu_Product, null);
+
+                        //delete Schedule_Menu_Shift
+                        List<TBL_SCHEDULE_MENU_SHIFT> lstSchedule_Menu_Shift = DA_ScheduleMenuShift.Instance.GetAll().Where(x => x.ScheduleMenuID == menu.ScheduleMenuID).ToList();
+                        // List Old Schedule Menu Shift
+                        List<TBL_SCHEDULE_MENU_SHIFT> lstOldSchedule_Menu_Shift = new List<TBL_SCHEDULE_MENU_SHIFT>();
+                        foreach (var item in lstSchedule_Menu_Shift)
+                        {
+                            //Add Vào List Old Schedule Menu Shift
+                            TBL_SCHEDULE_MENU_SHIFT oldSchedule_Menu_Shift = DA_ScheduleMenuShift.Instance.GetById(item.ScheduleMenuID);
+                            lstOldSchedule_Menu_Shift.Add(oldSchedule_Menu_Shift);
+
+                            DA_ScheduleMenuShift.Instance.Delete(item);
+                        }
+                        // Ghi log
+                        WriteLog("ScheduleMenuShift", "Delete", lstOldSchedule_Menu_Shift, null);
+                    }
+                }
+
+                if (cancel != null)
+                {
+                    TBL_SCHEDULE_MENU Schedule_Menu = DA_ScheduleMenu.Instance.GetAll().FirstOrDefault(x => x.MealDate == date);
+                    if (Schedule_Menu != null)
+                        continue;
+                }
+
+                List<TBL_MENU> tbl_Menu = DA_Menu.Instance.GetAll().Where(x => x.MenuDay == date.Day).ToList();
+                if (tbl_Menu != null)
+                {
+                    foreach (var menu in tbl_Menu)
+                    {
+                        //insert Schedule_Menu
+                        TBL_SCHEDULE_MENU Schedule_Menu = new TBL_SCHEDULE_MENU();
+                        Schedule_Menu.MealDate = date;
+                        Schedule_Menu.MenuID = menu.MenuID;
+                        Schedule_Menu.UserModified = int.Parse(Session["UserID"].ToString());
+                        Schedule_Menu.DateModified = DateTime.Now;
+                        DA_ScheduleMenu.Instance.Insert(Schedule_Menu);
+
+                        //Ghi log
+                        WriteLog("ScheduleMenu", "Create", null, Schedule_Menu);
+
+                        //Get Schedule_Menu_ID
+                        long Schedule_Menu_ID = DA_ScheduleMenu.Instance.GetAll().OrderByDescending(x => x.ScheduleMenuID).FirstOrDefault().ScheduleMenuID;
+
+                        //insert Schedule_Menu_Product
+                        List<TBL_MENU_PRODUCT> lstMenuProduct = DA_MenuProduct.Instance.GetAll().Where(x => x.MenuID == menu.MenuID).ToList();
+                        // List New Schedule Menu Product
+                        List<TBL_SCHEDULE_MENU_PRODUCT> lstNewSchedule_Menu_Product = new List<TBL_SCHEDULE_MENU_PRODUCT>();
+                        foreach (var item in lstMenuProduct)
+                        {
+                            TBL_SCHEDULE_MENU_PRODUCT Schedule_Menu_Product = new TBL_SCHEDULE_MENU_PRODUCT();
+                            Schedule_Menu_Product.ScheduleMenuID = Schedule_Menu_ID;
+                            Schedule_Menu_Product.MenuID = menu.MenuID;
+                            Schedule_Menu_Product.ProductID = item.ProductID;
+                            DA_ScheduleMenuProduct.Instance.Insert(Schedule_Menu_Product);
+
+                            // Add vào List New Schedule Menu Product
+                            lstNewSchedule_Menu_Product.Add(Schedule_Menu_Product);
+                        }
+                        // Ghi log
+                        WriteLog("ScheduleMenuProduct", "Create", null, lstNewSchedule_Menu_Product);
+
+                        //insert Schedule_Menu_Shift
+                        List<TBL_MENU_SHIFT> lstMenuShift = DA_MenuShift.Instance.GetAll().Where(x => x.MenuID == menu.MenuID).ToList();
+                        // List New Schedule Menu Product
+                        List<TBL_SCHEDULE_MENU_SHIFT> lstNewSchedule_Menu_Shift = new List<TBL_SCHEDULE_MENU_SHIFT>();
+                        foreach (var item in lstMenuShift)
+                        {
+                            TBL_SCHEDULE_MENU_SHIFT Schedule_Menu_Shift = new TBL_SCHEDULE_MENU_SHIFT();
+                            Schedule_Menu_Shift.ScheduleMenuID = Schedule_Menu_ID;
+                            Schedule_Menu_Shift.MenuID = menu.MenuID;
+                            Schedule_Menu_Shift.ShiftID = item.ShiftID;
+                            DA_ScheduleMenuShift.Instance.Insert(Schedule_Menu_Shift);
+
+                            // Add vào List New Schedule Menu Shift
+                            lstNewSchedule_Menu_Shift.Add(Schedule_Menu_Shift);
+                        }
+                        // Ghi log
+                        WriteLog("ScheduleMenuShift", "Create", null, lstNewSchedule_Menu_Shift);
+                    }
+                }
+            }
+            return Json("1", JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult CheckBeforeSave(DateTime From, DateTime To)
+        {
+            List<DateTime> lstDateTime = new List<DateTime>();
+            List<TBL_SCHEDULE_MENU> lst = DA_ScheduleMenu.Instance.GetAll().Where(x => x.MealDate >= From && x.MealDate <= To).ToList();
+            int i = 1;
+            foreach (var schedule in lst)
+            {
+                if (i == 1 || i == lst.Count)
+                    lstDateTime.Add(schedule.MealDate);
+                i++;
+            }
+
+            return Json(new { data = lstDateTime }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Delete(int ScheduleMenuID)
+        {
+            // Ghi log
+            TBL_SCHEDULE_MENU oldSchedule_Menu = DA_ScheduleMenu.Instance.GetById(ScheduleMenuID);
+            WriteLog("ScheduleMenu", "Delete", oldSchedule_Menu, null);
+
+            DA_ScheduleMenu.Instance.Delete(ScheduleMenuID);
+
+            // List Old Schedule Menu Product
+            List<TBL_SCHEDULE_MENU_PRODUCT> lstOldSchedule_Menu_Product = new List<TBL_SCHEDULE_MENU_PRODUCT>();
+            foreach (var item in DA_ScheduleMenuProduct.Instance.GetAll().Where(x => x.ScheduleMenuID == ScheduleMenuID))
+            {
+                // Add vào List Old Schedule Menu Product
+                TBL_SCHEDULE_MENU_PRODUCT oldScheduleProductMenu = DA_ScheduleMenuProduct.Instance.GetById(item.ScheduleMenuProductID);
+                lstOldSchedule_Menu_Product.Add(oldScheduleProductMenu);
+
+                DA_ScheduleMenuProduct.Instance.Delete(item);
+            }
+            // Ghi log
+            WriteLog("ScheduleMenuProduct", "Delete", lstOldSchedule_Menu_Product, null);
+
+            // List Old Schedule Menu Product
+            List<TBL_SCHEDULE_MENU_SHIFT> lstOldSchedule_Menu_Shift = new List<TBL_SCHEDULE_MENU_SHIFT>();
+            foreach (var item in DA_ScheduleMenuShift.Instance.GetAll().Where(x => x.ScheduleMenuID == ScheduleMenuID))
+            {
+                // Add vào List Old Schedule Menu Product
+                TBL_SCHEDULE_MENU_SHIFT oldScheduleShiftMenu = DA_ScheduleMenuShift.Instance.GetById(item.ScheduleMenuShiftID);
+                lstOldSchedule_Menu_Shift.Add(oldScheduleShiftMenu);
+
+                DA_ScheduleMenuShift.Instance.Delete(item);
+            }
+            // Ghi log
+            WriteLog("ScheduleMenuShift", "Delete", lstOldSchedule_Menu_Shift, null);
+
+            return RedirectToAction("Index");
+        }
+    }
+}

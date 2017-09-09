@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "Role";
+}
+@section featured {
+}
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                Vai trò
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                            <div class="col-md-1">
+                                @if (ViewBag.Add != null && (bool)ViewBag.Add == true)
+                                {
+                                    <a class="btn btn-block btn-primary" href="/Role/Create"><i class="fa fa-plus"></i></a>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:22%;">Vai trò</th>
+                                            <th>Ghi chú</th>
+                                            <th data-orderable="false" style="width:80px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < ViewBag.List.Count; i++)
+                                        {
+                                            string Name = @ViewBag.List[i].RoleName.ToString();
+                                            string ID = @ViewBag.List[i].RoleID.ToString();
+                                            <tr>
+                                                <td>@ViewBag.List[i].RoleName</td>
+                                                <td>@ViewBag.List[i].Note</td>
+                                                <td style=" text-align:center;">
+                                                    <div class="row">
+                                                        @if (ViewBag.Edit == true)
+                                                        {
+                                                            <a class="href btn btn-info btn-xs" href="/Role/Edit/@ID" id="edit" style=""><i class="fa fa-pencil"></i> Sửa</a>
+                                                        }
+                                                        @if (ViewBag.Delete == true)
+                                                        {
+                                                            <a class="href btn btn-danger btn-xs" onclick="return DeleteConfirm('@ID');" href="/Role/Delete/@ID" id="delete" style=""><i class="fa fa-trash-o"></i> Xóa</a>
+                                                        }
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+
+<script>
+    $(function () {
+        var table = $('#lv_list').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "iDisplayLength": 20,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "select": true,
+            //"processing": true,
+            //"serverSide": true,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            }
+
+        });
+    });
+
+    function DeleteConfirm(id) {
+        var flag = false;
+        if (confirm("Are you sure you want to delete ?")) {
+            $.ajax({
+                url: "/Role/CheckBeforeDelete",
+                type: 'POST',
+                data: {
+                    ID: id,
+                },
+                dataType: "json",
+                async: false,
+                cache: false,
+                success: function (data) {
+                    if (data == "1") { // co the xoa
+                        flag = true;
+                    }
+                    else {
+                        ShowError("Dữ liệu đang được sử dung. Không thể xóa");
+                    }
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+        return flag;
+    }
+</script>

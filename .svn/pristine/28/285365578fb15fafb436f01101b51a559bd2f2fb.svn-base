@@ -1,0 +1,545 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HRM_ROHTOModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="HRM_ROHTOEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="pr_DeleteAllData" />
+    <FunctionImport Name="pr_DeleteOldInvoice">
+      <Parameter Name="ListContractID" Mode="In" Type="String" />
+      <Parameter Name="ZoneID" Mode="In" Type="Int64" />
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_GenerateInvoice">
+      <Parameter Name="ListContractID" Mode="In" Type="String" />
+      <Parameter Name="ListServiceID" Mode="In" Type="String" />
+      <Parameter Name="ZoneID" Mode="In" Type="Int64" />
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+      <Parameter Name="UserCreate" Mode="In" Type="Int32" />
+      <Parameter Name="InvoiceDate" Mode="In" Type="DateTime" />
+      <Parameter Name="NumberPromotion" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_GenerateReceipt">
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ListContractID" Mode="In" Type="String" />
+      <Parameter Name="ZoneID" Mode="In" Type="Int64" />
+      <Parameter Name="RunNumber" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_GetServiceForCombobox">
+      <Parameter Name="ListServiceID" Mode="In" Type="String" />
+      <Parameter Name="ZoneID" Mode="In" Type="Int64" />
+    </FunctionImport>
+    <FunctionImport Name="pr_getScheduleMenu">
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <EntitySet Name="SYS_CONFIG" EntityType="HRM_ROHTOModel.SYS_CONFIG" />
+    <EntitySet Name="SYS_FUNCTION" EntityType="HRM_ROHTOModel.SYS_FUNCTION" />
+    <EntitySet Name="SYS_POS" EntityType="HRM_ROHTOModel.SYS_POS" />
+    <EntitySet Name="SYS_PRODUCT_TYPE" EntityType="HRM_ROHTOModel.SYS_PRODUCT_TYPE" />
+    <EntitySet Name="SYS_ROLE" EntityType="HRM_ROHTOModel.SYS_ROLE" />
+    <EntitySet Name="SYS_ROLEPERMISSION" EntityType="HRM_ROHTOModel.SYS_ROLEPERMISSION" />
+    <EntitySet Name="SYS_SHIFT" EntityType="HRM_ROHTOModel.SYS_SHIFT" />
+    <EntitySet Name="SYS_USER" EntityType="HRM_ROHTOModel.SYS_USER" />
+    <EntitySet Name="TBL_AUDIT" EntityType="HRM_ROHTOModel.TBL_AUDIT" />
+    <EntitySet Name="TBL_BROADCAST" EntityType="HRM_ROHTOModel.TBL_BROADCAST" />
+    <EntitySet Name="TBL_DEPARTMENT" EntityType="HRM_ROHTOModel.TBL_DEPARTMENT" />
+    <EntitySet Name="TBL_EMPLOYEE" EntityType="HRM_ROHTOModel.TBL_EMPLOYEE" />
+    <EntitySet Name="TBL_EXCEPTION_MEAL" EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL" />
+    <EntitySet Name="TBL_EXCEPTION_MEAL_SHIFT" EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_SHIFT" />
+    <EntitySet Name="TBL_EXCEPTION_MEAL_USED" EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_USED" />
+    <EntitySet Name="TBL_EXCEPTION_MEAL_USED_PRODUCT" EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_USED_PRODUCT" />
+    <EntitySet Name="TBL_MENU" EntityType="HRM_ROHTOModel.TBL_MENU" />
+    <EntitySet Name="TBL_MENU_PRODUCT" EntityType="HRM_ROHTOModel.TBL_MENU_PRODUCT" />
+    <EntitySet Name="TBL_MENU_SHIFT" EntityType="HRM_ROHTOModel.TBL_MENU_SHIFT" />
+    <EntitySet Name="TBL_POSITION" EntityType="HRM_ROHTOModel.TBL_POSITION" />
+    <EntitySet Name="TBL_PRODUCT" EntityType="HRM_ROHTOModel.TBL_PRODUCT" />
+    <EntitySet Name="TBL_REGISTER_MEAL" EntityType="HRM_ROHTOModel.TBL_REGISTER_MEAL" />
+    <EntitySet Name="TBL_REGISTER_MEAL_PRODUCT" EntityType="HRM_ROHTOModel.TBL_REGISTER_MEAL_PRODUCT" />
+    <EntitySet Name="TBL_REGISTER_MEAL_PRODUCT_OLD" EntityType="HRM_ROHTOModel.TBL_REGISTER_MEAL_PRODUCT_OLD" />
+    <EntitySet Name="TBL_SCHEDULE_MENU" EntityType="HRM_ROHTOModel.TBL_SCHEDULE_MENU" />
+    <EntitySet Name="TBL_SCHEDULE_MENU_PRODUCT" EntityType="HRM_ROHTOModel.TBL_SCHEDULE_MENU_PRODUCT" />
+    <EntitySet Name="TBL_SCHEDULE_MENU_SHIFT" EntityType="HRM_ROHTOModel.TBL_SCHEDULE_MENU_SHIFT" />
+    <EntitySet Name="TBL_SHIFT_TIME_RANGE" EntityType="HRM_ROHTOModel.TBL_SHIFT_TIME_RANGE" />
+    <FunctionImport Name="pr_CheckEmployeeHasRegisterMeal" ReturnType="Collection(HRM_ROHTOModel.pr_CheckEmployeeHasRegisterMeal_Result)">
+      <Parameter Name="day" Mode="In" Type="Int32" />
+      <Parameter Name="month" Mode="In" Type="Int32" />
+      <Parameter Name="year" Mode="In" Type="Int32" />
+      <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_DeleteAllData1" />
+    <FunctionImport Name="pr_ExportEmployeeList" ReturnType="Collection(HRM_ROHTOModel.pr_ExportEmployeeList_Result)" />
+    <FunctionImport Name="pr_LoadChoosenMenu" ReturnType="Collection(HRM_ROHTOModel.pr_LoadChoosenMenu_Result)">
+      <Parameter Name="day" Mode="In" Type="Int32" />
+      <Parameter Name="month" Mode="In" Type="Int32" />
+      <Parameter Name="year" Mode="In" Type="Int32" />
+      <Parameter Name="ShiftID" Mode="In" Type="Int32" />
+      <Parameter Name="ProductTypeID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_LoadExceptionMeal" ReturnType="Collection(HRM_ROHTOModel.pr_LoadExceptionMeal_Result)" />
+    <FunctionImport Name="pr_ReportMealCardByDay" ReturnType="Collection(HRM_ROHTOModel.pr_ReportMealCardByDay_Result)">
+      <Parameter Name="day" Mode="In" Type="Int32" />
+      <Parameter Name="month" Mode="In" Type="Int32" />
+      <Parameter Name="year" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="pr_ReportPrintMealToDay">
+      <Parameter Name="date" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_ReportRegisterByEmployee" ReturnType="Collection(HRM_ROHTOModel.pr_ReportRegisterByEmployee_Result)">
+      <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+      <Parameter Name="todate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_ReportSLPhanComCanThanhToan" ReturnType="Collection(HRM_ROHTOModel.pr_ReportSLPhanComCanThanhToan_Result)">
+      <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+      <Parameter Name="todate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_ReportSLPhanComHangNgay" ReturnType="Collection(HRM_ROHTOModel.pr_ReportSLPhanComHangNgay_Result)">
+      <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+      <Parameter Name="todate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_ReportSLPhanComTheoNhanVien">
+      <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+      <Parameter Name="todate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_ReportSummaryByEmployee" ReturnType="Collection(HRM_ROHTOModel.pr_ReportSummaryByEmployee_Result)">
+      <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+      <Parameter Name="todate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_ReportSummaryByShift" ReturnType="Collection(HRM_ROHTOModel.pr_ReportSummaryByShift_Result)">
+      <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+      <Parameter Name="todate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="pr_UpdateExceptionMealUsed">
+      <Parameter Name="shiftID" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <EntityType Name="SYS_CONFIG">
+    <Key>
+      <PropertyRef Name="ConfigID" />
+    </Key>
+    <Property Name="ConfigID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Description2" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ValueType" Type="Int32" Nullable="false" />
+    <Property Name="SourceTable" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="SYS_FUNCTION">
+    <Key>
+      <PropertyRef Name="FunctionName" />
+    </Key>
+    <Property Name="FunctionName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Description2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Path" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ModuleCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SortOrder" Type="Int32" Nullable="false" />
+    <Property Name="IconURL" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="RoleID" Type="Int16" />
+  </EntityType>
+  <EntityType Name="SYS_POS">
+    <Key>
+      <PropertyRef Name="POSID" />
+    </Key>
+    <Property Name="POSID" Type="Int32" Nullable="false" />
+    <Property Name="POSName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ShiftListID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="SYS_PRODUCT_TYPE">
+    <Key>
+      <PropertyRef Name="ProductTypeID" />
+    </Key>
+    <Property Name="ProductTypeID" Type="Int32" Nullable="false" />
+    <Property Name="ProductTypeName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ProductTypeCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="SYS_ROLE">
+    <Key>
+      <PropertyRef Name="RoleID" />
+    </Key>
+    <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="SYS_ROLEPERMISSION">
+    <Key>
+      <PropertyRef Name="RoleID" />
+      <PropertyRef Name="FunctionName" />
+    </Key>
+    <Property Name="RoleID" Type="Int32" Nullable="false" />
+    <Property Name="FunctionName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="View" Type="Boolean" Nullable="false" />
+    <Property Name="Add" Type="Boolean" Nullable="false" />
+    <Property Name="Edit" Type="Boolean" Nullable="false" />
+    <Property Name="Delete" Type="Boolean" Nullable="false" />
+    <Property Name="Print" Type="Boolean" Nullable="false" />
+    <Property Name="Export" Type="Boolean" Nullable="false" />
+    <Property Name="Import" Type="Boolean" Nullable="false" />
+    <Property Name="Accept" Type="Boolean" Nullable="false" />
+    <Property Name="Cancel" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SYS_SHIFT">
+    <Key>
+      <PropertyRef Name="ShiftID" />
+    </Key>
+    <Property Name="ShiftID" Type="Int32" Nullable="false" />
+    <Property Name="ShiftCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="ShiftName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="SYS_USER">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="RoleID" Type="Int32" />
+    <Property Name="IsAdmin" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="TBL_AUDIT">
+    <Key>
+      <PropertyRef Name="AuditID" />
+    </Key>
+    <Property Name="AuditID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AuditDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="FunctionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="OldData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NewData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="TBL_BROADCAST">
+    <Key>
+      <PropertyRef Name="BroadcastID" />
+    </Key>
+    <Property Name="BroadcastID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BeginTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="EndTime" Type="DateTime" Precision="3" />
+    <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="UserCreate" Type="Int32" />
+    <Property Name="DateCreate" Type="DateTime" Precision="3" />
+    <Property Name="UserModified" Type="Int32" />
+    <Property Name="DateModified" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="TBL_DEPARTMENT">
+    <Key>
+      <PropertyRef Name="DepartmentID" />
+    </Key>
+    <Property Name="DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DepartmentCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="DepartmentName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ParentID" Type="Int32" />
+    <Property Name="LevelID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TBL_EMPLOYEE">
+    <Key>
+      <PropertyRef Name="EmployeeID" />
+    </Key>
+    <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FullName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="EmployeeCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ContractNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="DepartmentID" Type="Int32" />
+    <Property Name="PositionID1" Type="Int32" />
+    <Property Name="PositionID2" Type="Int32" />
+    <Property Name="PositionID3" Type="Int32" />
+    <Property Name="IsLeaveOut" Type="Boolean" Nullable="false" />
+    <Property Name="LeaveDate" Type="DateTime" Precision="0" />
+    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="TBL_EXCEPTION_MEAL">
+    <Key>
+      <PropertyRef Name="ExceptionMealID" />
+    </Key>
+    <Property Name="ExceptionMealID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ExceptionDate" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <EntityType Name="TBL_EXCEPTION_MEAL_SHIFT">
+    <Key>
+      <PropertyRef Name="ExceptionMealShiftID" />
+    </Key>
+    <Property Name="ExceptionMealShiftID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ExceptionMealID" Type="Int64" Nullable="false" />
+    <Property Name="ShiftID" Type="Int32" Nullable="false" />
+    <Property Name="ExceptionQty" Type="Int32" Nullable="false" />
+    <Property Name="ExceptionQtyUsed" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TBL_EXCEPTION_MEAL_USED">
+    <Key>
+      <PropertyRef Name="ExceptionMealUsedID" />
+    </Key>
+    <Property Name="ExceptionMealUsedID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MealDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="PrintTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+    <Property Name="ShiftID" Type="Int32" Nullable="false" />
+    <Property Name="MenuID" Type="Int32" Nullable="false" />
+    <Property Name="UserCreate" Type="Int32" />
+    <Property Name="UserPrint" Type="Int32" />
+    <Property Name="POSCreate" Type="Int32" />
+    <Property Name="POSModified" Type="Int32" />
+    <Property Name="POSPrint" Type="Int32" />
+  </EntityType>
+  <EntityType Name="TBL_EXCEPTION_MEAL_USED_PRODUCT">
+    <Key>
+      <PropertyRef Name="ExceptionMealUsedProductID" />
+    </Key>
+    <Property Name="ExceptionMealUsedProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ExceptionMealUsedID" Type="Int64" Nullable="false" />
+    <Property Name="ProductID" Type="Int32" Nullable="false" />
+    <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="TBL_MENU">
+    <Key>
+      <PropertyRef Name="MenuID" />
+    </Key>
+    <Property Name="MenuID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MenuName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="UserCreate" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedUser" Type="Int32" />
+    <Property Name="MenuDay" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TBL_MENU_PRODUCT">
+    <Key>
+      <PropertyRef Name="MenuProductID" />
+    </Key>
+    <Property Name="MenuProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MenuID" Type="Int32" Nullable="false" />
+    <Property Name="ProductID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TBL_MENU_SHIFT">
+    <Key>
+      <PropertyRef Name="MenuShiftID" />
+    </Key>
+    <Property Name="MenuShiftID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MenuID" Type="Int32" Nullable="false" />
+    <Property Name="ShiftID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TBL_POSITION">
+    <Key>
+      <PropertyRef Name="PositionID" />
+    </Key>
+    <Property Name="PositionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PositionCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PositionName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="TBL_PRODUCT">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ProductName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="ProductTypeID" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ImageProduct" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TBL_REGISTER_MEAL">
+    <Key>
+      <PropertyRef Name="RegisterID" />
+    </Key>
+    <Property Name="RegisterID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+    <Property Name="ShiftID" Type="Int32" Nullable="false" />
+    <Property Name="MenuID" Type="Int32" />
+    <Property Name="RegisterTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="MealDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="UserCreate" Type="Int32" />
+    <Property Name="UserPrint" Type="Int32" />
+    <Property Name="IsCancel" Type="Boolean" Nullable="false" />
+    <Property Name="IsPrint" Type="Boolean" Nullable="false" />
+    <Property Name="PrintTime" Type="DateTime" Precision="3" />
+    <Property Name="UserModified" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ShiftIDOld" Type="Int32" />
+    <Property Name="MenuIDOld" Type="Int32" />
+    <Property Name="IsAddOn" Type="Boolean" Nullable="false" />
+    <Property Name="POSCreate" Type="Int32" />
+    <Property Name="POSModified" Type="Int32" />
+    <Property Name="POSPrint" Type="Int32" />
+    <Property Name="IsUpdate" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TBL_REGISTER_MEAL_PRODUCT">
+    <Key>
+      <PropertyRef Name="RegisterMealProductID" />
+    </Key>
+    <Property Name="RegisterMealProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RegisterMealID" Type="Int64" Nullable="false" />
+    <Property Name="ProductID" Type="Int32" Nullable="false" />
+    <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="TBL_REGISTER_MEAL_PRODUCT_OLD">
+    <Key>
+      <PropertyRef Name="RegisterMealProductID" />
+    </Key>
+    <Property Name="RegisterMealProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RegisterMealID" Type="Int64" Nullable="false" />
+    <Property Name="ProductID" Type="Int32" Nullable="false" />
+    <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="TBL_SCHEDULE_MENU">
+    <Key>
+      <PropertyRef Name="ScheduleMenuID" />
+    </Key>
+    <Property Name="ScheduleMenuID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MealDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="MenuID" Type="Int32" Nullable="false" />
+    <Property Name="UserModified" Type="Int32" />
+    <Property Name="DateModified" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="TBL_SCHEDULE_MENU_PRODUCT">
+    <Key>
+      <PropertyRef Name="ScheduleMenuProductID" />
+    </Key>
+    <Property Name="ScheduleMenuProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ScheduleMenuID" Type="Int64" Nullable="false" />
+    <Property Name="MenuID" Type="Int32" Nullable="false" />
+    <Property Name="ProductID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TBL_SCHEDULE_MENU_SHIFT">
+    <Key>
+      <PropertyRef Name="ScheduleMenuShiftID" />
+    </Key>
+    <Property Name="ScheduleMenuShiftID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ScheduleMenuID" Type="Int64" Nullable="false" />
+    <Property Name="MenuID" Type="Int32" Nullable="false" />
+    <Property Name="ShiftID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TBL_SHIFT_TIME_RANGE">
+    <Key>
+      <PropertyRef Name="ShiftTimeRangeID" />
+    </Key>
+    <Property Name="ShiftTimeRangeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ShiftID" Type="Int32" Nullable="false" />
+    <Property Name="BeginTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <ComplexType Name="pr_CheckEmployeeHasRegisterMeal_Result">
+    <Property Type="Int64" Name="RegisterID" Nullable="false" />
+    <Property Type="Int32" Name="EmployeeID" Nullable="false" />
+    <Property Type="Int32" Name="ShiftID" Nullable="false" />
+    <Property Type="Int32" Name="MenuID" Nullable="true" />
+    <Property Type="DateTime" Name="RegisterTime" Nullable="false" Precision="23" />
+    <Property Type="DateTime" Name="MealDate" Nullable="false" />
+    <Property Type="Int32" Name="UserCreate" Nullable="true" />
+    <Property Type="Int32" Name="UserPrint" Nullable="true" />
+    <Property Type="Boolean" Name="IsCancel" Nullable="false" />
+    <Property Type="Boolean" Name="IsPrint" Nullable="false" />
+    <Property Type="DateTime" Name="PrintTime" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="UserModified" Nullable="true" />
+    <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="ShiftIDOld" Nullable="true" />
+    <Property Type="Int32" Name="MenuIDOld" Nullable="true" />
+    <Property Type="Boolean" Name="IsAddOn" Nullable="false" />
+    <Property Type="Int32" Name="POSCreate" Nullable="true" />
+    <Property Type="Int32" Name="POSModified" Nullable="true" />
+    <Property Type="Int32" Name="POSPrint" Nullable="true" />
+    <Property Type="Boolean" Name="IsUpdate" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="pr_ExportEmployeeList_Result">
+    <Property Type="String" Name="FullName" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="EmployeeCode" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="ContractNo" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="CardNumber" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="DepartmentCode" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PositionName1" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PositionName2" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PositionName3" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="pr_LoadChoosenMenu_Result">
+    <Property Type="Int32" Name="ChoosenMeal" Nullable="true" />
+    <Property Type="Int32" Name="MenuID" Nullable="true" />
+    <Property Type="Int32" Name="ProductID" Nullable="false" />
+    <Property Type="String" Name="ProductName" Nullable="true" MaxLength="150" />
+    <Property Type="Int32" Name="ProductTypeID" Nullable="true" />
+    <Property Type="String" Name="ProductTypeName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Producttypecode" Nullable="true" MaxLength="20" />
+  </ComplexType>
+  <ComplexType Name="pr_LoadExceptionMeal_Result">
+    <Property Type="Int32" Name="SHIFTID" Nullable="false" />
+    <Property Type="Int32" Name="REMAIN" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_ReportMealCardByDay_Result">
+    <Property Type="Int32" Name="ShiftID" Nullable="true" />
+    <Property Type="String" Name="ShiftName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="ProductName" Nullable="true" MaxLength="150" />
+    <Property Type="Int32" Name="Quantity" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_ReportRegisterByEmployee_Result">
+    <Property Type="DateTime" Name="MealDate" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="EmployeeID" Nullable="true" />
+    <Property Type="String" Name="FullName" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="EmployeeCode" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Ca0" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Ca1" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Ca2" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Ca3" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Ca0Plus" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Ca1Plus" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="Total" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_ReportSLPhanComCanThanhToan_Result">
+    <Property Type="DateTime" Name="MealDate" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="Ca1Reg" Nullable="true" />
+    <Property Type="Int32" Name="Ca1Print" Nullable="true" />
+    <Property Type="Int32" Name="Ca1Exp" Nullable="true" />
+    <Property Type="Int32" Name="Ca1Payment" Nullable="true" />
+    <Property Type="Int32" Name="Ca0Reg" Nullable="true" />
+    <Property Type="Int32" Name="Ca0Print" Nullable="true" />
+    <Property Type="Int32" Name="Ca0Exp" Nullable="true" />
+    <Property Type="Int32" Name="Ca0Payment" Nullable="true" />
+    <Property Type="Int32" Name="Ca1PlusReg" Nullable="true" />
+    <Property Type="Int32" Name="Ca1PlusPrint" Nullable="true" />
+    <Property Type="Int32" Name="Ca1PlusExp" Nullable="true" />
+    <Property Type="Int32" Name="Ca1PlusPayment" Nullable="true" />
+    <Property Type="Int32" Name="Ca2Reg" Nullable="true" />
+    <Property Type="Int32" Name="Ca2Print" Nullable="true" />
+    <Property Type="Int32" Name="Ca2Exp" Nullable="true" />
+    <Property Type="Int32" Name="Ca2Payment" Nullable="true" />
+    <Property Type="Int32" Name="Ca0PlusReg" Nullable="true" />
+    <Property Type="Int32" Name="Ca0PlusPrint" Nullable="true" />
+    <Property Type="Int32" Name="Ca0PlusExp" Nullable="true" />
+    <Property Type="Int32" Name="Ca0PlusPayment" Nullable="true" />
+    <Property Type="Int32" Name="Ca3Reg" Nullable="true" />
+    <Property Type="Int32" Name="Ca3Print" Nullable="true" />
+    <Property Type="Int32" Name="Ca3Exp" Nullable="true" />
+    <Property Type="Int32" Name="Ca3Payment" Nullable="true" />
+    <Property Type="Int32" Name="SumReg" Nullable="true" />
+    <Property Type="Int32" Name="SumPrint" Nullable="true" />
+    <Property Type="Int32" Name="SumExp" Nullable="true" />
+    <Property Type="Int32" Name="SumPayment" Nullable="true" />
+    <Property Type="Int32" Name="DeltaPayment" Nullable="true" />
+    <Property Type="String" Name="Notes" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="Special" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_ReportSLPhanComHangNgay_Result">
+    <Property Type="DateTime" Name="MealDate" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="TotalReg" Nullable="true" />
+    <Property Type="Int32" Name="TotalPrint" Nullable="true" />
+    <Property Type="Int32" Name="TotalExp" Nullable="true" />
+    <Property Type="Int32" Name="Total" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_ReportSummaryByEmployee_Result">
+    <Property Type="String" Name="Fullname" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="EmployeeCode" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="CardNumber" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="ContractNo" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="EmployeeID" Nullable="false" />
+    <Property Type="Int32" Name="Quantity" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="pr_ReportSummaryByShift_Result">
+    <Property Type="Int32" Name="ShiftID" Nullable="false" />
+    <Property Type="String" Name="ShiftName" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="Quantity" Nullable="true" />
+  </ComplexType>
+</Schema>

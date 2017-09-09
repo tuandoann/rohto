@@ -1,0 +1,184 @@
+﻿@model HRM_ROHTO.Models.ListExt.Schedule_All_Ext
+@using HRM_ROHTO.Models.BUS
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+</style>
+@using (Html.BeginForm("Index", "ReportMealCardTomorrow", FormMethod.Post, new { @id = "frmSearch" }))
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                Thống kê số lượng phiếu cơm đăng ký
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-2 text-right">
+
+                                <button type="button" class="btn btn-warning" onclick="btnExport_Click();">Xuất báo cáo</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-1" style="margin-top:5px;">
+                                <label for="date_year">Ngày: </label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="date" class="form-control" id="date_year" value="@ViewBag.FromDate" name="date_year" />
+                            </div>
+                            <div class="col-md-1" style="padding-left:0;">
+                                <button type="button" onclick="return filterByMonthAndYear()" class="btn btn-block btn-vimeo btn-group">Tìm</button>
+                            </div>
+                            @*return filterByMonthAndYear()*@
+                            <div class="col-md-6">
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                            <div class="col-md-1">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @*<section class="content">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box-body">
+                                    @Html.Partial("CustomerDebit_Table", @ViewData["ListData"])
+                                </div><!-- /.box-body -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </section>*@
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Ca</th>
+                                            <th>Món</th>
+                                            <th>Số lượng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < ViewBag.store.Rows.Count; i++)
+                                        {
+                                            var dt = ViewBag.store;
+                                            <tr>
+
+                                                <td>
+                                                    @dt.Rows[i]["ShiftName"].ToString()
+                                                </td>
+                                                <td>
+                                                    @dt.Rows[i]["ProductName"].ToString()
+                                                </td>
+                                                <td align="right">
+                                                    @dt.Rows[i]["Quantity"].ToString()
+                                                </td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                                <td></td>
+                                                <td>Tổng:</td>
+                                                <td align="right">@ViewBag.Tong</td>
+                                            </tr>*
+                                    </tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script>
+    $(function () {
+        $('#lv_list tbody').on('click', '#edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?ScheduleMenuID=" + data["ScheduleMenuID"];
+        });
+        var arrTr = $("#lv_list tbody tr");
+
+        //$('#date_year').datetimepicker({
+        //    viewMode: 'days',
+        //    format: 'dd/MM/YYYY',
+        //    showClear: true,
+        //    showClose: true
+        //});
+    });
+
+    var date = new Date();
+    //$("#date_year").val((date.getMonth() + 1) + "/" + date.getFullYear());
+    $("#date_year").val(date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + ((date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate())));
+
+    function filterByMonthAndYear() {
+        debugger;
+        //ReloadPartialViewIndex();
+        if ($("#date_year").val() == "") {
+            ShowError("Vui lòng nhập ngày");
+            $("#date_year").focus();
+            return false;
+        }
+        else {
+            var arrDate = $("#date_year").val().split("-");
+            location.href = "/ReportMealCardTomorrow/Index?year=" + arrDate[0] + "&&month=" + arrDate[1] + "&&day=" + arrDate[2];
+        }
+    }
+
+    function ReloadPartialViewIndex() {
+        $('#partial_Invoice').load('/ReportMealCardTomorrow/Index', $("#frmSearch").serializeArray());
+    }
+
+    function btnSearch_Click() {
+        ReloadPartialViewIndex();
+    }
+
+    function btnExport_Click() {
+
+        $.ajax({
+            url: '/ReportMealCardTomorrow/ExportMealCardTomorrow',
+            type: 'post',
+            datatype: 'json',
+            data: $("#frmSearch").serializeArray(),
+            async: false,
+            cache: false,
+            success: function (data) {
+                if (data == "-1") {
+                    ShowError("Mã khách hàng đã tồn tại, vui lòng nhập lại");
+                    flag = false;
+                }
+                else {
+                    debugger;
+                    window.location.href = window.location.origin + (data);
+                }
+            }
+        })
+    }
+</script>

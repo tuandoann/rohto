@@ -1,0 +1,211 @@
+﻿using HRM_ROHTO.Models;
+using HRM_ROHTO.Models.BUS;
+using HRM_ROHTO.Util.BUS;
+using HRM_ROHTO.Models.ListExt;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace HRM_ROHTO.Controllers
+{
+    public class UserController : BaseController
+    {
+        BUS_User b_User = new BUS_User();
+
+        public ActionResult Index(FormCollection fc, int page = 1)
+        {
+            bool CanView = CheckPermission("User", 1);
+            if (!CanView)
+            {
+                return RedirectToAction("Login", "Login", "Login");
+            }
+            ViewBag.List = DA_User.Instance.GetAll();
+            return View();
+        }
+
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
+
+        public ActionResult Create()
+        {
+            // combobox Role
+            RepairToShow();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(SYS_USER user, FormCollection fc)
+        {
+            try
+            {
+                user.Password = HRM_ROHTO.Util.MD5Encryption.Encrypte(user.Password);
+                user.IsAdmin = false;
+                DA_User.Instance.Insert(user);
+
+                //Ghi log
+                WriteLog("User", "Create", null, user);
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                RepairToShow();
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public string CheckUserNameNotExist(string UserName)
+        {
+            return DA_User.Instance.CheckUserNameNotExist(UserName) == true ? "1" : "-1";
+        }
+
+        [HttpPost]
+        public string CheckEditUserNameNotExist(int UserID, string UserName)
+        {
+            return DA_User.Instance.CheckEditUserNameNotExist(UserID, UserName) == true ? "1" : "-1";
+        }
+
+        public ActionResult Edit(string id)
+        {
+            int ID = int.Parse(id);
+            SYS_USER user = DA_User.Instance.GetById(ID);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            RepairToShow(ID);
+            return View(user);
+        }
+
+
+
+        [HttpPost]
+        public ActionResult Edit(SYS_USER user, FormCollection fc)
+        {
+            try
+            {
+                SYS_USER oldUser = DA_User.Instance.GetById(user.UserID);
+
+                user.IsActive = true;
+                user.IsAdmin = false;
+                user.Password = HRM_ROHTO.Util.MD5Encryption.Encrypte(user.Password);
+                DA_User.Instance.Update(user);
+
+                //Ghi log
+                WriteLog("User", "Edit", oldUser, user);
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                RepairToShow();
+                return View();
+            }
+        }
+
+        public ActionResult Delete(int id)
+        {
+            SYS_USER oldUser = DA_User.Instance.GetById(id);
+            //Ghi log
+            WriteLog("User", "Delete", oldUser);
+
+            DA_User.Instance.Delete(id);
+            return RedirectToAction("Index");
+        }
+
+        public void RepairToShow(int id = 0)
+        {
+            List<SelectListItem> lstRole = DA_Role.Instance.GetListForCombobox();
+            lstRole.Insert(0, new SelectListItem { Text = "", Value = "0" });
+            ViewBag.listRole = lstRole;
+        }
+
+        public ActionResult ChangePassword(FormCollection frm)
+        {
+            try
+            {
+                var c = DA_User.Instance.GetById(int.Parse(Session["UserID"].ToString()));
+                if (frm != null && frm.Count > 0)
+                {
+                    var OldPass = frm[0].ToString();
+                    var Old = HRM_ROHTO.Util.MD5Encryption.Encrypte(OldPass);
+                    if (c.Password == Old)
+                    {
+                        var NewPass = frm[1].ToString();
+                        var New = HRM_ROHTO.Util.MD5Encryption.Encrypte(NewPass);
+                        int t = DA_User.Instance.ChangePassword(int.Parse(Session["UserID"].ToString()), New);
+                        if (t == 1)
+                        {
+                            ViewBag.ShowSuccess = true;
+                            ViewBag.Success = "Đổi mật khẩu thành công.";
+
+                            //Ghi log
+                            User_Password_Ext oldPassword = new User_Password_Ext();
+                            oldPassword.Password = Old;
+                            User_Password_Ext newPassword = new User_Password_Ext();
+                            newPassword.Password = New;
+                            WriteLog("User", "Change password", oldPassword, newPassword);
+                        }
+                        else
+                        {
+                            ViewBag.ShowError = true;
+                            ViewBag.Error = "Đổi mật khẩu thất bại.";
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.ShowError = true;
+                        ViewBag.Error = "Mật khẩu cũ không đúng.";
+                    }
+                }
+            }
+            catch
+            { }
+
+            return View();
+        }
+
+        public ActionResult CheckPassword(string PasswordOld)
+        {
+            return Content("1", "text/plain");
+        }
+
+        public ActionResult Profile()
+        {
+            int ID = int.Parse(Session["UserID"].ToString());
+            SYS_USER user = DA_User.Instance.GetById(ID);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            RepairToShow(ID);
+            return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult Profile(SYS_USER user, FormCollection fc)
+        {
+            try
+            {
+                DA_User.Instance.UpdateProfile(user);
+                RepairToShow();
+
+                //Ghi log
+                SYS_USER oldUser = DA_User.Instance.GetById(user.UserID);
+                WriteLog("User", "Update profile", oldUser, user);
+
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+    }
+}

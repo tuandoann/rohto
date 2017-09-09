@@ -1,0 +1,104 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using HRM_ROHTO.Models.ListExt;
+
+namespace HRM_ROHTO.Models.BUS
+{
+    public class DA_Employee : EfRepositoryBase<TBL_EMPLOYEE>
+    {
+        #region Constructor
+        private static volatile DA_Employee _instance;
+        private static readonly object SyncRoot = new Object();
+
+        public static DA_Employee Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    lock (SyncRoot)
+                    {
+                        if (_instance == null)
+                            _instance = new DA_Employee();
+                    }
+                }
+                return _instance;
+            }
+        }
+        #endregion
+
+        public IList<EmployeeExt> GetEmployeeExt()
+        {
+            List<EmployeeExt> lst = new List<EmployeeExt>();
+            using (var context = (HRM_ROHTOEntities)Activator.CreateInstance(typeof(HRM_ROHTOEntities), _connectionStr))
+            {
+                foreach (var item in context.TBL_EMPLOYEE)
+                {
+                    TBL_DEPARTMENT department = context.TBL_DEPARTMENT.FirstOrDefault(x => x.DepartmentID == item.DepartmentID);
+                    TBL_POSITION position = context.TBL_POSITION.FirstOrDefault(x => x.PositionID == item.PositionID1);
+                    EmployeeExt ext = new EmployeeExt
+                    {
+                        EmployeeID = item.EmployeeID,
+                        EmployeeCode = item.EmployeeCode,
+                        FullName = item.FullName,
+                        ContractNo = item.ContractNo,
+                        CardNumber = item.CardNumber,
+                        DepartmentName = department != null ? department.DepartmentName : "",
+                        PositionName = position != null ? position.PositionName : "",
+                        IsLeaveOut = item.IsLeaveOut == true ? "Nghỉ việc" : "Đang làm"
+                    };
+                    lst.Add(ext);
+                }
+            }
+            return lst;
+        }
+
+        public bool CheckEmployeeCodeNotExist(string EmployeeCode)
+        {
+            using (var context = (HRM_ROHTOEntities)Activator.CreateInstance(typeof(HRM_ROHTOEntities), _connectionStr))
+            {
+                TBL_EMPLOYEE ds = context.TBL_EMPLOYEE.FirstOrDefault(x => x.EmployeeCode == EmployeeCode);
+                if (ds != null)
+                    return false;
+            }
+            return true;
+        }
+
+        public bool CheckEditEmployeeCodeHasExist(int EmployeeID, string EmployeeCode)
+        {
+            using (var context = (HRM_ROHTOEntities)Activator.CreateInstance(typeof(HRM_ROHTOEntities), _connectionStr))
+            {
+                TBL_EMPLOYEE ds = context.TBL_EMPLOYEE.FirstOrDefault(x => x.EmployeeID == EmployeeID);
+                if (ds == null)
+                    return false;
+                if (ds.EmployeeCode != EmployeeCode && !CheckEmployeeCodeNotExist(EmployeeCode))
+                    return false;
+            }
+            return true;
+        }
+
+        public bool CheckEmployeeContractNoExist(string contractNo)
+        {
+            using (var context = (HRM_ROHTOEntities)Activator.CreateInstance(typeof(HRM_ROHTOEntities), _connectionStr))
+            {
+                TBL_EMPLOYEE ds = context.TBL_EMPLOYEE.FirstOrDefault(x => x.ContractNo == contractNo);
+                if (ds != null)
+                    return false;
+            }
+            return true;
+        }
+
+        public bool CheckEmployeeCardNumbertExist(string cardNumber)
+        {
+            using (var context = (HRM_ROHTOEntities)Activator.CreateInstance(typeof(HRM_ROHTOEntities), _connectionStr))
+            {
+                TBL_EMPLOYEE ds = context.TBL_EMPLOYEE.FirstOrDefault(x => x.CardNumber == cardNumber);
+                if (ds != null)
+                    return false;
+            }
+            return true;
+        }
+    }
+}

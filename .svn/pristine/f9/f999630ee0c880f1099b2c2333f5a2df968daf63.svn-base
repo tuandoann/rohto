@@ -1,0 +1,280 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .botoom_footerCa {
+        border-bottom: 1px groove !important;
+    }
+
+    .A1, .A11, .A0, .A01, .A1p, .A1p1, .A0p, .A0p1, .A2, .A21, .A3, .A31, .sum, .sum1, .ngoaiRa {
+        vertical-align: middle;
+    }
+
+    .A1, .A11 {
+        background-color: rgb(252,213,180);
+    }
+
+    .A0, .A01 {
+        background-color: rgb(219,229,241);
+    }
+
+    .A1p, .A1p1 {
+        background-color: rgb(155,187,89);
+    }
+
+    .A0p, .A0p1 {
+        background-color: rgb(141,180,227);
+    }
+
+    .A2, .A21 {
+        background-color: rgb(215,228,188);
+    }
+
+    .A3, .A31 {
+        background-color: rgb(252,213,180);
+    }
+
+    .sum, .sum1 {
+        background-color: rgb(178,161,199);
+    }
+
+    .A11, .A01, .A1p1, .A0p1, .A21, .A31, .sum1 {
+        text-align: right;
+    }
+
+    .A1, .A0, .A1p, .A0p, .A2, .A3, .sum, .ngoaiRa {
+        text-align: center;
+    }
+    .ngoaiRa {
+        background-color: #DF0101;
+    }
+</style>
+@section featured {
+}
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                Thống kê số lượng phần cơm cần thanh toán
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <button type="button" class="btn btn-warning" onclick="btnExport_Click();">Xuất báo cáo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-header with-border">
+                    <div class="row" style="padding-bottom:5px;">
+                        <div class="col-md-1 col-xs-2" style="font-weight:bold; text-align:right;">Từ ngày</div>
+                        <div class="col-md-2 col-xs-3">
+                            <input type="date" id="FromDate" name="FromDate" value="@ViewBag.FromDate" class="form-control" />
+                        </div>
+                        <div class="col-md-2 col-xs-1"></div>
+                        <div class="col-md-1 col-xs-2" style="font-weight:bold; text-align:right;">Đến ngày</div>
+                        <div class="col-md-2 col-xs-3 input-group ToDate">
+                            <input type="date" id="ToDate" name="ToDate" value="@ViewBag.ToDate" class="form-control" />
+                        </div>
+                        <div class="col-md-1" style="float: right; margin-right: 10px;">
+                            <button id="btnSearch" class="btn btn-block btn-warning" onclick="filterByMonthAndYear(); return false;">
+                                Tìm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <section class="content" style="overflow-x: scroll">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered ">
+                                    <thead>
+                                        <tr style="text-align: center; vertical-align: middle">
+                                            <th rowspan="2" style="text-align: center; vertical-align: middle; min-width: 90px">Tháng</th>
+                                            <th colspan="4" class="A1 botoom_footerCa">CA 1</th>
+                                            <th colspan="4" class="A0 botoom_footerCa">CA 0</th>
+                                            <th colspan="4" class="A1p botoom_footerCa">CA 1+</th>
+                                            <th colspan="4" class="A2 botoom_footerCa">CA 2</th>
+                                            <th colspan="4" class="A0p botoom_footerCa">CA 0+</th>
+                                            <th colspan="4" class="A3 botoom_footerCa">CA 3</th>
+                                            <th colspan="4" class="sum botoom_footerCa">Tổng</th>
+                                            <th rowspan="2" class="ngoaiRa">Số lượng chênh lệch</th>
+                                            <th colspan="2" class="botoom_footerCa">Trường hợp đặc biệt</th>
+                                        </tr>
+                                        <tr style="text-align: center; vertical-align: middle">
+                                            <th class="A1">Sl đăng ký</th>
+                                            <th class="A1">Sl đã in phiếu</th>
+                                            <th class="A1">Sl in phiếu đột xuất</th>
+                                            <th class="A1">Payment</th>
+
+                                            <th class="A0">Sl đăng ký</th>
+                                            <th class="A0">Sl đã in phiếu</th>
+                                            <th class="A0">Sl in phiếu đột xuất</th>
+                                            <th class="A0">Payment</th>
+                                            
+                                            <th class="A1p">Sl đăng ký</th>
+                                            <th class="A1p">Sl đã in phiếu</th>
+                                            <th class="A1p">Sl in phiếu đột xuất</th>
+                                            <th class="A1p">Payment</th>
+                                            
+                                            <th class="A2">Sl đăng ký</th>
+                                            <th class="A2">Sl đã in phiếu</th>
+                                            <th class="A2">Sl in phiếu đột xuất</th>
+                                            <th class="A2">Payment</th>
+                                            
+                                            <th class="A0p">Sl đăng ký</th>
+                                            <th class="A0p">Sl đã in phiếu</th>
+                                            <th class="A0p">Sl in phiếu đột xuất</th>
+                                            <th class="A0p">Payment</th>
+                                            
+                                            <th class="A3">Sl đăng ký</th>
+                                            <th class="A3">Sl đã in phiếu</th>
+                                            <th class="A3">Sl in phiếu đột xuất</th>
+                                            <th class="A3">Payment</th>
+                                            
+                                            <th class="sum">Sl đăng ký</th>
+                                            <th class="sum">Sl đã in phiếu</th>
+                                            <th class="sum">Sl in phiếu đột xuất</th>
+                                            <th class="sum">Payment</th>
+
+                                            <th>Ghi chú</th>
+                                            <th>SL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var data = ViewBag.store;
+                                            List<Int32> lTong = ViewBag.tong;
+                                            for (int i = 0; i < data.Rows.Count; i++)
+                                            {
+                                                var item = data.Rows[i];
+                                                var dayOfWeek = data.Rows[i]["MealDate"].DayOfWeek;
+                                                string style_mealDate = (dayOfWeek == DayOfWeek.Sunday) || (dayOfWeek == DayOfWeek.Saturday) ? "background-color: red" : "";
+                                                string mealDate = Convert.ToDateTime(item["MealDate"]).ToString("dd-MM-yyyy");
+                                                if((dayOfWeek == DayOfWeek.Monday) && i!=0)
+                                                {
+                                                    <tr>
+                                                        <td colspan="32"></td>
+                                                    </tr>
+                                                }
+                                                <tr>
+                                                    <td style="@style_mealDate">@mealDate</td>
+
+                                                    <td class="A1">@item["Ca1Reg"].ToString()</td>
+                                                    <td class="A1">@item["Ca1Print"].ToString()</td>
+                                                    <td class="A1">@item["Ca1Exp"].ToString()</td>
+                                                    <td class="A1">@item["Ca1Payment"].ToString()</td>
+
+                                                    <td class="A0">@item["Ca0Reg"].ToString()</td>
+                                                    <td class="A0">@item["Ca0Print"].ToString()</td>
+                                                    <td class="A0">@item["Ca0Exp"].ToString()</td>
+                                                    <td class="A0">@item["Ca0Payment"].ToString()</td>
+
+                                                    <td class="A1p">@item["Ca1PlusReg"].ToString()</td>
+                                                    <td class="A1p">@item["Ca1PlusPrint"].ToString()</td>
+                                                    <td class="A1p">@item["Ca1PlusExp"].ToString()</td>
+                                                    <td class="A1p">@item["Ca1PlusPayment"].ToString()</td>
+
+                                                    <td class="A2">@item["Ca2Reg"].ToString()</td>
+                                                    <td class="A2">@item["Ca2Print"].ToString()</td>
+                                                    <td class="A2">@item["Ca2Exp"].ToString()</td>
+                                                    <td class="A2">@item["Ca2Payment"].ToString()</td>
+
+                                                    <td class="A0p">@item["Ca0PlusReg"].ToString()</td>
+                                                    <td class="A0p">@item["Ca0PlusPrint"].ToString()</td>
+                                                    <td class="A0p">@item["Ca0PlusExp"].ToString()</td>
+                                                    <td class="A0p">@item["Ca0PlusPayment"].ToString()</td>
+
+                                                    <td class="A3">@item["Ca3Reg"].ToString()</td>
+                                                    <td class="A3">@item["Ca3Print"].ToString()</td>
+                                                    <td class="A3">@item["Ca3Exp"].ToString()</td>
+                                                    <td class="A3">@item["Ca3Payment"].ToString()</td>
+
+                                                    <td class="sum">@item["SumReg"].ToString()</td>
+                                                    <td class="sum">@item["SumPrint"].ToString()</td>
+                                                    <td class="sum">@item["SumExp"].ToString()</td>
+                                                    <td class="sum">@item["SumPayment"].ToString()</td>
+
+                                                    <td class="ngoaiRa">@item["DeltaPayment"].ToString()</td>
+
+                                                    <td>@item["Notes"].ToString()</td>
+                                                    <td>@item["Special"].ToString()</td>
+                                                </tr>
+                                            }
+                                            <tr style="font-weight:bold">
+                                                <td>Tổng cộng:</td>
+                                                @{
+                                                    int index = 1;
+                                                    foreach(int item in lTong)
+                                                    {
+                                                        string class_item="";
+                                                        if( index < 5)
+                                                        {
+                                                            class_item = "A1";
+                                                        }
+                                                        else if( index < 9)
+                                                        {
+                                                            class_item = "A0";
+                                                        }
+                                                        else if( index < 13)
+                                                        {
+                                                            class_item = "A1p";
+                                                        }
+                                                        else if( index < 17)
+                                                        {
+                                                            class_item = "A2";
+                                                        }
+                                                        else if( index < 21)
+                                                        {
+                                                            class_item = "A0p";
+                                                        }
+                                                        else if( index < 25)
+                                                        {
+                                                            class_item = "A3";
+                                                        }
+                                                        else if( index < 29)
+                                                        {
+                                                            class_item = "sum";
+                                                        }
+                                                        else if (index <30)
+                                                        {
+                                                            class_item = "ngoaiRa";
+                                                        }
+                                                        else
+                                                        {
+                                                            <td></td>           
+                                                        }
+                                                        index += 1;
+                                                        <td class="@class_item">@item</td>
+                                                    }
+                                                }
+                                            </tr>
+                                          }
+                                    </tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script src="~/Content/JS/ReportSoLuongPhanComCanThanhToan.js"></script>

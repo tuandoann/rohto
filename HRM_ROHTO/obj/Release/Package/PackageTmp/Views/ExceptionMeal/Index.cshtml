@@ -1,0 +1,168 @@
+﻿@model List<HRM_ROHTO.Models.TBL_EXCEPTION_MEAL>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                Danh sách phiếu cơm dự phòng
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-1" style="margin-top:5px;">
+                                <label for="date_year">Tháng/năm: </label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" id="date_year" name="date_year" class="form-control" />
+                            </div>
+                            <div class="col-md-1" style="padding-left:0;">
+                                <button type="button" onclick="return filterByMonthAndYear()" class="btn btn-block btn-vimeo btn-group">Tìm</button>
+                            </div>
+                            <div class="col-md-6">
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                            <div class="col-md-1">
+                                @if (ViewBag.Add == true)
+                                {
+                                    <a class="btn btn-block btn-primary" href="/ExceptionMeal/Create"><i class="fa fa-plus"></i></a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th width="88%">Ngày</th>
+                                            <td class="sr-only" hidden="hidden"></td>
+                                            <th style="min-width:80px; width:100px;" data-orderable="false"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var i in Model)
+                                        {
+                                            <tr>
+                                                <td>@i.ExceptionDate.ToShortDateString()</td>
+                                                <td class="sr-only" hidden="hidden">@i.ExceptionMealID</td>
+                                                <td>
+                                                    @if (ViewBag.Edit == true)
+                                                    {
+                                                        <a href="/ExceptionMeal/Edit?ExceptionMealID=@i.ExceptionMealID" class='btn btn-info btn-xs' id='edit'><i class='fa fa-pencil'></i> Edit</a>
+                                                    }
+                                                    @if (ViewBag.Delete == true)
+                                                    {
+                                                        <a class='btn btn-danger btn-xs' id='delete'><i class='fa fa-trash-o'></i> Delete</a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+
+<script>
+    $(function () {
+        var table = $('#lv_list').DataTable({
+            "processing": true, // for show processing bar
+            //"serverSide": true, // for process on server side
+            "orderMulti": false, // for disable multi column order
+            "iDisplayLength": 20,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "info": false,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+        });
+
+        $('#lv_list tbody').on('click', '#delete', function () {
+            debugger;
+            var data = table.row($(this).parents('tr')).data();
+            var flag = DeleteConfirm(data[1]);
+            if (flag) {
+                debugger;
+                location.reload();
+            }
+        });
+
+        $('#date_year').datetimepicker({
+            viewMode: 'months',
+            format: 'MM/YYYY',
+            showClear: true,
+            showClose: true
+        });
+    });
+
+    var date = new Date();
+    $("#date_year").val((date.getMonth() + 1) + "/" + date.getFullYear());
+
+    function filterByMonthAndYear() {
+        debugger;
+        if ($("#date_year").val() == "") {
+            ShowError("Vui lòng nhập tháng năm");
+            $("#date_year").focus();
+            return false;
+        }
+        else {
+            var arrDate = $("#date_year").val().split("/");
+            location.href = "/ExceptionMeal/Index?year=" + arrDate[1] + "&&month=" + arrDate[0];
+        }
+    }
+
+    function DeleteConfirm(id) {
+        if (confirm("Bạn thật sự muốn xóa dòng dữ liệu đang chọn?")) {
+            var flag = true;
+            $.ajax({
+                url: '/ExceptionMeal/Delete',
+                type: 'POST',
+                datatype: 'json',
+                data: {
+                    ExceptionMealID: id
+                },
+                success: function (data) {
+                    if (data == "1") {
+                        table.ajax.reload();
+                        flag = true;
+                    }
+                    else {
+                        ShowError("Dữ liệu đang được sử dụng, không thể xóa");
+                        flag = false;
+                    }
+                }
+            })
+        }
+        return flag;
+    }
+</script>

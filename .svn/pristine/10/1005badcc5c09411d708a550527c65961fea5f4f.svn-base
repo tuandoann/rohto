@@ -1,0 +1,238 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                THỐNG KÊ SỐ LƯỢNG PHẦN CƠM ĐÃ ĐĂNG KÝ CỦA NHÂN VIÊN
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-2 text-right">
+
+                                <button type="button" class="btn btn-warning" onclick="btnExport_Click();">Xuất báo cáo</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-header with-border">
+                    <div class="row" style="padding-bottom:5px;">
+                        <div class="col-md-1 col-xs-2" style="font-weight:bold; text-align:right;">Từ ngày</div>
+                        <div class="col-md-2 col-xs-3">
+                            <input type="date" id="FromDate" name="FromDate" value="@ViewBag.FromDate" class="form-control" />
+                        </div>
+                        <div class="col-md-2 col-xs-1"></div>
+                        <div class="col-md-1 col-xs-2" style="font-weight:bold; text-align:right;">Đến ngày</div>
+                        <div class="col-md-2 col-xs-3 input-group ToDate">
+                            <input type="date" id="ToDate" name="ToDate" value="@ViewBag.ToDate" class="form-control" />
+                        </div>
+                        <div class="col-md-1" style="float: right; margin-right: 10px;">
+                            <button id="btnSearch" class="btn btn-block btn-warning" onclick="filterByMonthAndYear(); return false;">
+                                Tìm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 2%; text-align: center;">STT</th>
+                                            <th style="text-align: center">NHÂN VIÊN</th>
+                                            <th style="width: 6%; text-align: center;">MÃ NHÂN VIÊN</th>
+                                            <th style="width: 12%; text-align: center;">CA 0</th>
+                                            <th style="width: 12%; text-align: center;">CA 1</th>
+                                            <th style="width: 12%; text-align: center;">CA 2</th>
+                                            <th style="width: 12%; text-align: center;">CA 3</th>
+                                            <th style="width: 12%; text-align: center;">CA 0+</th>
+                                            <th style="width: 12%; text-align: center;">CA 1+</th>
+                                            <th style="width: 2%; text-align: center;">TỔNG</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            List<object> get_data_controler = ViewBag.store;
+                                            int stt = 1;
+                                            if (get_data_controler.Count != null)
+                                            {
+                                                foreach (List<System.Data.DataRow> element in get_data_controler)
+                                                {
+                                                    //đầu mỗi vòng lặp
+                                                    <tr>
+                                                        <td colspan="10" style="text-align:center">@Convert.ToDateTime(element.FirstOrDefault()["MealDate"]).ToString("dd/MM/yyyy")</td>
+                                                    </tr>
+                                                    stt=1;
+                                                    //giữa vòng lặp
+                                                    foreach (System.Data.DataRow item in element)
+                                                    {
+                                                        <tr>
+                                                            <td align="center">@stt</td>
+                                                            <td>
+                                                                @item["FullName"].ToString()
+                                                            </td>
+                                                            <td align="center">
+                                                                @item["EmployeeCode"].ToString()
+                                                            </td>
+                                                            <td>
+                                                                @item["Ca0"].ToString()
+                                                            </td>
+                                                            <td>
+                                                                @item["Ca1"].ToString()
+                                                            </td>
+                                                            <td>
+                                                                @item["Ca2"].ToString()
+                                                            </td>
+                                                            <td>
+                                                                @item["Ca3"].ToString()
+                                                            </td>
+                                                            <td>
+                                                                @item["Ca0Plus"].ToString()
+                                                            </td>
+                                                            <td>
+                                                                @item["Ca1Plus"].ToString()
+                                                            </td>
+                                                            <td align="right">
+                                                                @item["Total"].ToString()
+                                                            </td>
+                                                        </tr>
+                                                        stt += 1;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        @{
+                                            List<long> tong = ViewBag.Tong; 
+                                            <tr style="font-weight:bold">
+                                                <td colspan="3" style="text-align:center">Tổng:</td>
+                                                @foreach(long item in tong)
+                                                {
+                                                  <td align="right">@item</td>
+                                                }
+                                                
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script>
+    $(function () {
+        $('#lv_list tbody').on('click', '#edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?ScheduleMenuID=" + data["ScheduleMenuID"];
+        });
+        var arrTr = $("#lv_list tbody tr");
+
+        //$('#date_year').datetimepicker({
+        //    viewMode: 'days',
+        //    format: 'dd/MM/YYYY',
+        //    showClear: true,
+        //    showClose: true
+        //});
+    });
+
+    var date = new Date();
+    //hàm dùng để lấy giá trị biến url theo name
+    $.urlParam = function (name) {
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results == null) {
+            return null;
+        }
+        else {
+            return results[1] || 0;
+        }
+    }
+    //Đỗ dữ liệu cho datetimepicker
+    var date = new Date();
+    if ($.urlParam('FromDate') != null) {
+        var fromDate = $.urlParam('FromDate').split('-');
+        $("#FromDate").val(fromDate[0] + "-" + fromDate[1] + "-" + fromDate[2]);
+    }
+    else {
+        $("#FromDate").val(date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + ((date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate())));
+    }
+    if ($.urlParam('ToDate') != null) {
+        var toDate = $.urlParam('ToDate').split('-');
+        $("#ToDate").val(toDate[0] + "-" + toDate[1] + "-" + toDate[2]);
+    }
+    else {
+        $("#ToDate").val(date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + ((date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate())));
+    }
+
+
+    function filterByMonthAndYear() {
+        //ReloadPartialViewIndex();
+        if ($("#date_year").val() == "") {
+            ShowError("Vui lòng nhập ngày");
+            $("#date_year").focus();
+            return false;
+        }
+        else {
+            var FromDate = $("#FromDate").val();
+            var ToDate = $('#ToDate').val();
+            location.href = "/ReportSummaryByEmployee/Index?FromDate=" + FromDate + "&&ToDate=" + ToDate;
+        }
+    }
+
+    function ReloadPartialViewIndex() {
+        $('#partial_Invoice').load('/ReportSummaryByEmployee/Index', $("#frmSearch").serializeArray());
+    }
+
+    function btnSearch_Click() {
+        ReloadPartialViewIndex();
+    }
+
+    function btnExport_Click() {
+
+        $.ajax({
+            url: '/ReportSummaryByEmployee/ExportMealCard',
+            type: 'post',
+            datatype: 'json',
+            data: $("#frmSearch").serializeArray(),
+            async: false,
+            cache: false,
+            success: function (data) {
+                if (data == "-1") {
+                    ShowError("Mã khách hàng đã tồn tại, vui lòng nhập lại");
+                    flag = false;
+                }
+                else {
+                    debugger;
+                    window.location.href = window.location.origin + (data);
+                }
+            }
+        })
+    }
+</script>

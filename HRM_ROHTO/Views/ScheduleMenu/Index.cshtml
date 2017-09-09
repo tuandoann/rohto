@@ -1,0 +1,275 @@
+﻿@model HRM_ROHTO.Models.ListExt.Schedule_All_Ext
+@using HRM_ROHTO.Models.BUS
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                Danh sách thực đơn theo ngày
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-1" style="margin-top:5px;">
+                                <label for="date_year">Tháng/năm: </label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" id="date_year" name="date_year" class="form-control" />
+                            </div>
+                            <div class="col-md-1" style="padding-left:0;">
+                                <button type="button" onclick="return filterByMonthAndYear()" class="btn btn-block btn-vimeo btn-group">Tìm</button>
+                            </div>
+                            <div class="col-md-5">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-block btn-success" id="export_excel"><span><i class="fa fa-file-excel-o"></i></span>    Xuất báo cáo</button>
+                            </div>
+                            <div class="col-md-1">
+                                @if (ViewBag.Add == true)
+                                {
+                                    <a class="btn btn-block btn-primary" href="/ScheduleMenu/Create"><i class="fa fa-plus"></i></a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Ngày</th>
+                                            <th>Ca</th>
+                                            <th>Món mặn</th>
+                                            <th>Món phụ</th>
+                                            <th>Món rau</th>
+                                            <th>Món canh</th>
+                                            <th>Món chay</th>
+                                            <th>Món nước</th>
+                                            <th>Tráng miệng</th>
+                                            <th style="min-width:80px; width:80px;" data-orderable="false"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < ViewBag.store.Rows.Count; i++)
+                                        {
+                                            var dt = ViewBag.store;
+                                            <tr>
+                                                <td>
+                                                    @dt.Rows[i]["MealDate"].ToString("dd/MM/yyyy")
+                                                </td>
+                                                <td>
+                                                    @{ var shift = dt.Rows[i]["ShiftName"].ToString().Split(',');}
+                                                    @foreach (var shi in shift)
+                                                    {
+                                                        <span>@shi</span><br />
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{ var monman = dt.Rows[i]["ProductName1"].ToString().Split(',');}
+                                                    @foreach (var item in monman)
+                                                    {
+                                                        <span>@item</span><br />
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{ var monphu = dt.Rows[i]["ProductName4"].ToString().Split(',');}
+                                                    @foreach (var item in monphu)
+                                                    {
+                                                        <span>@item</span><br />
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{ var monxao = dt.Rows[i]["ProductName5"].ToString().Split(',');}
+                                                    @foreach (var item in monxao)
+                                                    {
+                                                        <span>@item</span><br />
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{ var moncanh = dt.Rows[i]["ProductName6"].ToString().Split(',');}
+                                                    @foreach (var item in moncanh)
+                                                    {
+                                                        <span>@item</span><br />
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{ var monchay = dt.Rows[i]["ProductName2"].ToString().Split(',');}
+                                                    @foreach (var item in monchay)
+                                                    {
+                                                        <span>@item</span><br />
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{ var monnuoc = dt.Rows[i]["ProductName3"].ToString().Split(',');}
+                                                    @foreach (var item in monnuoc)
+                                                    {
+                                                        <span>@item</span><br />
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{ var trangmieng = dt.Rows[i]["ProductName7"].ToString().Split(',');}
+                                                    @foreach (var item in trangmieng)
+                                                    {
+                                                        <span>@item</span><br />
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (ViewBag.Delete == true)
+                                                    {
+                                                        <a class='btn btn-danger btn-xs' href="/ScheduleMenu/delete?ScheduleMenuID=@dt.Rows[i]["ScheduleMenuID"]" id='delete' onclick="return DeleteConfirm()"><i class='fa fa-trash-o'></i> Xóa</a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                                        }
+
+                                    </tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+                                                        }
+
+<script>
+    $(function () {
+        
+        //var table = $('#lv_list').DataTable({
+        //    "processing": true, // for show processing bar
+        //    "serverSide": false, // for process on server side
+        //    "orderMulti": false, // for disable multi column order
+        //    "iDisplayLength": 100,
+        //    "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+        //    "info": false,
+        //    "language": {
+        //        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+        //    },
+        //});
+
+        $('#lv_list tbody').on('click', '#edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?ScheduleMenuID=" + data["ScheduleMenuID"];
+        });
+
+        //$('#lv_list tbody').on('click', '#delete', function () {
+        //    var data = table.row($(this).parents('tr')).data();
+        //    var flag = DeleteConfirm(data["ScheduleMenuID"]);
+        //    if (flag) {
+        //        debugger;
+        //        table.ajax.reload();
+        //    }
+        //});
+
+        var arrTr = $("#lv_list tbody tr");
+
+        //for (var i = 0; i < arrTr.length; i++) {
+        //    debugger;
+        //    var element = arrTr.find(".MealDate");
+        //    var text = element[i].innerText;
+        //    var id = element[i].id;
+        //    for (var j = 0; j < arrTr.length; j++) {
+        //        var text2 = element[j].innerText;
+        //        var id2 = element[j].id;
+        //        if (element[i].innerText == element[j].innerText) {
+        //            if (element[i].id != 1) {
+        //                element[i].remove();
+        //                i--;
+        //            }
+        //            else
+        //                element.attr("rowspan","3")
+        //            break;
+        //        }
+        //    }
+        //}
+        //-----
+
+        $('#date_year').datetimepicker({
+            viewMode: 'months',
+            format: 'MM/YYYY',
+            showClear: true,
+            showClose: true
+        });
+        $("#export_excel").click(function () {
+            $.ajax({
+                url: '/ScheduleMenu/ExportExcel',
+                type: 'post',
+                datatype: 'json',
+                async: false,
+                cache: false,
+                success: function (data) {
+                    debugger;
+                    if (data.split('!')[0] == 'true') {
+                        window.location.href = window.location.origin + (data.split('!')[1]);
+                    }
+                    else {
+                        ShowError("Xuất excel thất bại");
+                        console.log('Lỗi xuất excel thất bại : ' + data.split('!')[1]);
+                        flag = false;
+                    }
+                }
+            })
+        })
+    });
+    //hàm dùng để lấy giá trị biến url theo name
+    $.urlParam = function (name) {
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results == null) {
+            return null;
+        }
+        else {
+            return results[1] || 0;
+        }
+    }
+    //Đỗ dữ liệu cho datetimepicker
+    var date = new Date();
+    var year_current = $.urlParam('year') == null ? date.getFullYear() : $.urlParam('year');
+    var month_current = $.urlParam('month') == null ? ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) : $.urlParam('month');
+    $("#date_year").val((month_current + 1) + "/" + year_current);
+
+    function filterByMonthAndYear() {
+        debugger;
+        if ($("#date_year").val() == "") {
+            ShowError("Vui lòng nhập tháng năm");
+            $("#date_year").focus();
+            return false;
+        }
+        else {
+            var arrDate = $("#date_year").val().split("/");
+            location.href = "/ScheduleMenu/Index?year=" + arrDate[1] + "&&month=" + arrDate[0];
+        }
+    }
+
+    function DeleteConfirm() {
+        var flag = false;
+        if (confirm("Bạn thật sự muốn xóa dòng dữ liệu đang chọn?")) {
+            flag = true;
+        }
+        return flag;
+    }
+</script>

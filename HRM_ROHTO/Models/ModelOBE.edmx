@@ -1,0 +1,1509 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HRM_ROHTOModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="SYS_CONFIG">
+          <Key>
+            <PropertyRef Name="ConfigID" />
+          </Key>
+          <Property Name="ConfigID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="Description2" Type="nvarchar" MaxLength="250" />
+          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ValueType" Type="int" Nullable="false" />
+          <Property Name="SourceTable" Type="nvarchar" MaxLength="50" />
+          <Property Name="FieldName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SYS_FUNCTION">
+          <Key>
+            <PropertyRef Name="FunctionName" />
+          </Key>
+          <Property Name="FunctionName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Path" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModuleCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortOrder" Type="int" Nullable="false" />
+          <Property Name="IconURL" Type="nvarchar" MaxLength="200" />
+          <Property Name="RoleID" Type="smallint" />
+        </EntityType>
+        <EntityType Name="SYS_POS">
+          <Key>
+            <PropertyRef Name="POSID" />
+          </Key>
+          <Property Name="POSID" Type="int" Nullable="false" />
+          <Property Name="POSName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ShiftListID" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SYS_PRODUCT_TYPE">
+          <Key>
+            <PropertyRef Name="ProductTypeID" />
+          </Key>
+          <Property Name="ProductTypeID" Type="int" Nullable="false" />
+          <Property Name="ProductTypeName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ProductTypeCode" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="SYS_ROLE">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Note" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="SYS_ROLEPERMISSION">
+          <Key>
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="FunctionName" />
+          </Key>
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="FunctionName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="View" Type="bit" Nullable="false" />
+          <Property Name="Add" Type="bit" Nullable="false" />
+          <Property Name="Edit" Type="bit" Nullable="false" />
+          <Property Name="Delete" Type="bit" Nullable="false" />
+          <Property Name="Print" Type="bit" Nullable="false" />
+          <Property Name="Export" Type="bit" Nullable="false" />
+          <Property Name="Import" Type="bit" Nullable="false" />
+          <Property Name="Accept" Type="bit" Nullable="false" />
+          <Property Name="Cancel" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SYS_SHIFT">
+          <Key>
+            <PropertyRef Name="ShiftID" />
+          </Key>
+          <Property Name="ShiftID" Type="int" Nullable="false" />
+          <Property Name="ShiftCode" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="ShiftName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SYS_USER">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="IsAdmin" Type="bit" />
+        </EntityType>
+        <EntityType Name="TBL_AUDIT">
+          <Key>
+            <PropertyRef Name="AuditID" />
+          </Key>
+          <Property Name="AuditID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AuditDate" Type="datetime" Nullable="false" />
+          <Property Name="FunctionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Action" Type="nvarchar" MaxLength="50" />
+          <Property Name="OldData" Type="nvarchar(max)" />
+          <Property Name="NewData" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="TBL_BROADCAST">
+          <Key>
+            <PropertyRef Name="BroadcastID" />
+          </Key>
+          <Property Name="BroadcastID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BeginTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UserCreate" Type="int" />
+          <Property Name="DateCreate" Type="datetime" />
+          <Property Name="UserModified" Type="int" />
+          <Property Name="DateModified" Type="datetime" />
+        </EntityType>
+        <EntityType Name="TBL_DEPARTMENT">
+          <Key>
+            <PropertyRef Name="DepartmentID" />
+          </Key>
+          <Property Name="DepartmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepartmentCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="DepartmentName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="LevelID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_EMPLOYEE">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="EmployeeCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="ContractNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="DepartmentID" Type="int" />
+          <Property Name="PositionID1" Type="int" />
+          <Property Name="PositionID2" Type="int" />
+          <Property Name="PositionID3" Type="int" />
+          <Property Name="IsLeaveOut" Type="bit" Nullable="false" />
+          <Property Name="LeaveDate" Type="date" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="TBL_EXCEPTION_MEAL">
+          <Key>
+            <PropertyRef Name="ExceptionMealID" />
+          </Key>
+          <Property Name="ExceptionMealID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExceptionDate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_EXCEPTION_MEAL_SHIFT">
+          <Key>
+            <PropertyRef Name="ExceptionMealShiftID" />
+          </Key>
+          <Property Name="ExceptionMealShiftID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExceptionMealID" Type="bigint" Nullable="false" />
+          <Property Name="ShiftID" Type="int" Nullable="false" />
+          <Property Name="ExceptionQty" Type="int" Nullable="false" />
+          <Property Name="ExceptionQtyUsed" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_EXCEPTION_MEAL_USED">
+          <Key>
+            <PropertyRef Name="ExceptionMealUsedID" />
+          </Key>
+          <Property Name="ExceptionMealUsedID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MealDate" Type="date" Nullable="false" />
+          <Property Name="PrintTime" Type="datetime" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="ShiftID" Type="int" Nullable="false" />
+          <Property Name="MenuID" Type="int" Nullable="false" />
+          <Property Name="UserCreate" Type="int" />
+          <Property Name="UserPrint" Type="int" />
+          <Property Name="POSCreate" Type="int" />
+          <Property Name="POSModified" Type="int" />
+          <Property Name="POSPrint" Type="int" />
+        </EntityType>
+        <EntityType Name="TBL_EXCEPTION_MEAL_USED_PRODUCT">
+          <Key>
+            <PropertyRef Name="ExceptionMealUsedProductID" />
+          </Key>
+          <Property Name="ExceptionMealUsedProductID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExceptionMealUsedID" Type="bigint" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="TBL_MENU">
+          <Key>
+            <PropertyRef Name="MenuID" />
+          </Key>
+          <Property Name="MenuID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="UserCreate" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedUser" Type="int" />
+          <Property Name="MenuDay" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_MENU_PRODUCT">
+          <Key>
+            <PropertyRef Name="MenuProductID" />
+          </Key>
+          <Property Name="MenuProductID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_MENU_SHIFT">
+          <Key>
+            <PropertyRef Name="MenuShiftID" />
+          </Key>
+          <Property Name="MenuShiftID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuID" Type="int" Nullable="false" />
+          <Property Name="ShiftID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_POSITION">
+          <Key>
+            <PropertyRef Name="PositionID" />
+          </Key>
+          <Property Name="PositionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PositionCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PositionName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_PRODUCT">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ProductTypeID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="ImageProduct" Type="image" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_REGISTER_MEAL">
+          <Key>
+            <PropertyRef Name="RegisterID" />
+          </Key>
+          <Property Name="RegisterID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="ShiftID" Type="int" Nullable="false" />
+          <Property Name="MenuID" Type="int" />
+          <Property Name="RegisterTime" Type="datetime" Nullable="false" />
+          <Property Name="MealDate" Type="date" Nullable="false" />
+          <Property Name="UserCreate" Type="int" />
+          <Property Name="UserPrint" Type="int" />
+          <Property Name="IsCancel" Type="bit" Nullable="false" />
+          <Property Name="IsPrint" Type="bit" Nullable="false" />
+          <Property Name="PrintTime" Type="datetime" />
+          <Property Name="UserModified" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ShiftIDOld" Type="int" />
+          <Property Name="MenuIDOld" Type="int" />
+          <Property Name="IsAddOn" Type="bit" Nullable="false" />
+          <Property Name="POSCreate" Type="int" />
+          <Property Name="POSModified" Type="int" />
+          <Property Name="POSPrint" Type="int" />
+          <Property Name="IsUpdate" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_REGISTER_MEAL_PRODUCT">
+          <Key>
+            <PropertyRef Name="RegisterMealProductID" />
+          </Key>
+          <Property Name="RegisterMealProductID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RegisterMealID" Type="bigint" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="TBL_REGISTER_MEAL_PRODUCT_OLD">
+          <Key>
+            <PropertyRef Name="RegisterMealProductID" />
+          </Key>
+          <Property Name="RegisterMealProductID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RegisterMealID" Type="bigint" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="TBL_SCHEDULE_MENU">
+          <Key>
+            <PropertyRef Name="ScheduleMenuID" />
+          </Key>
+          <Property Name="ScheduleMenuID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MealDate" Type="date" Nullable="false" />
+          <Property Name="MenuID" Type="int" Nullable="false" />
+          <Property Name="UserModified" Type="int" />
+          <Property Name="DateModified" Type="datetime" />
+        </EntityType>
+        <EntityType Name="TBL_SCHEDULE_MENU_PRODUCT">
+          <Key>
+            <PropertyRef Name="ScheduleMenuProductID" />
+          </Key>
+          <Property Name="ScheduleMenuProductID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ScheduleMenuID" Type="bigint" Nullable="false" />
+          <Property Name="MenuID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_SCHEDULE_MENU_SHIFT">
+          <Key>
+            <PropertyRef Name="ScheduleMenuShiftID" />
+          </Key>
+          <Property Name="ScheduleMenuShiftID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ScheduleMenuID" Type="bigint" Nullable="false" />
+          <Property Name="MenuID" Type="int" Nullable="false" />
+          <Property Name="ShiftID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_SHIFT_TIME_RANGE">
+          <Key>
+            <PropertyRef Name="ShiftTimeRangeID" />
+          </Key>
+          <Property Name="ShiftTimeRangeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShiftID" Type="int" Nullable="false" />
+          <Property Name="BeginTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_SPECIAL">
+          <Key>
+            <PropertyRef Name="SpecialID" />
+          </Key>
+          <Property Name="SpecialID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SpecialDate" Type="date" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+        </EntityType>
+        <Function Name="pr_CheckEmployeeHasRegisterMeal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="day" Type="int" Mode="In" />
+          <Parameter Name="month" Type="int" Mode="In" />
+          <Parameter Name="year" Type="int" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="pr_DeleteAllData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="pr_ExportEmployeeList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="pr_getScheduleMenu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromDate" Type="date" Mode="In" />
+          <Parameter Name="ToDate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="pr_LoadChoosenMenu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="day" Type="int" Mode="In" />
+          <Parameter Name="month" Type="int" Mode="In" />
+          <Parameter Name="year" Type="int" Mode="In" />
+          <Parameter Name="ShiftID" Type="int" Mode="In" />
+          <Parameter Name="ProductTypeID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="pr_LoadExceptionMeal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="pr_ReportMealCardByDay" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="day" Type="int" Mode="In" />
+          <Parameter Name="month" Type="int" Mode="In" />
+          <Parameter Name="year" Type="int" Mode="In" />
+        </Function>
+        <Function Name="pr_ReportPrintMealToDay" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="date" Type="date" Mode="In" />
+        </Function>
+        <Function Name="pr_ReportRegisterByEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="date" Mode="In" />
+          <Parameter Name="todate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="pr_ReportSLPhanComCanThanhToan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="date" Mode="In" />
+          <Parameter Name="todate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="pr_ReportSLPhanComHangNgay" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="date" Mode="In" />
+          <Parameter Name="todate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="pr_ReportSLPhanComTheoNhanVien" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="date" Mode="In" />
+          <Parameter Name="todate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="pr_ReportSummaryByEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="date" Mode="In" />
+          <Parameter Name="todate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="pr_ReportSummaryByShift" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="date" Mode="In" />
+          <Parameter Name="todate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="pr_UpdateExceptionMealUsed" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shiftID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="HRM_ROHTOModelStoreContainer">
+          <EntitySet Name="SYS_CONFIG" EntityType="Self.SYS_CONFIG" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_FUNCTION" EntityType="Self.SYS_FUNCTION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_POS" EntityType="Self.SYS_POS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_PRODUCT_TYPE" EntityType="Self.SYS_PRODUCT_TYPE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_ROLE" EntityType="Self.SYS_ROLE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_ROLEPERMISSION" EntityType="Self.SYS_ROLEPERMISSION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_SHIFT" EntityType="Self.SYS_SHIFT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_USER" EntityType="Self.SYS_USER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_AUDIT" EntityType="Self.TBL_AUDIT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_BROADCAST" EntityType="Self.TBL_BROADCAST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_DEPARTMENT" EntityType="Self.TBL_DEPARTMENT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_EMPLOYEE" EntityType="Self.TBL_EMPLOYEE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_EXCEPTION_MEAL" EntityType="Self.TBL_EXCEPTION_MEAL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_EXCEPTION_MEAL_SHIFT" EntityType="Self.TBL_EXCEPTION_MEAL_SHIFT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_EXCEPTION_MEAL_USED" EntityType="Self.TBL_EXCEPTION_MEAL_USED" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_EXCEPTION_MEAL_USED_PRODUCT" EntityType="Self.TBL_EXCEPTION_MEAL_USED_PRODUCT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_MENU" EntityType="Self.TBL_MENU" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_MENU_PRODUCT" EntityType="Self.TBL_MENU_PRODUCT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_MENU_SHIFT" EntityType="Self.TBL_MENU_SHIFT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_POSITION" EntityType="Self.TBL_POSITION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_PRODUCT" EntityType="Self.TBL_PRODUCT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_REGISTER_MEAL" EntityType="Self.TBL_REGISTER_MEAL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_REGISTER_MEAL_PRODUCT" EntityType="Self.TBL_REGISTER_MEAL_PRODUCT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_REGISTER_MEAL_PRODUCT_OLD" EntityType="Self.TBL_REGISTER_MEAL_PRODUCT_OLD" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_SCHEDULE_MENU" EntityType="Self.TBL_SCHEDULE_MENU" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_SCHEDULE_MENU_PRODUCT" EntityType="Self.TBL_SCHEDULE_MENU_PRODUCT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_SCHEDULE_MENU_SHIFT" EntityType="Self.TBL_SCHEDULE_MENU_SHIFT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_SHIFT_TIME_RANGE" EntityType="Self.TBL_SHIFT_TIME_RANGE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBL_SPECIAL" EntityType="Self.TBL_SPECIAL" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HRM_ROHTOModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="HRM_ROHTOEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="pr_DeleteAllData" />
+          <FunctionImport Name="pr_DeleteOldInvoice">
+            <Parameter Name="ListContractID" Mode="In" Type="String" />
+            <Parameter Name="ZoneID" Mode="In" Type="Int64" />
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="pr_GenerateInvoice">
+            <Parameter Name="ListContractID" Mode="In" Type="String" />
+            <Parameter Name="ListServiceID" Mode="In" Type="String" />
+            <Parameter Name="ZoneID" Mode="In" Type="Int64" />
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="UserCreate" Mode="In" Type="Int32" />
+            <Parameter Name="InvoiceDate" Mode="In" Type="DateTime" />
+            <Parameter Name="NumberPromotion" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_GenerateReceipt">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ListContractID" Mode="In" Type="String" />
+            <Parameter Name="ZoneID" Mode="In" Type="Int64" />
+            <Parameter Name="RunNumber" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_GetServiceForCombobox">
+            <Parameter Name="ListServiceID" Mode="In" Type="String" />
+            <Parameter Name="ZoneID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="pr_getScheduleMenu">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="SYS_CONFIG" EntityType="HRM_ROHTOModel.SYS_CONFIG" />
+          <EntitySet Name="SYS_FUNCTION" EntityType="HRM_ROHTOModel.SYS_FUNCTION" />
+          <EntitySet Name="SYS_POS" EntityType="HRM_ROHTOModel.SYS_POS" />
+          <EntitySet Name="SYS_PRODUCT_TYPE" EntityType="HRM_ROHTOModel.SYS_PRODUCT_TYPE" />
+          <EntitySet Name="SYS_ROLE" EntityType="HRM_ROHTOModel.SYS_ROLE" />
+          <EntitySet Name="SYS_ROLEPERMISSION" EntityType="HRM_ROHTOModel.SYS_ROLEPERMISSION" />
+          <EntitySet Name="SYS_SHIFT" EntityType="HRM_ROHTOModel.SYS_SHIFT" />
+          <EntitySet Name="SYS_USER" EntityType="HRM_ROHTOModel.SYS_USER" />
+          <EntitySet Name="TBL_AUDIT" EntityType="HRM_ROHTOModel.TBL_AUDIT" />
+          <EntitySet Name="TBL_BROADCAST" EntityType="HRM_ROHTOModel.TBL_BROADCAST" />
+          <EntitySet Name="TBL_DEPARTMENT" EntityType="HRM_ROHTOModel.TBL_DEPARTMENT" />
+          <EntitySet Name="TBL_EMPLOYEE" EntityType="HRM_ROHTOModel.TBL_EMPLOYEE" />
+          <EntitySet Name="TBL_EXCEPTION_MEAL" EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL" />
+          <EntitySet Name="TBL_EXCEPTION_MEAL_SHIFT" EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_SHIFT" />
+          <EntitySet Name="TBL_EXCEPTION_MEAL_USED" EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_USED" />
+          <EntitySet Name="TBL_EXCEPTION_MEAL_USED_PRODUCT" EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_USED_PRODUCT" />
+          <EntitySet Name="TBL_MENU" EntityType="HRM_ROHTOModel.TBL_MENU" />
+          <EntitySet Name="TBL_MENU_PRODUCT" EntityType="HRM_ROHTOModel.TBL_MENU_PRODUCT" />
+          <EntitySet Name="TBL_MENU_SHIFT" EntityType="HRM_ROHTOModel.TBL_MENU_SHIFT" />
+          <EntitySet Name="TBL_POSITION" EntityType="HRM_ROHTOModel.TBL_POSITION" />
+          <EntitySet Name="TBL_PRODUCT" EntityType="HRM_ROHTOModel.TBL_PRODUCT" />
+          <EntitySet Name="TBL_REGISTER_MEAL" EntityType="HRM_ROHTOModel.TBL_REGISTER_MEAL" />
+          <EntitySet Name="TBL_REGISTER_MEAL_PRODUCT" EntityType="HRM_ROHTOModel.TBL_REGISTER_MEAL_PRODUCT" />
+          <EntitySet Name="TBL_REGISTER_MEAL_PRODUCT_OLD" EntityType="HRM_ROHTOModel.TBL_REGISTER_MEAL_PRODUCT_OLD" />
+          <EntitySet Name="TBL_SCHEDULE_MENU" EntityType="HRM_ROHTOModel.TBL_SCHEDULE_MENU" />
+          <EntitySet Name="TBL_SCHEDULE_MENU_PRODUCT" EntityType="HRM_ROHTOModel.TBL_SCHEDULE_MENU_PRODUCT" />
+          <EntitySet Name="TBL_SCHEDULE_MENU_SHIFT" EntityType="HRM_ROHTOModel.TBL_SCHEDULE_MENU_SHIFT" />
+          <EntitySet Name="TBL_SHIFT_TIME_RANGE" EntityType="HRM_ROHTOModel.TBL_SHIFT_TIME_RANGE" />
+          <FunctionImport Name="pr_CheckEmployeeHasRegisterMeal" ReturnType="Collection(HRM_ROHTOModel.pr_CheckEmployeeHasRegisterMeal_Result)">
+            <Parameter Name="day" Mode="In" Type="Int32" />
+            <Parameter Name="month" Mode="In" Type="Int32" />
+            <Parameter Name="year" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_DeleteAllData1" />
+          <FunctionImport Name="pr_ExportEmployeeList" ReturnType="Collection(HRM_ROHTOModel.pr_ExportEmployeeList_Result)" />
+          <FunctionImport Name="pr_LoadChoosenMenu" ReturnType="Collection(HRM_ROHTOModel.pr_LoadChoosenMenu_Result)">
+            <Parameter Name="day" Mode="In" Type="Int32" />
+            <Parameter Name="month" Mode="In" Type="Int32" />
+            <Parameter Name="year" Mode="In" Type="Int32" />
+            <Parameter Name="ShiftID" Mode="In" Type="Int32" />
+            <Parameter Name="ProductTypeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_LoadExceptionMeal" ReturnType="Collection(HRM_ROHTOModel.pr_LoadExceptionMeal_Result)" />
+          <FunctionImport Name="pr_ReportMealCardByDay" ReturnType="Collection(HRM_ROHTOModel.pr_ReportMealCardByDay_Result)">
+            <Parameter Name="day" Mode="In" Type="Int32" />
+            <Parameter Name="month" Mode="In" Type="Int32" />
+            <Parameter Name="year" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="pr_ReportPrintMealToDay">
+          <Parameter Name="date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="pr_ReportRegisterByEmployee" ReturnType="Collection(HRM_ROHTOModel.pr_ReportRegisterByEmployee_Result)">
+            <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+            <Parameter Name="todate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="pr_ReportSLPhanComCanThanhToan" ReturnType="Collection(HRM_ROHTOModel.pr_ReportSLPhanComCanThanhToan_Result)">
+            <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+            <Parameter Name="todate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="pr_ReportSLPhanComHangNgay" ReturnType="Collection(HRM_ROHTOModel.pr_ReportSLPhanComHangNgay_Result)">
+            <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+            <Parameter Name="todate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="pr_ReportSLPhanComTheoNhanVien">
+            <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+            <Parameter Name="todate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="pr_ReportSummaryByEmployee" ReturnType="Collection(HRM_ROHTOModel.pr_ReportSummaryByEmployee_Result)">
+            <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+            <Parameter Name="todate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="pr_ReportSummaryByShift" ReturnType="Collection(HRM_ROHTOModel.pr_ReportSummaryByShift_Result)">
+            <Parameter Name="fromdate" Mode="In" Type="DateTime" />
+            <Parameter Name="todate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="pr_UpdateExceptionMealUsed">
+          <Parameter Name="shiftID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="TBL_SPECIAL" EntityType="HRM_ROHTOModel.TBL_SPECIAL" />
+          </EntityContainer>
+        <EntityType Name="SYS_CONFIG">
+          <Key>
+            <PropertyRef Name="ConfigID" />
+          </Key>
+          <Property Name="ConfigID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Description2" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ValueType" Type="Int32" Nullable="false" />
+          <Property Name="SourceTable" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_FUNCTION">
+          <Key>
+            <PropertyRef Name="FunctionName" />
+          </Key>
+          <Property Name="FunctionName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Path" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModuleCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortOrder" Type="Int32" Nullable="false" />
+          <Property Name="IconURL" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int16" />
+        </EntityType>
+        <EntityType Name="SYS_POS">
+          <Key>
+            <PropertyRef Name="POSID" />
+          </Key>
+          <Property Name="POSID" Type="Int32" Nullable="false" />
+          <Property Name="POSName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShiftListID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_PRODUCT_TYPE">
+          <Key>
+            <PropertyRef Name="ProductTypeID" />
+          </Key>
+          <Property Name="ProductTypeID" Type="Int32" Nullable="false" />
+          <Property Name="ProductTypeName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ProductTypeCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_ROLE">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_ROLEPERMISSION">
+          <Key>
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="FunctionName" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="FunctionName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="View" Type="Boolean" Nullable="false" />
+          <Property Name="Add" Type="Boolean" Nullable="false" />
+          <Property Name="Edit" Type="Boolean" Nullable="false" />
+          <Property Name="Delete" Type="Boolean" Nullable="false" />
+          <Property Name="Print" Type="Boolean" Nullable="false" />
+          <Property Name="Export" Type="Boolean" Nullable="false" />
+          <Property Name="Import" Type="Boolean" Nullable="false" />
+          <Property Name="Accept" Type="Boolean" Nullable="false" />
+          <Property Name="Cancel" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SYS_SHIFT">
+          <Key>
+            <PropertyRef Name="ShiftID" />
+          </Key>
+          <Property Name="ShiftID" Type="Int32" Nullable="false" />
+          <Property Name="ShiftCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ShiftName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_USER">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="IsAdmin" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="TBL_AUDIT">
+          <Key>
+            <PropertyRef Name="AuditID" />
+          </Key>
+          <Property Name="AuditID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FunctionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OldData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NewData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TBL_BROADCAST">
+          <Key>
+            <PropertyRef Name="BroadcastID" />
+          </Key>
+          <Property Name="BroadcastID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BeginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserCreate" Type="Int32" />
+          <Property Name="DateCreate" Type="DateTime" Precision="3" />
+          <Property Name="UserModified" Type="Int32" />
+          <Property Name="DateModified" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="TBL_DEPARTMENT">
+          <Key>
+            <PropertyRef Name="DepartmentID" />
+          </Key>
+          <Property Name="DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="LevelID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_EMPLOYEE">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ContractNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentID" Type="Int32" />
+          <Property Name="PositionID1" Type="Int32" />
+          <Property Name="PositionID2" Type="Int32" />
+          <Property Name="PositionID3" Type="Int32" />
+          <Property Name="IsLeaveOut" Type="Boolean" Nullable="false" />
+          <Property Name="LeaveDate" Type="DateTime" Precision="0" />
+          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TBL_EXCEPTION_MEAL">
+          <Key>
+            <PropertyRef Name="ExceptionMealID" />
+          </Key>
+          <Property Name="ExceptionMealID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExceptionDate" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="TBL_EXCEPTION_MEAL_SHIFT">
+          <Key>
+            <PropertyRef Name="ExceptionMealShiftID" />
+          </Key>
+          <Property Name="ExceptionMealShiftID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExceptionMealID" Type="Int64" Nullable="false" />
+          <Property Name="ShiftID" Type="Int32" Nullable="false" />
+          <Property Name="ExceptionQty" Type="Int32" Nullable="false" />
+          <Property Name="ExceptionQtyUsed" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_EXCEPTION_MEAL_USED">
+          <Key>
+            <PropertyRef Name="ExceptionMealUsedID" />
+          </Key>
+          <Property Name="ExceptionMealUsedID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MealDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="PrintTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="ShiftID" Type="Int32" Nullable="false" />
+          <Property Name="MenuID" Type="Int32" Nullable="false" />
+          <Property Name="UserCreate" Type="Int32" />
+          <Property Name="UserPrint" Type="Int32" />
+          <Property Name="POSCreate" Type="Int32" />
+          <Property Name="POSModified" Type="Int32" />
+          <Property Name="POSPrint" Type="Int32" />
+        </EntityType>
+        <EntityType Name="TBL_EXCEPTION_MEAL_USED_PRODUCT">
+          <Key>
+            <PropertyRef Name="ExceptionMealUsedProductID" />
+          </Key>
+          <Property Name="ExceptionMealUsedProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExceptionMealUsedID" Type="Int64" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TBL_MENU">
+          <Key>
+            <PropertyRef Name="MenuID" />
+          </Key>
+          <Property Name="MenuID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="UserCreate" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedUser" Type="Int32" />
+          <Property Name="MenuDay" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_MENU_PRODUCT">
+          <Key>
+            <PropertyRef Name="MenuProductID" />
+          </Key>
+          <Property Name="MenuProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_MENU_SHIFT">
+          <Key>
+            <PropertyRef Name="MenuShiftID" />
+          </Key>
+          <Property Name="MenuShiftID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuID" Type="Int32" Nullable="false" />
+          <Property Name="ShiftID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_POSITION">
+          <Key>
+            <PropertyRef Name="PositionID" />
+          </Key>
+          <Property Name="PositionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PositionCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PositionName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TBL_PRODUCT">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ProductName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ProductTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ImageProduct" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_REGISTER_MEAL">
+          <Key>
+            <PropertyRef Name="RegisterID" />
+          </Key>
+          <Property Name="RegisterID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="ShiftID" Type="Int32" Nullable="false" />
+          <Property Name="MenuID" Type="Int32" />
+          <Property Name="RegisterTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="MealDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="UserCreate" Type="Int32" />
+          <Property Name="UserPrint" Type="Int32" />
+          <Property Name="IsCancel" Type="Boolean" Nullable="false" />
+          <Property Name="IsPrint" Type="Boolean" Nullable="false" />
+          <Property Name="PrintTime" Type="DateTime" Precision="3" />
+          <Property Name="UserModified" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ShiftIDOld" Type="Int32" />
+          <Property Name="MenuIDOld" Type="Int32" />
+          <Property Name="IsAddOn" Type="Boolean" Nullable="false" />
+          <Property Name="POSCreate" Type="Int32" />
+          <Property Name="POSModified" Type="Int32" />
+          <Property Name="POSPrint" Type="Int32" />
+          <Property Name="IsUpdate" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_REGISTER_MEAL_PRODUCT">
+          <Key>
+            <PropertyRef Name="RegisterMealProductID" />
+          </Key>
+          <Property Name="RegisterMealProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RegisterMealID" Type="Int64" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TBL_REGISTER_MEAL_PRODUCT_OLD">
+          <Key>
+            <PropertyRef Name="RegisterMealProductID" />
+          </Key>
+          <Property Name="RegisterMealProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RegisterMealID" Type="Int64" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TBL_SCHEDULE_MENU">
+          <Key>
+            <PropertyRef Name="ScheduleMenuID" />
+          </Key>
+          <Property Name="ScheduleMenuID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MealDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="MenuID" Type="Int32" Nullable="false" />
+          <Property Name="UserModified" Type="Int32" />
+          <Property Name="DateModified" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="TBL_SCHEDULE_MENU_PRODUCT">
+          <Key>
+            <PropertyRef Name="ScheduleMenuProductID" />
+          </Key>
+          <Property Name="ScheduleMenuProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ScheduleMenuID" Type="Int64" Nullable="false" />
+          <Property Name="MenuID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_SCHEDULE_MENU_SHIFT">
+          <Key>
+            <PropertyRef Name="ScheduleMenuShiftID" />
+          </Key>
+          <Property Name="ScheduleMenuShiftID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ScheduleMenuID" Type="Int64" Nullable="false" />
+          <Property Name="MenuID" Type="Int32" Nullable="false" />
+          <Property Name="ShiftID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBL_SHIFT_TIME_RANGE">
+          <Key>
+            <PropertyRef Name="ShiftTimeRangeID" />
+          </Key>
+          <Property Name="ShiftTimeRangeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShiftID" Type="Int32" Nullable="false" />
+          <Property Name="BeginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <ComplexType Name="pr_CheckEmployeeHasRegisterMeal_Result">
+          <Property Type="Int64" Name="RegisterID" Nullable="false" />
+          <Property Type="Int32" Name="EmployeeID" Nullable="false" />
+          <Property Type="Int32" Name="ShiftID" Nullable="false" />
+          <Property Type="Int32" Name="MenuID" Nullable="true" />
+          <Property Type="DateTime" Name="RegisterTime" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="MealDate" Nullable="false" />
+          <Property Type="Int32" Name="UserCreate" Nullable="true" />
+          <Property Type="Int32" Name="UserPrint" Nullable="true" />
+          <Property Type="Boolean" Name="IsCancel" Nullable="false" />
+          <Property Type="Boolean" Name="IsPrint" Nullable="false" />
+          <Property Type="DateTime" Name="PrintTime" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="UserModified" Nullable="true" />
+          <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="ShiftIDOld" Nullable="true" />
+          <Property Type="Int32" Name="MenuIDOld" Nullable="true" />
+          <Property Type="Boolean" Name="IsAddOn" Nullable="false" />
+          <Property Type="Int32" Name="POSCreate" Nullable="true" />
+          <Property Type="Int32" Name="POSModified" Nullable="true" />
+          <Property Type="Int32" Name="POSPrint" Nullable="true" />
+          <Property Type="Boolean" Name="IsUpdate" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="pr_ExportEmployeeList_Result">
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="EmployeeCode" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="ContractNo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="CardNumber" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="DepartmentCode" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="PositionName1" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="PositionName2" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="PositionName3" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="pr_LoadChoosenMenu_Result">
+          <Property Type="Int32" Name="ChoosenMeal" Nullable="true" />
+          <Property Type="Int32" Name="MenuID" Nullable="true" />
+          <Property Type="Int32" Name="ProductID" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="150" />
+          <Property Type="Int32" Name="ProductTypeID" Nullable="true" />
+          <Property Type="String" Name="ProductTypeName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Producttypecode" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="pr_LoadExceptionMeal_Result">
+          <Property Type="Int32" Name="SHIFTID" Nullable="false" />
+          <Property Type="Int32" Name="REMAIN" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="pr_ReportMealCardByDay_Result">
+          <Property Type="Int32" Name="ShiftID" Nullable="true" />
+          <Property Type="String" Name="ShiftName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="150" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="pr_ReportRegisterByEmployee_Result">
+          <Property Type="DateTime" Name="MealDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="EmployeeID" Nullable="true" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="EmployeeCode" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Ca0" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Ca1" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Ca2" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Ca3" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Ca0Plus" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Ca1Plus" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="Total" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="pr_ReportSLPhanComCanThanhToan_Result">
+          <Property Type="DateTime" Name="MealDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Ca1Reg" Nullable="true" />
+          <Property Type="Int32" Name="Ca1Print" Nullable="true" />
+          <Property Type="Int32" Name="Ca1Exp" Nullable="true" />
+          <Property Type="Int32" Name="Ca1Payment" Nullable="true" />
+          <Property Type="Int32" Name="Ca0Reg" Nullable="true" />
+          <Property Type="Int32" Name="Ca0Print" Nullable="true" />
+          <Property Type="Int32" Name="Ca0Exp" Nullable="true" />
+          <Property Type="Int32" Name="Ca0Payment" Nullable="true" />
+          <Property Type="Int32" Name="Ca1PlusReg" Nullable="true" />
+          <Property Type="Int32" Name="Ca1PlusPrint" Nullable="true" />
+          <Property Type="Int32" Name="Ca1PlusExp" Nullable="true" />
+          <Property Type="Int32" Name="Ca1PlusPayment" Nullable="true" />
+          <Property Type="Int32" Name="Ca2Reg" Nullable="true" />
+          <Property Type="Int32" Name="Ca2Print" Nullable="true" />
+          <Property Type="Int32" Name="Ca2Exp" Nullable="true" />
+          <Property Type="Int32" Name="Ca2Payment" Nullable="true" />
+          <Property Type="Int32" Name="Ca0PlusReg" Nullable="true" />
+          <Property Type="Int32" Name="Ca0PlusPrint" Nullable="true" />
+          <Property Type="Int32" Name="Ca0PlusExp" Nullable="true" />
+          <Property Type="Int32" Name="Ca0PlusPayment" Nullable="true" />
+          <Property Type="Int32" Name="Ca3Reg" Nullable="true" />
+          <Property Type="Int32" Name="Ca3Print" Nullable="true" />
+          <Property Type="Int32" Name="Ca3Exp" Nullable="true" />
+          <Property Type="Int32" Name="Ca3Payment" Nullable="true" />
+          <Property Type="Int32" Name="SumReg" Nullable="true" />
+          <Property Type="Int32" Name="SumPrint" Nullable="true" />
+          <Property Type="Int32" Name="SumExp" Nullable="true" />
+          <Property Type="Int32" Name="SumPayment" Nullable="true" />
+          <Property Type="Int32" Name="DeltaPayment" Nullable="true" />
+          <Property Type="String" Name="Notes" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="Special" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="pr_ReportSLPhanComHangNgay_Result">
+          <Property Type="DateTime" Name="MealDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="TotalReg" Nullable="true" />
+          <Property Type="Int32" Name="TotalPrint" Nullable="true" />
+          <Property Type="Int32" Name="TotalExp" Nullable="true" />
+          <Property Type="Int32" Name="Total" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="pr_ReportSummaryByEmployee_Result">
+          <Property Type="String" Name="Fullname" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="EmployeeCode" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="CardNumber" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="ContractNo" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="EmployeeID" Nullable="false" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="pr_ReportSummaryByShift_Result">
+          <Property Type="Int32" Name="ShiftID" Nullable="false" />
+          <Property Type="String" Name="ShiftName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="TBL_SPECIAL">
+          <Key>
+            <PropertyRef Name="SpecialID" />
+          </Key>
+          <Property Name="SpecialID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SpecialDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HRM_ROHTOModelStoreContainer" CdmEntityContainer="HRM_ROHTOEntities">
+          <FunctionImportMapping FunctionImportName="pr_getScheduleMenu" FunctionName="HRM_ROHTOModel.Store.pr_getScheduleMenu" />
+          <EntitySetMapping Name="SYS_CONFIG">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_CONFIG">
+              <MappingFragment StoreEntitySet="SYS_CONFIG">
+                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="SourceTable" ColumnName="SourceTable" />
+                <ScalarProperty Name="ValueType" ColumnName="ValueType" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Description2" ColumnName="Description2" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ConfigID" ColumnName="ConfigID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_FUNCTION">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_FUNCTION">
+              <MappingFragment StoreEntitySet="SYS_FUNCTION">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="IconURL" ColumnName="IconURL" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="ModuleCode" ColumnName="ModuleCode" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Description2" ColumnName="Description2" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="FunctionName" ColumnName="FunctionName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_POS">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_POS">
+              <MappingFragment StoreEntitySet="SYS_POS">
+                <ScalarProperty Name="ShiftListID" ColumnName="ShiftListID" />
+                <ScalarProperty Name="POSName" ColumnName="POSName" />
+                <ScalarProperty Name="POSID" ColumnName="POSID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_PRODUCT_TYPE">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_PRODUCT_TYPE">
+              <MappingFragment StoreEntitySet="SYS_PRODUCT_TYPE">
+                <ScalarProperty Name="ProductTypeCode" ColumnName="ProductTypeCode" />
+                <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
+                <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_ROLE">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_ROLE">
+              <MappingFragment StoreEntitySet="SYS_ROLE">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_ROLEPERMISSION">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_ROLEPERMISSION">
+              <MappingFragment StoreEntitySet="SYS_ROLEPERMISSION">
+                <ScalarProperty Name="Cancel" ColumnName="Cancel" />
+                <ScalarProperty Name="Accept" ColumnName="Accept" />
+                <ScalarProperty Name="Import" ColumnName="Import" />
+                <ScalarProperty Name="Export" ColumnName="Export" />
+                <ScalarProperty Name="Print" ColumnName="Print" />
+                <ScalarProperty Name="Delete" ColumnName="Delete" />
+                <ScalarProperty Name="Edit" ColumnName="Edit" />
+                <ScalarProperty Name="Add" ColumnName="Add" />
+                <ScalarProperty Name="View" ColumnName="View" />
+                <ScalarProperty Name="FunctionName" ColumnName="FunctionName" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_SHIFT">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_SHIFT">
+              <MappingFragment StoreEntitySet="SYS_SHIFT">
+                <ScalarProperty Name="ShiftName" ColumnName="ShiftName" />
+                <ScalarProperty Name="ShiftCode" ColumnName="ShiftCode" />
+                <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_USER">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_USER">
+              <MappingFragment StoreEntitySet="SYS_USER">
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_AUDIT">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_AUDIT">
+              <MappingFragment StoreEntitySet="TBL_AUDIT">
+                <ScalarProperty Name="NewData" ColumnName="NewData" />
+                <ScalarProperty Name="OldData" ColumnName="OldData" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="FunctionName" ColumnName="FunctionName" />
+                <ScalarProperty Name="AuditDate" ColumnName="AuditDate" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AuditID" ColumnName="AuditID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_BROADCAST">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_BROADCAST">
+              <MappingFragment StoreEntitySet="TBL_BROADCAST">
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="DateCreate" ColumnName="DateCreate" />
+                <ScalarProperty Name="UserCreate" ColumnName="UserCreate" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="BeginTime" ColumnName="BeginTime" />
+                <ScalarProperty Name="BroadcastID" ColumnName="BroadcastID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_DEPARTMENT">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_DEPARTMENT">
+              <MappingFragment StoreEntitySet="TBL_DEPARTMENT">
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="DepartmentCode" ColumnName="DepartmentCode" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_EMPLOYEE">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_EMPLOYEE">
+              <MappingFragment StoreEntitySet="TBL_EMPLOYEE">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="LeaveDate" ColumnName="LeaveDate" />
+                <ScalarProperty Name="IsLeaveOut" ColumnName="IsLeaveOut" />
+                <ScalarProperty Name="PositionID3" ColumnName="PositionID3" />
+                <ScalarProperty Name="PositionID2" ColumnName="PositionID2" />
+                <ScalarProperty Name="PositionID1" ColumnName="PositionID1" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+                <ScalarProperty Name="EmployeeCode" ColumnName="EmployeeCode" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_EXCEPTION_MEAL">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_EXCEPTION_MEAL">
+              <MappingFragment StoreEntitySet="TBL_EXCEPTION_MEAL">
+                <ScalarProperty Name="ExceptionDate" ColumnName="ExceptionDate" />
+                <ScalarProperty Name="ExceptionMealID" ColumnName="ExceptionMealID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_EXCEPTION_MEAL_SHIFT">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_SHIFT">
+              <MappingFragment StoreEntitySet="TBL_EXCEPTION_MEAL_SHIFT">
+                <ScalarProperty Name="ExceptionQtyUsed" ColumnName="ExceptionQtyUsed" />
+                <ScalarProperty Name="ExceptionQty" ColumnName="ExceptionQty" />
+                <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+                <ScalarProperty Name="ExceptionMealID" ColumnName="ExceptionMealID" />
+                <ScalarProperty Name="ExceptionMealShiftID" ColumnName="ExceptionMealShiftID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_EXCEPTION_MEAL_USED">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_USED">
+              <MappingFragment StoreEntitySet="TBL_EXCEPTION_MEAL_USED">
+                <ScalarProperty Name="POSPrint" ColumnName="POSPrint" />
+                <ScalarProperty Name="POSModified" ColumnName="POSModified" />
+                <ScalarProperty Name="POSCreate" ColumnName="POSCreate" />
+                <ScalarProperty Name="UserPrint" ColumnName="UserPrint" />
+                <ScalarProperty Name="UserCreate" ColumnName="UserCreate" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="PrintTime" ColumnName="PrintTime" />
+                <ScalarProperty Name="MealDate" ColumnName="MealDate" />
+                <ScalarProperty Name="ExceptionMealUsedID" ColumnName="ExceptionMealUsedID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_EXCEPTION_MEAL_USED_PRODUCT">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_USED_PRODUCT">
+              <MappingFragment StoreEntitySet="TBL_EXCEPTION_MEAL_USED_PRODUCT">
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ExceptionMealUsedID" ColumnName="ExceptionMealUsedID" />
+                <ScalarProperty Name="ExceptionMealUsedProductID" ColumnName="ExceptionMealUsedProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_MENU">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_MENU">
+              <MappingFragment StoreEntitySet="TBL_MENU">
+                <ScalarProperty Name="MenuDay" ColumnName="MenuDay" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="UserCreate" ColumnName="UserCreate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_MENU_PRODUCT">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_MENU_PRODUCT">
+              <MappingFragment StoreEntitySet="TBL_MENU_PRODUCT">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="MenuProductID" ColumnName="MenuProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_MENU_SHIFT">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_MENU_SHIFT">
+              <MappingFragment StoreEntitySet="TBL_MENU_SHIFT">
+                <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="MenuShiftID" ColumnName="MenuShiftID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_POSITION">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_POSITION">
+              <MappingFragment StoreEntitySet="TBL_POSITION">
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="PositionCode" ColumnName="PositionCode" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_PRODUCT">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_PRODUCT">
+              <MappingFragment StoreEntitySet="TBL_PRODUCT">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ImageProduct" ColumnName="ImageProduct" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_REGISTER_MEAL">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_REGISTER_MEAL">
+              <MappingFragment StoreEntitySet="TBL_REGISTER_MEAL">
+                <ScalarProperty Name="IsUpdate" ColumnName="IsUpdate" />
+                <ScalarProperty Name="POSPrint" ColumnName="POSPrint" />
+                <ScalarProperty Name="POSModified" ColumnName="POSModified" />
+                <ScalarProperty Name="POSCreate" ColumnName="POSCreate" />
+                <ScalarProperty Name="IsAddOn" ColumnName="IsAddOn" />
+                <ScalarProperty Name="MenuIDOld" ColumnName="MenuIDOld" />
+                <ScalarProperty Name="ShiftIDOld" ColumnName="ShiftIDOld" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="PrintTime" ColumnName="PrintTime" />
+                <ScalarProperty Name="IsPrint" ColumnName="IsPrint" />
+                <ScalarProperty Name="IsCancel" ColumnName="IsCancel" />
+                <ScalarProperty Name="UserPrint" ColumnName="UserPrint" />
+                <ScalarProperty Name="UserCreate" ColumnName="UserCreate" />
+                <ScalarProperty Name="MealDate" ColumnName="MealDate" />
+                <ScalarProperty Name="RegisterTime" ColumnName="RegisterTime" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="RegisterID" ColumnName="RegisterID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_REGISTER_MEAL_PRODUCT">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_REGISTER_MEAL_PRODUCT">
+              <MappingFragment StoreEntitySet="TBL_REGISTER_MEAL_PRODUCT">
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="RegisterMealID" ColumnName="RegisterMealID" />
+                <ScalarProperty Name="RegisterMealProductID" ColumnName="RegisterMealProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_REGISTER_MEAL_PRODUCT_OLD">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_REGISTER_MEAL_PRODUCT_OLD">
+              <MappingFragment StoreEntitySet="TBL_REGISTER_MEAL_PRODUCT_OLD">
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="RegisterMealID" ColumnName="RegisterMealID" />
+                <ScalarProperty Name="RegisterMealProductID" ColumnName="RegisterMealProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_SCHEDULE_MENU">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_SCHEDULE_MENU">
+              <MappingFragment StoreEntitySet="TBL_SCHEDULE_MENU">
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="MealDate" ColumnName="MealDate" />
+                <ScalarProperty Name="ScheduleMenuID" ColumnName="ScheduleMenuID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_SCHEDULE_MENU_PRODUCT">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_SCHEDULE_MENU_PRODUCT">
+              <MappingFragment StoreEntitySet="TBL_SCHEDULE_MENU_PRODUCT">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="ScheduleMenuID" ColumnName="ScheduleMenuID" />
+                <ScalarProperty Name="ScheduleMenuProductID" ColumnName="ScheduleMenuProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_SCHEDULE_MENU_SHIFT">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_SCHEDULE_MENU_SHIFT">
+              <MappingFragment StoreEntitySet="TBL_SCHEDULE_MENU_SHIFT">
+                <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="ScheduleMenuID" ColumnName="ScheduleMenuID" />
+                <ScalarProperty Name="ScheduleMenuShiftID" ColumnName="ScheduleMenuShiftID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBL_SHIFT_TIME_RANGE">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_SHIFT_TIME_RANGE">
+              <MappingFragment StoreEntitySet="TBL_SHIFT_TIME_RANGE">
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="BeginTime" ColumnName="BeginTime" />
+                <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+                <ScalarProperty Name="ShiftTimeRangeID" ColumnName="ShiftTimeRangeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="pr_CheckEmployeeHasRegisterMeal" FunctionName="HRM_ROHTOModel.Store.pr_CheckEmployeeHasRegisterMeal">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRM_ROHTOModel.pr_CheckEmployeeHasRegisterMeal_Result">
+                <ScalarProperty Name="RegisterID" ColumnName="RegisterID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="RegisterTime" ColumnName="RegisterTime" />
+                <ScalarProperty Name="MealDate" ColumnName="MealDate" />
+                <ScalarProperty Name="UserCreate" ColumnName="UserCreate" />
+                <ScalarProperty Name="UserPrint" ColumnName="UserPrint" />
+                <ScalarProperty Name="IsCancel" ColumnName="IsCancel" />
+                <ScalarProperty Name="IsPrint" ColumnName="IsPrint" />
+                <ScalarProperty Name="PrintTime" ColumnName="PrintTime" />
+                <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ShiftIDOld" ColumnName="ShiftIDOld" />
+                <ScalarProperty Name="MenuIDOld" ColumnName="MenuIDOld" />
+                <ScalarProperty Name="IsAddOn" ColumnName="IsAddOn" />
+                <ScalarProperty Name="POSCreate" ColumnName="POSCreate" />
+                <ScalarProperty Name="POSModified" ColumnName="POSModified" />
+                <ScalarProperty Name="POSPrint" ColumnName="POSPrint" />
+                <ScalarProperty Name="IsUpdate" ColumnName="IsUpdate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_DeleteAllData1" FunctionName="HRM_ROHTOModel.Store.pr_DeleteAllData" />
+          <FunctionImportMapping FunctionImportName="pr_ExportEmployeeList" FunctionName="HRM_ROHTOModel.Store.pr_ExportEmployeeList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRM_ROHTOModel.pr_ExportEmployeeList_Result">
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="EmployeeCode" ColumnName="EmployeeCode" />
+                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="DepartmentCode" ColumnName="DepartmentCode" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="PositionName1" ColumnName="PositionName1" />
+                <ScalarProperty Name="PositionName2" ColumnName="PositionName2" />
+                <ScalarProperty Name="PositionName3" ColumnName="PositionName3" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_LoadChoosenMenu" FunctionName="HRM_ROHTOModel.Store.pr_LoadChoosenMenu">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRM_ROHTOModel.pr_LoadChoosenMenu_Result">
+                <ScalarProperty Name="ChoosenMeal" ColumnName="ChoosenMeal" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
+                <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
+                <ScalarProperty Name="Producttypecode" ColumnName="Producttypecode" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_LoadExceptionMeal" FunctionName="HRM_ROHTOModel.Store.pr_LoadExceptionMeal">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRM_ROHTOModel.pr_LoadExceptionMeal_Result">
+                <ScalarProperty Name="SHIFTID" ColumnName="SHIFTID" />
+                <ScalarProperty Name="REMAIN" ColumnName="REMAIN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_ReportMealCardByDay" FunctionName="HRM_ROHTOModel.Store.pr_ReportMealCardByDay">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRM_ROHTOModel.pr_ReportMealCardByDay_Result">
+                <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+                <ScalarProperty Name="ShiftName" ColumnName="ShiftName" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_ReportPrintMealToDay" FunctionName="HRM_ROHTOModel.Store.pr_ReportPrintMealToDay" />
+          <FunctionImportMapping FunctionImportName="pr_ReportRegisterByEmployee" FunctionName="HRM_ROHTOModel.Store.pr_ReportRegisterByEmployee">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRM_ROHTOModel.pr_ReportRegisterByEmployee_Result">
+                <ScalarProperty Name="MealDate" ColumnName="MealDate" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="EmployeeCode" ColumnName="EmployeeCode" />
+                <ScalarProperty Name="Ca0" ColumnName="Ca0" />
+                <ScalarProperty Name="Ca1" ColumnName="Ca1" />
+                <ScalarProperty Name="Ca2" ColumnName="Ca2" />
+                <ScalarProperty Name="Ca3" ColumnName="Ca3" />
+                <ScalarProperty Name="Ca0Plus" ColumnName="Ca0Plus" />
+                <ScalarProperty Name="Ca1Plus" ColumnName="Ca1Plus" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_ReportSLPhanComCanThanhToan" FunctionName="HRM_ROHTOModel.Store.pr_ReportSLPhanComCanThanhToan">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRM_ROHTOModel.pr_ReportSLPhanComCanThanhToan_Result">
+                <ScalarProperty Name="MealDate" ColumnName="MealDate" />
+                <ScalarProperty Name="Ca1Reg" ColumnName="Ca1Reg" />
+                <ScalarProperty Name="Ca1Print" ColumnName="Ca1Print" />
+                <ScalarProperty Name="Ca1Exp" ColumnName="Ca1Exp" />
+                <ScalarProperty Name="Ca1Payment" ColumnName="Ca1Payment" />
+                <ScalarProperty Name="Ca0Reg" ColumnName="Ca0Reg" />
+                <ScalarProperty Name="Ca0Print" ColumnName="Ca0Print" />
+                <ScalarProperty Name="Ca0Exp" ColumnName="Ca0Exp" />
+                <ScalarProperty Name="Ca0Payment" ColumnName="Ca0Payment" />
+                <ScalarProperty Name="Ca1PlusReg" ColumnName="Ca1PlusReg" />
+                <ScalarProperty Name="Ca1PlusPrint" ColumnName="Ca1PlusPrint" />
+                <ScalarProperty Name="Ca1PlusExp" ColumnName="Ca1PlusExp" />
+                <ScalarProperty Name="Ca1PlusPayment" ColumnName="Ca1PlusPayment" />
+                <ScalarProperty Name="Ca2Reg" ColumnName="Ca2Reg" />
+                <ScalarProperty Name="Ca2Print" ColumnName="Ca2Print" />
+                <ScalarProperty Name="Ca2Exp" ColumnName="Ca2Exp" />
+                <ScalarProperty Name="Ca2Payment" ColumnName="Ca2Payment" />
+                <ScalarProperty Name="Ca0PlusReg" ColumnName="Ca0PlusReg" />
+                <ScalarProperty Name="Ca0PlusPrint" ColumnName="Ca0PlusPrint" />
+                <ScalarProperty Name="Ca0PlusExp" ColumnName="Ca0PlusExp" />
+                <ScalarProperty Name="Ca0PlusPayment" ColumnName="Ca0PlusPayment" />
+                <ScalarProperty Name="Ca3Reg" ColumnName="Ca3Reg" />
+                <ScalarProperty Name="Ca3Print" ColumnName="Ca3Print" />
+                <ScalarProperty Name="Ca3Exp" ColumnName="Ca3Exp" />
+                <ScalarProperty Name="Ca3Payment" ColumnName="Ca3Payment" />
+                <ScalarProperty Name="SumReg" ColumnName="SumReg" />
+                <ScalarProperty Name="SumPrint" ColumnName="SumPrint" />
+                <ScalarProperty Name="SumExp" ColumnName="SumExp" />
+                <ScalarProperty Name="SumPayment" ColumnName="SumPayment" />
+                <ScalarProperty Name="DeltaPayment" ColumnName="DeltaPayment" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Special" ColumnName="Special" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_ReportSLPhanComHangNgay" FunctionName="HRM_ROHTOModel.Store.pr_ReportSLPhanComHangNgay">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRM_ROHTOModel.pr_ReportSLPhanComHangNgay_Result">
+                <ScalarProperty Name="MealDate" ColumnName="MealDate" />
+                <ScalarProperty Name="TotalReg" ColumnName="TotalReg" />
+                <ScalarProperty Name="TotalPrint" ColumnName="TotalPrint" />
+                <ScalarProperty Name="TotalExp" ColumnName="TotalExp" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_ReportSLPhanComTheoNhanVien" FunctionName="HRM_ROHTOModel.Store.pr_ReportSLPhanComTheoNhanVien" />
+          <FunctionImportMapping FunctionImportName="pr_ReportSummaryByEmployee" FunctionName="HRM_ROHTOModel.Store.pr_ReportSummaryByEmployee">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRM_ROHTOModel.pr_ReportSummaryByEmployee_Result">
+                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
+                <ScalarProperty Name="EmployeeCode" ColumnName="EmployeeCode" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_ReportSummaryByShift" FunctionName="HRM_ROHTOModel.Store.pr_ReportSummaryByShift">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRM_ROHTOModel.pr_ReportSummaryByShift_Result">
+                <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+                <ScalarProperty Name="ShiftName" ColumnName="ShiftName" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pr_UpdateExceptionMealUsed" FunctionName="HRM_ROHTOModel.Store.pr_UpdateExceptionMealUsed" />
+          <EntitySetMapping Name="TBL_SPECIAL">
+            <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_SPECIAL">
+              <MappingFragment StoreEntitySet="TBL_SPECIAL">
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="SpecialDate" ColumnName="SpecialDate" />
+                <ScalarProperty Name="SpecialID" ColumnName="SpecialID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

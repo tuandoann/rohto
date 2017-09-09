@@ -1,0 +1,101 @@
+﻿@model HRM_ROHTO.Models.TBL_SHIFT_TIME_RANGE
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .arrow {
+        margin-top: 50px;
+    }
+
+        .arrow span {
+            font-size: 30px;
+        }
+
+        .arrow a:hover {
+            cursor: pointer;
+        }
+
+    #lv_list tbody tr.selected, #lv_list_2 tbody tr.selected {
+        background: #808080;
+        color: #efefef;
+    }
+</style>
+
+@using (@Html.BeginForm(new { id = "form" }))
+{
+    <body onload="setFocus()">
+        <div class="box-body">
+            <div id="lblError"></div>
+            <div id="lblSuccess"></div>
+            <div id="lblInfo"></div>
+            <section class="content-header">
+                <h1 class="MT_Title">
+                    Thêm thời gian ca
+                </h1>
+                <ol class="breadcrumb"></ol>
+            </section>
+            <section class="content">
+                <div class="box box-success color-palette-box">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-md-10 col-sm-8 col-xs-6">
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-3">
+                                <button type="submit" class="btn btn-block btn-google" onclick="return btnSaveShiftTimeRangeClick();">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-3">
+                                <a class="btn btn-block bg-purple" href="/ShiftTimeRange/Index"><i class="fa fa-arrow-left"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="content">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box-body">
+                                    <div class="row" style="padding-bottom:20px;">
+                                        <div class="col-md-1 text-right">Ca<span style="color:red;">*</span></div>
+                                        <div class="col-md-2">
+                                            @Html.DropDownListFor(x => x.ShiftID, (List<SelectListItem>)ViewBag.lstShift, new { @class = "form-control select2" })
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-3"></div>
+                                    </div>
+                                    <div class="row" style="padding-bottom:5px;">
+                                        <div class="col-md-1 text-right">Bắt đầu<span style="color:red;">*</span></div>
+                                        <div class="col-md-2">
+                                            @Html.TextBoxFor(x => x.BeginTime, new { @class = "form-control", @type = "time" })
+                                        </div>
+                                        <div class="col-md-1">Kết thúc<span style="color:red;">*</span></div>
+                                        <div class="col-md-2">
+                                            @Html.TextBoxFor(x => x.EndTime, new { @class = "form-control", @type = "time" })
+                                        </div>
+                                        <div class="col-md-3"></div>
+                                    </div>
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </section>
+                </div><!-- /.row -->
+            </section>
+        </div>
+    </body>
+}
+
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="../../Content/plugins/select2/select2.full.min.js"></script>
+    <script src="~/App_Script/ShiftTimeRange.js"></script>
+    <script src="~/App_Script/Gobal.js"></script>
+    <script>
+        $(".select2").select2();
+        function setFocus() { document.getElementById("ShiftID").focus(); }
+    </script>
+}
+
+

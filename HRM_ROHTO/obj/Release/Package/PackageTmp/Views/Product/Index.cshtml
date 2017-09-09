@@ -1,0 +1,371 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .modal .modal-row {
+        border: 1px solid black;
+        background: white;
+    }
+
+        .modal .modal-row .input-file {
+            padding: 20px;
+        }
+
+    .modal .title {
+        background: #3282ff;
+        color: #efefef;
+    }
+</style>
+@using (Html.BeginForm("Index", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="box-body">
+        <div id="lblError">
+            @Html.Raw(ViewBag.errorDetails)
+        </div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                Món ăn
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-6">
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-inline list-unstyled pull-right">
+                                    <li>
+                                        <button type="button" class="btn btn-danger" id="exportExcel">Xuất excel</button>
+                                    </li>
+                                    <li>
+                                        @if (ViewBag.Add == true && ViewBag.Edit == true)
+                                        {
+                                            <button type="button" class="btn btn-facebook" data-toggle="modal" data-target="#modalImg">Nhập hình ảnh</button>
+                                        }
+                                    </li>
+                                    <li>
+                                        @if (ViewBag.Add == true && ViewBag.Edit == true)
+                                        {
+                                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal">Nhập dữ liệu</button>
+                                        }
+                                    </li>
+                                    <li>
+                                        @if (ViewBag.Add == true)
+                                        {
+                                            <button type="button" id="create" class="btn btn-primary" style="padding-left:20px; padding-right:20px"><i class="fa fa-plus"></i></button>
+                                        }
+                                    </li>
+                                    <li>
+                                        @if (ViewBag.Delete == true)
+                                        {
+                                            <button type="button" class="btn btn-danger" id="DeleteMulti">Xóa</button>
+                                        }
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                                </button>
+                                <h4 class="modal-title">Nhập dữ liệu</h4>
+                            </div>
+                            <div class="modal-body modal-row">
+                                <p id="error" class="text-red"></p>
+                                <label class="control-label">Chọn file excel</label>
+                                @*@Html.Hidden("Path")*@
+                                <input id="fileUpload" name="fileUpload" type="file" class="file" accept=".xlsx,.csv">
+                                <br />
+                                <button type="submit" onclick="return CheckFileUpload()" class="btn btn-primary">Xử lý</button>
+                                <p style="margin-top:10px"><b><span class="fa fa-exclamation-triangle"> Lưu ý</span></b></p>
+                                <ul>
+                                    <li>Cấu trúc file tải lên phải giống với file mẫu và có dạng *.xlsx hoặc *.csv</li>
+                                    <li>Tải file mẫu tại đây: <a href="~/Content/Excel/FileMau/01_Import_Product.xlsx"><span class="fa fa-cloud-download"></span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalImg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                                </button>
+                                <h4 class="modal-title">Nhập hình ảnh</h4>
+                            </div>
+                            <div class="modal-body modal-row">
+                                <p id="errorAll" class="text-red"></p>
+                                <label class="control-label">Chọn thư mục hình</label>
+                                @Html.Hidden("Path")
+                                <input id="fileUploadAll" name="fileUploadAll" class="file" type="file" webkitdirectory directory multiple>
+                                <br />
+                                <button type="submit" onclick="return CheckFileUploadAll()" class="btn btn-primary">Xử lý</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th class="text-center" data-orderable="false" style="padding-right:10px;"><input type="checkbox" name="select_all" value="1" id="example-select-all"></th>
+                                            <th>Món ăn</th>
+                                            <th>Loại</th>
+                                            <th>Trạng thái</th>
+                                            <th style="min-width:80px; width:100px;" data-orderable="false"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+@section scripts {
+    <script>
+        $(function () {
+            $("#fileUpload").fileinput({
+                'showUpload': false,
+                'language': 'vi',
+            })
+
+            $("#fileUploadAll").fileinput({
+                'showUpload': false,
+                'language': 'vi',
+            })
+        })
+    </script>
+}
+<script>
+    $(function () {
+        var table = $('#lv_list').DataTable({
+            "processing": true, // for show processing bar
+            "serverSide": false, // for process on server side
+            "orderMulti": false, // for disable multi column order
+            "iDisplayLength": 100,
+            "lengthMenu": [[10, 20, 50, 100, 200], [10, 20, 50, 100, 200]],
+            "info": false,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+            "ajax": {
+                "url": "/Product/GetAllProduct",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { 'data': null, 'visible': false },
+            {
+                'data': 'ProductID',
+                'targets': 0,
+                'searchable': false,
+                'orderable': false,
+                'className': 'dt-body-center text-center',
+                'render': function (data, type, full, meta) {
+                    return '<input type="checkbox" class="chkID" name="id[]" value="' + data + '">';
+                }
+            },
+                { "data": "ProductName", "name": "ProductName" },
+                { "data": "ProductTypeName", "name": "ProductTypeName" },
+                { "data": "IsActive", "name": "IsActive" },
+                {
+                    "targets": -1,
+                    "data": null,
+                    "defaultContent": `
+                        @if (ViewBag.Edit == true) {
+                            <a class ='btn btn-info btn-xs' id='edit' class ='edit'><i class ='fa fa-pencil'></i> Sửa</a>
+                        }
+                        @if (ViewBag.Delete == true)
+	                    {
+		                     <a class ='btn btn-danger btn-xs' id='delete'><i class ='fa fa-trash-o'></i> Xóa</a>
+	                    }`
+                }
+            ]
+        });
+
+        // Handle click on "Select all" control
+        $('#example-select-all').on('click', function () {
+            // Get all rows with search applied
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            // Check/uncheck checkboxes for all rows in the table
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+
+        $('#lv_list tbody').on('change', 'input[type="checkbox"]', function () {
+            // If checkbox is not checked
+            if (!this.checked) {
+                var el = $('#example-select-all').get(0);
+                // If "Select all" control is checked and has 'indeterminate' property
+                if (el && el.checked && ('indeterminate' in el)) {
+                    // Set visual state of "Select all" control
+                    // as 'indeterminate'
+                    el.indeterminate = true;
+                }
+            }
+        });
+
+        $('#DeleteMulti').on('click', function (e) {
+            if (confirm("Bạn thật sự muốn xóa những dòng dữ liệu đang chọn?")) {
+                debugger;
+                var arr = [];
+                $("#lv_list tbody tr").each(function () {
+                    debugger;
+                    var Check = $(this).find('.chkID')[0];
+                    if (Check != null) {
+                        if (Check.checked) {
+                            arr.push(Check.value)
+                        }
+                    }
+                });
+                if (arr.length == 0)
+                    ShowError("Không tìm thấy dòng dữ liệu nào để xóa");
+                else {
+                    var lstProductID = JSON.stringify(arr);
+                    $.ajax({
+                        "url": "/Product/DeleteMultiProduct",
+                        "type": "post",
+                        "datatype": "json",
+                        data: {
+                            lstProductID: lstProductID
+                        },
+                        success: function (data) {
+                            if (data == false) {
+                                ShowError("Dữ liệu đang được sử dụng, không thể xóa");
+                                flag = false;
+                            }
+                            else {
+                                table.ajax.reload();
+                                flag = true;
+                            }
+                        }
+                    })
+                }
+            }
+        });
+
+        $('#lv_list tbody').on('click', '#edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?ProductID=" + data["ProductID"];
+        });
+
+        $('#lv_list tbody').on('click', '#delete', function () {
+            var data = table.row($(this).parents('tr')).data();
+            var flag = DeleteConfirm(data["ProductID"]);
+            if (flag) {
+                debugger;
+                table.ajax.reload();
+            }
+        });
+
+        $("#create").click(function () {
+            location.href = "/Product/Create";
+        });
+
+        $("#exportExcel").click(function () {
+             $.ajax({
+                    url: '/Product/ExportExcel',
+                    type: 'post',
+                    datatype: 'json',
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        debugger;
+                        if (data == "-1") {
+                            ShowError("Mã khách hàng đã tồn tại, vui lòng nhập lại");
+                            flag = false;
+                        }
+                        else {
+                            debugger;
+                            window.location.href = window.location.origin + (data);
+                        }
+                    }
+                })
+        })
+    });
+
+    function CheckFileUploadAll() {
+        console.log($("#fileUploadAll"))
+    }
+
+    function CheckFileUpload() {
+        debugger;
+        var fileName = $('#fileUpload').val();
+        var fileExtensions = fileName.split('.').pop();
+
+        if (fileExtensions.toLowerCase() != "xlsx" && fileExtensions.toLowerCase() != "csv") {
+            $("#error").text("Không đúng dịnh dạng file Excel (*.xlsx, *csv)");
+            return false;
+        }
+
+        return true;
+    };
+
+    function CheckFileUploadAll() {
+        debugger;
+        if ($("#fileUploadAll").val() == "") {
+            $("#errorAll").text("Không tìm thấy thư mục nào được chọn");
+            return false;
+        }
+        return true;
+    }
+
+    function DeleteConfirm(id) {
+        var flag = false;
+        if (confirm("Bạn thật sự muốn xóa dòng dữ liệu đang chọn?")) {
+            $.ajax({
+                url: "/Product/DeleteProduct",
+                type: 'POST',
+                data: {
+                    ProductID: id,
+                },
+                dataType: "json",
+                async: false,
+                cache: false,
+                success: function (data) {
+                    if (data == true) { // co the xoa
+                        flag = true;
+                    }
+                    else {
+                        ShowError('Dữ liệu đang được sử dụng, không thể xóa');
+                        flag = false;
+                    }
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+        return flag;
+    }
+</script>

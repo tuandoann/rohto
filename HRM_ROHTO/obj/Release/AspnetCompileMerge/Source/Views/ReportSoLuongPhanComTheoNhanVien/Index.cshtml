@@ -1,0 +1,359 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .td-center {
+        text-align: center;
+    }
+
+    .td-right {
+        text-align: right;
+    }
+
+    .td-bold {
+        font-weight: bold;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                LUNCHEON
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <button type="button" class="btn btn-warning" onclick="btnExport_Click();">Xuất báo cáo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-1" style="margin-top:5px;">
+                                <label for="date_year">Tháng/năm: </label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" id="date_year" name="date_year" class="form-control" />
+                            </div>
+                            <div class="col-md-1">
+                                <input type="radio" id="month_before" name="month" value="1" checked="checked"> 15 ngày đầu
+                            </div>
+                            <div class="col-md-1">
+                                <input type="radio" id="month_after" name="month" value="2"> 15 ngày sau
+                            </div>
+                            <div class="col-md-1" style="padding-left:0;">
+                                <button type="button" onclick="return filterByMonthAndYear()" class="btn btn-block btn-vimeo btn-group">Tìm</button>
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                @{
+                                int soThang = ViewBag.soThang;
+                                Boolean dk = ViewBag.dk;
+                                System.Data.DataTable directLabor = ViewBag.directLabor;
+                                System.Data.DataTable overheadStaff = ViewBag.overheadStaff;
+                                System.Data.DataTable outsideLuncheonCharge = ViewBag.outsideLuncheonCharge;
+                                int []subTotalDirectLabor = ViewBag.subTotalDirectLabor;
+                                int[] subTotalOverheadStaff = ViewBag.subTotalOverheadStaff;
+                                int[] subTotalOutsideLuncheonCharge = ViewBag.subTotalOutsideLuncheonCharge;
+                                int[] grandTotal = ViewBag.grandTotal;
+                                int[] totalLuncheon = ViewBag.totalLuncheon;
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr class="td-center td-bold">
+                                            <th class="td-center" style="width:5%">NO</th>
+                                            <th class="td-center" colspan="2">DATE</th>
+                                            @{
+                                                int startThang = dk ? 1 : 16;
+                                                int widthThang = 48 / soThang;
+                                                for(int i = startThang; i< startThang + soThang;i++)
+                                                {
+                                                    if (i == startThang + soThang - 1)
+                                                    {
+                                                        <th class="td-center" style="width:5%">Total</th>
+                                                    }
+                                                    else
+                                                    {
+                                                        <th class="td-center" style="width: @(widthThang.ToString() + "%") ">@i</th>
+                                                    }
+                                                }
+}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Load nhân viên DIRECT LABOR -->
+                                        <tr class="td-bold">
+                                            <td></td>
+                                            <td class="td-center">DIRECT LABOR</td>
+                                            <td class="td-center">EMPLOYEE CODE</td>
+                                            <td colspan="@soThang"></td>
+                                        </tr>
+                                        @for (int i = 0; i < directLabor.Rows.Count; i++)
+                                        {
+                                            <tr>
+                                                <td class="td-center">@(i + 1)</td>
+                                                <td>@directLabor.Rows[i][1].ToString()</td>
+                                                <td class="td-center">@directLabor.Rows[i]["EmployeeCode"].ToString()</td>
+                                                @for (int j = 0; j < soThang; j++)
+                                                {
+                                                    string nameCol = (j == soThang - 1) ? "Total" : "Ngay" + (j + startThang).ToString();
+                                                    <td class="td-center">@directLabor.Rows[i][nameCol]</td>
+                                                }
+                                            </tr>
+                                        }
+                                        <tr class="td-bold">
+                                            <td colspan="3" class="td-center">SUB TOTAL</td>
+                                            @for (int i = 0; i < soThang; i++)
+                                            {
+                                                <td class="td-center">@subTotalDirectLabor[i]</td>
+                                            }
+                                        </tr>
+                                        <!-- Load nhân viên OVERHEAD STAFF -->
+                                        <tr class="td-bold">
+                                            <td></td>
+                                            <td class="td-center">OVERHEAD STAFF</td>
+                                            <td class="td-center">EMPLOYEE CODE</td>
+                                            <td colspan="@soThang"></td>
+                                        </tr>
+                                        @for (int i = 0; i < overheadStaff.Rows.Count; i++)
+                                        {
+                                            <tr>
+                                                <td class="td-center">@(i + 1)</td>
+                                                <td>@overheadStaff.Rows[i]["FullName"].ToString()</td>
+                                                <td class="td-center">@overheadStaff.Rows[i]["EmployeeCode"].ToString()</td>
+                                                @for (int j = 0; j < soThang; j++)
+                                                {
+                                                    string nameCol = (j == soThang - 1) ? "Total" : "Ngay" + (j + startThang).ToString();
+                                                    <td class="td-center">@overheadStaff.Rows[i][nameCol]</td>
+                                                }
+                                            </tr>
+                                        }
+                                        <tr class="td-bold">
+                                            <td colspan="3" class="td-center">SUB TOTAL</td>
+                                            @for (int i = 0; i < soThang; i++)
+                                            {
+                                                <td class="td-center">@subTotalOverheadStaff[i]</td>
+                                            }
+                                        </tr>
+
+                                        <!-- GRAND TOTAL -->
+                                        <tr class="td-bold">
+                                            <td colspan="3" class="td-center">GRAND TOTAL</td>
+                                            @for (int i = 0; i < soThang; i++)
+                                            {
+                                                <td class="td-center">@grandTotal[i]</td>
+                                            }
+                                        </tr>
+
+                                        <!-- TOTAL LUNCHEON -->
+                                        <tr class="td-bold">
+                                            <td colspan="3" class="td-center">TOTAL LUNCHEON</td>
+                                            <td colspan="@soThang"></td>
+                                        </tr>
+
+                                        <!-- Load nhân viên Outside luncheon charge -->
+                                        @if (outsideLuncheonCharge.Rows.Count > 0)
+                                        {
+                                            for (int i = 0; i < outsideLuncheonCharge.Rows.Count; i++)
+                                            {
+                                                <tr>
+                                                    @if (i == 0)
+                                                    {
+                                                        <td class="td-center" style="font-weight:bold" rowspan="@outsideLuncheonCharge.Rows.Count">Outside luncheon charge</td>
+                                                    }
+                                                    
+                                                    <td>@directLabor.Rows[i][1].ToString()</td>
+                                                    <td class="td-center">@directLabor.Rows[i]["EmployeeCode"].ToString()</td>
+                                                    @for (int j = 0; j < soThang; j++)
+                                                    {
+                                                        string nameCol = (j == soThang - 1) ? "Total" : "Ngay" + (j + startThang).ToString();
+                                                        <td class="td-center">@directLabor.Rows[i][nameCol]</td>
+                                                    }
+                                                </tr>
+                                                }
+                                                <tr>
+                                                    <td colspan="3">For emploees who work overtime but cancel late</td>
+                                                    @for (int i = 0; i < soThang; i++)
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                </tr>
+                                            <tr class="td-bold">
+                                                <td colspan="3" class="td-center">SUB TOTAL</td>
+                                                @for (int i = 0; i < soThang; i++)
+                                                {
+                                                    <td class="td-center">@subTotalDirectLabor[i]</td>
+                                                }
+                                                </tr>
+                                        }
+                                        @if(outsideLuncheonCharge.Rows.Count == 0)
+                                        {
+                                            <tr>
+                                                <td style="font-weight:bold">Outside luncheon charge</td>
+                                                @for (int i = 0; i < soThang + 2 ; i++)
+                                                {
+                                                    <td></td>
+                                                }
+                                            </tr>
+                                            <tr>
+                                                    <td colspan="3">For emploees who work overtime but cancel late</td>
+                                                    @for (int i = 0; i < soThang; i++)
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                </tr>
+                                            <tr class="td-bold">
+                                                <td colspan="3" class="td-center">SUB TOTAL</td>
+                                                @for (int i = 0; i < soThang; i++)
+                                                {
+                                                    <td class="td-center">@subTotalDirectLabor[i]</td>
+                                                }
+                                                </tr>
+                                        }
+                                        
+                                        <!-- Total luncheon (1) -->
+                                        <tr class="td-bold">
+                                            <td colspan="3" class="td-center">Total luncheon (1)</td>
+                                            @for (int i = 0; i < soThang; i++)
+                                            {
+                                                <td class="td-center">@totalLuncheon[i]</td>
+                                            }
+                                        </tr>
+
+                                        <!-- Actual luncheon (2) -->
+                                        <tr class="td-bold">
+                                            <td colspan="3" class="td-center">Actual luncheon (2)</td>
+                                            <td colspan="@soThang"></td>
+                                        </tr>
+
+                                        <!-- Balance [(2)-(1)] -->
+                                        <tr class="td-bold">
+                                            <td colspan="3" class="td-center">Balance [(2)-(1)]</td>
+                                            <td colspan="@soThang"></td>
+                                        </tr>
+
+                                        <!-- Amount -->
+                                        <tr class="td-bold">
+                                            <td colspan="3" class="td-center">Amount</td>
+                                            <td colspan="@soThang"></td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                }
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.col -->
+                            </div><!-- /.row -->
+                        </section>
+                    </div>
+                </section>
+            </div>
+                                }
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+                                <script>
+                                    $(function () {
+                                        $('#lv_list tbody').on('click', '#edit', function () {
+                                            var data = table.row($(this).parents('tr')).data();
+                                            window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?ScheduleMenuID=" + data["ScheduleMenuID"];
+                                        });
+                                        var arrTr = $("#lv_list tbody tr");
+
+                                        $('#date_year').datetimepicker({
+                                            viewMode: 'months',
+                                            format: 'MM/YYYY',
+                                            showClear: true,
+                                            showClose: true
+                                        });
+                                    });
+                                    $.urlParam = function (name) {
+                                        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+                                        if (results == null) {
+                                            return null;
+                                        }
+                                        else {
+                                            return results[1] || 0;
+                                        }
+                                    }
+                                    var date = new Date();
+                                    var year_current = $.urlParam('year') == null ? date.getFullYear() : $.urlParam('year');
+                                    var month_current = $.urlParam('month') == null ? (date.getMonth() + 1) : $.urlParam('month');
+                                    $("#date_year").val(month_current + "-" + year_current);
+                                    var dk = $.urlParam('dk');
+                                    if (dk == 'true') {
+                                        $("#month_before").prop("checked", true);
+                                        $("#month_after").prop("checked", false);
+                                    } else {
+                                        if (dk == 'false') {
+                                            $("#month_before").prop("checked", false);
+                                            $("#month_after").prop("checked", true);
+                                        }
+
+                                    }
+
+                                    function filterByMonthAndYear() {
+                                        debugger;
+                                        if ($("#date_year").val() == "") {
+                                            ShowError("Vui lòng nhập tháng năm");
+                                            $("#date_year").focus();
+                                            return false;
+                                        }
+                                        else {
+                                            var dk = $('#month_before').is(':checked') ? true : false;
+                                            var arrDate = $("#date_year").val().split("/");
+                                            location.href = "/ReportSoLuongPhanComTheoNhanVien/Index?year=" + arrDate[1] + "&&month=" + arrDate[0] + "&&dk=" + dk;
+                                        }
+                                    }
+
+                                    function ReloadPartialViewIndex() {
+                                        $('#partial_Invoice').load('/ReportSoLuongPhanComTheoNhanVien/Index', $("#frmSearch").serializeArray());
+                                    }
+
+                                    function btnSearch_Click() {
+                                        ReloadPartialViewIndex();
+                                    }
+
+                                    function btnExport_Click() {
+                                        $.ajax({
+                                            url: '/ReportSoLuongPhanComTheoNhanVien/ExportSoLuongPhanComTheoNhanVien',
+                                            type: 'post',
+                                            datatype: 'json',
+                                            async: false,
+                                            cache: false,
+                                            success: function (data) {
+                                                if (data == "-1") {
+                                                    ShowError("Xuất báo cáo thất bại");
+                                                    flag = false;
+                                                }
+                                                else {
+                                                    debugger;
+                                                    window.location.href = window.location.origin + (data);
+                                                }
+                                            }
+                                        })
+                                    }
+                                </script>

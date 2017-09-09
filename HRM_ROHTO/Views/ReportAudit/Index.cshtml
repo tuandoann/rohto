@@ -1,0 +1,250 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    .td-center, .header_modal {
+        text-align: center;
+    }
+    #viewOldHistory {
+        flex: 1;
+        border-right: 1px solid black;
+        width: 50%;
+    }
+    #viewNewHistory {
+        flex: 1;
+        border-left: 1px solid black;
+        width:50%;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <!-- Modal -->
+        <div class="modal fade" id="modalViewHistory" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Xem lịch sử</h4>
+                    </div>
+                    <div class="modal-body" style=" display: flex;">
+                        <div id="viewOldHistory">
+                            <div class="header_modal">Lịch sử cũ</div>
+                            <div name="view"><pre></pre></div>
+                        </div>
+                        <div id="viewNewHistory">
+                            <div class="header_modal">Lịch sử mới</div>
+                            <div name="view"><pre></pre></div>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <section class="content-header">
+                <h1>
+                    Nhật ký truy xuất
+                </h1>
+                <ol class="breadcrumb"></ol>
+            </section>
+            <section class="content">
+                <div class="box box-danger color-palette-box">
+                    <div class="box-header with-border">
+                        <div class="row" style="margin-top:5px">
+                            <div class="col-md-12">
+                                <div class="col-md-2" style="margin-top:5px;">
+                                    <label for="date_year">Từ ngày: </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" class="form-control" id="dateFrom" name="dateFrom" />
+                                </div>
+                                <div class="col-md-2" style="margin-top:5px;">
+                                    <label for="date_year">Đến ngày: </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" class="form-control" id="dateTo" name="dateTo" />
+                                </div>
+                                <div class="col-md-2">
+                                    <button id="btnSearch" class="btn btn-block btn-warning" type="button">
+                                        Tìm kiếm
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <section class="content" style="margin-top: 10px; border: black solid thin;">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box-body">
+                                    <table id="lv_list" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tài khoản</th>
+                                                <th>Ngày (giờ)</th>
+                                                <th>Chức năng</th>
+                                                <th>Thao tác</th>
+                                                <th data-orderable="false"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div><!-- /.box-body -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </section>
+                </div>
+            </section>
+        </div>
+}
+
+<script>
+    var table;
+    $(function () {
+
+        var date = new Date();
+        var dateStart = new Date(date.getFullYear(), (date.getMonth()), 1);
+        var year_current = dateStart.getFullYear();
+        var month_current = (dateStart.getMonth() + 1) < 10 ? "0" + (dateStart.getMonth() + 1) : (dateStart.getMonth() + 1);
+        var day_current = (dateStart.getDate()) < 10 ? "0" + (dateStart.getDate()) : (dateStart.getDate());
+        $("#dateFrom").val(year_current + "-" + month_current + "-" + day_current);
+
+        var dateFinsh = new Date(date.getFullYear(), (date.getMonth() + 1), 0);
+        year_current = dateFinsh.getFullYear();
+        month_current = (dateFinsh.getMonth() + 1) < 10 ? "0" + (dateFinsh.getMonth() + 1) : (dateFinsh.getMonth() + 1);
+        day_current = (dateFinsh.getDate()) < 10 ? "0" + (dateFinsh.getDate()) : (dateFinsh.getDate());
+        $("#dateTo").val(year_current + "-" + month_current + "-" + day_current);
+
+        loadDataTable(table);
+
+        $("#btnSearch").click(function () {
+            table.destroy();
+            //$('#lv_list').empty();
+            loadDataTable(table);
+        });
+        $('#lv_list tbody').on('click', 'button', function () {
+            debugger;
+            $.ajax({
+                url: '/ReportAudit/ViewHistory',
+                type: 'post',
+                datatype: 'json',
+                data : {"id_Item": table.row($(this).parents('tr')).data().AuditID,},
+                async: false,
+                cache: false,
+                success: function (data) {
+                    debugger;
+                    if (data.oldData == "null" && data.newData == "null") {
+                        console.log("Lỗi click event view history: " + data.error)
+                        ShowError("Hiện thị lịch sử bị lỗi");
+                        flag = false;
+                    }
+                    else {
+                        viewJson(data.oldData, 'viewOldHistory div[name="view"] pre');
+                        viewJson(data.newData, 'viewNewHistory div[name="view"] pre');
+                        if (data.oldData == 'null') {
+                            $("#viewOldHistory").css("display", "none");
+                            $("#viewNewHistory").css("border-left", "none");
+                        }
+                        else {
+                            $("#viewOldHistory").css("display", "block");
+                            $("#viewNewHistory").css("border-left", "1px solid black");
+                        }
+                        if(data.newData == 'null')
+                        {
+                            $("#viewNewHistory").css("display", "none");
+                            $("#viewOldHistory").css("border-right", "none");
+                        }
+                        else {
+                            $("#viewNewHistory").css("display", "block");
+                            $("#viewOldHistory").css("border-right", "1px solid black");
+                        }
+                    }
+                }
+            })
+        });
+     
+    });
+    function viewJsonNull(eleNull, eleNotNull)
+    {
+        $("#" + eleNull).css("display", "none");
+        $("#" + eleNotNull).css("border-left", "none");
+    }
+    function viewJson(json, element)
+    {
+        if (json != 'null')
+        {
+            var jsonObj = JSON.parse(json);
+            var jsonPretty = JSON.stringify(jsonObj, null, '\t');
+            $("#" + element).text(jsonPretty);
+        }
+    }
+    function loadDataTable() {
+        table = $('#lv_list').DataTable({
+            "processing": true, // for show processing bar
+            "serverSide": true, // for process on server side
+            "orderMulti": false, // for disable multi column order
+            "iDisplayLength": 20,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "info": false,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+            "ajax": {
+                "url": "/ReportAudit/GetAllAudit",
+                "type": "POST",
+                "datatype": "json",
+                "data" : {
+                    "dateFrom" : $("#dateFrom").val(),
+                    "dateTo": $("#dateTo").val()
+                }
+            },
+            "columns": [
+                { "width": "21%", "data": "UserName", "name": "UserName", "orderable": true, "searchable": true, 'className': 'td-center' },
+                {
+                    "width": "21%",
+                    "data": "AuditDate",
+                    "name": "AuditDate",
+                    'className': 'td-center',
+                    "orderable": true,
+                    "render": function (data) {
+                        debugger;
+                        var pattern = /Date\(([^)]+)\)/;
+                        var results = pattern.exec(data);
+                        var dt = new Date(parseFloat(results[1]));
+                        return (dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear()) + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();;
+                    }
+                },
+                { "width": "21%", "data": "FunctionName", "name": "FunctionName", "orderable": true, "searchable": true, 'className': 'td-center' },
+                { "width": "21%", "data": "Action", "name": "Action", "orderable": true, "searchable": true, 'className': 'td-center' },
+                {
+                    "width": "16%",
+                    "targets": -1,
+                    "data": null,
+                    'className': 'td-center',
+                    "render": function (data, type, row) {
+                        var content = (data.OldData == 'null' && data.NewData == 'null') ? "" : '<div class="row"><div class="col-md-12"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalViewHistory">Xem chi tiết</button></div></div>';
+                        return content;
+                    }
+                }
+            ],
+            //"order": [[1, "desc"]],
+        });
+    }
+    
+</script>

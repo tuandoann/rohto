@@ -1,0 +1,138 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                Ca
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                            <div class="col-md-1">
+                                @if (ViewBag.Add == true)
+                                {
+                                    <a class="btn btn-block btn-primary" href="/Shift/Create"><i class="fa fa-plus"></i></a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã</th>
+                                            <th>Tên</th>
+                                            <th style="min-width:100px; width:140px;" data-orderable="false"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+
+<script>
+    $(function () {
+        var table = $('#lv_list').DataTable({
+            "processing": true, // for show processing bar
+            //"serverSide": true, // for process on server side
+            "orderMulti": false, // for disable multi column order
+            "iDisplayLength": 20,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "info": false,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+            "ajax": {
+                "url": "/Shift/LoadData",
+                "type": "post",
+                "dataType": "json",
+            },
+            "columns": [
+                { "data": "ShiftCode", "name": "ShiftCode" },
+                { "data": "ShiftName", "name": "ShiftName" },
+                {
+                    "targets": -1,
+                    "data": null,
+                    "defaultContent": `
+                        @if (ViewBag.Edit == true) {
+                            <a class ='btn btn-info btn-xs' id='edit' class ='edit'><i class ='fa fa-pencil'></i> Sửa</a>
+                        }
+                        @if (ViewBag.Delete == true)
+	                    {
+		                     <a class ='btn btn-danger btn-xs' id='delete'><i class ='fa fa-trash-o'></i> Xóa</a>
+	                    }`
+                }
+            ]
+        });
+
+        $('#lv_list tbody').on('click', '#edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?ShiftID=" + data["ShiftID"];
+        });
+
+        $('#lv_list tbody').on('click', '#delete', function () {
+            var data = table.row($(this).parents('tr')).data();
+            var flag = DeleteConfirm(data["ShiftID"]);
+            if (flag) {
+                debugger;
+                table.ajax.reload();
+            }
+        });
+    });
+
+    function DeleteConfirm(id) {
+        var flag = true;
+        if (confirm("Are you sure you want to delete ?")) {
+            $.ajax({
+                "url": '/Shift/Delete',
+                "type": 'post',
+                "datatype": 'json',
+                data: {
+                    ShiftID: id,
+                },
+                success: function (data) {
+                    if (data == true)
+                        flag = true;
+                    else
+                        flag = false;
+                }
+            })
+        }
+        return flag;
+    }
+</script>

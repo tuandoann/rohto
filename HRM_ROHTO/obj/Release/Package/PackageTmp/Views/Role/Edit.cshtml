@@ -1,0 +1,113 @@
+﻿@model HRM_ROHTO.Models.SYS_ROLE
+@{
+    ViewBag.Title = "Edit Role";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: #3c8dbc !important;
+        border-color: #367fa9 !important;
+        padding: 1px 10px !important;
+        color: #fff;
+    }
+</style>
+@using (@Html.BeginForm(new { id = "form" }))
+{
+    <body onload="setFocus()">
+        <div class="box-body">
+            <div id="lblError"></div>
+            <div id="lblSuccess"></div>
+            <div id="lblInfo"></div>
+            <section class="content-header">
+                <h1 class="MT_Title">
+                    Cập nhật vai trò
+                </h1>
+                <ol class="breadcrumb"></ol>
+            </section>
+            <section class="content">
+                <div class="box box-success color-palette-box">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-md-10 col-sm-8 col-xs-6">
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-3">
+                                <button type="submit" class="btn btn-block btn-google" id="btnSave" onclick="return false;">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-3">
+                                <a class="btn btn-block bg-purple" href="/Role/Index"><i class="fa fa-arrow-left"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="content">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box-body">
+                                    <div class="row" style="padding-bottom:5px;">
+                                        <div class="col-md-2">Vai trò<span style="color:red;">*</span></div>
+                                        <div class="col-md-3">
+                                            @Html.HiddenFor(u => u.RoleID)
+                                            @Html.TextBoxFor(u => u.RoleName, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="padding-bottom:5px;">
+                                        <div class="col-md-2">Ghi chú</div>
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(u => u.Note, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+
+                                    <h4>Danh sách chức năng</h4>
+                                    <table id="lv_list" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Chức năng</th>
+                                                <th style="width:10%;">Xem <input type="checkbox" id="ckAll_View" class="minimal-red ckAll ckAll_View" /></th>
+                                                <th style="width:10%;">Thêm <input type="checkbox" id="ckAll_Add" class="minimal-red ckAll ckAll_Add" /></th>
+                                                <th style="width:10%;">Sửa <input type="checkbox" id="ckAll_Edit" class="minimal-red ckAll ckAll_Edit" /></th>
+                                                <th style="width:10%;">Xóa <input type="checkbox" id="ckAll_Delete" class="minimal-red ckAll ckAll_Delete" /></th>
+                                                <th style="width:10%;">In <input type="checkbox" id="ckAll_Print" class="minimal-red ckAll ckAll_Print" /></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (int i = 0; i < ViewBag.List.Count; i++)
+                                            {
+                                                string Name = @ViewBag.List[i].FunctionName;
+                                                <tr>
+                                                    <td>
+                                                        <input type="hidden" id="hdFunctionName" value="@Name" />
+                                                        @ViewBag.List[i].Description
+                                                    </td>
+                                                    <td style="text-align:center;"><input type="checkbox" class="minimal-red ck ck_View" checked="@ViewBag.List[i].View" /></td>
+                                                    <td style="text-align:center;"><input type="checkbox" class="minimal-red ck ck_Add" checked="@ViewBag.List[i].Add" /></td>
+                                                    <td style="text-align:center;"><input type="checkbox" class="minimal-red ck ck_Edit" checked="@ViewBag.List[i].Edit" /></td>
+                                                    <td style="text-align:center;"><input type="checkbox" class="minimal-red ck ck_Delete" checked="@ViewBag.List[i].Delete" /></td>
+                                                    <td style="text-align:center;"><input type="checkbox" class="minimal-red ck ck_Print" checked="@ViewBag.List[i].Print" /></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.box-body -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </section>
+                </div>
+            </section>
+        </div>
+    </body>
+}
+
+
+
+
+@section scripts{
+
+    <script src="~/App_Script/Role.js"></script>
+    <script src="~/App_Script/Gobal.js"></script>
+    <script>
+        function setFocus() { }
+
+    </script>
+}

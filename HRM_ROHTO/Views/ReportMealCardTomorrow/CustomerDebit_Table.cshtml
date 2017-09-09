@@ -1,0 +1,49 @@
+﻿
+
+<div id="partial_Invoice">
+    <table id="lv_list" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th style="width:20px;">STT</th>
+                <th>Ca</th>
+                <th>Món</th>
+                <th>Số lượng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (ViewBag.ListData != null)
+                {
+                    for (int i = 0; i < ViewBag.ListData.Rows.Count; i++)
+                    {
+                        <tr>
+                            <td style="text-align: right;">@(i + 1)</td>
+                            <td>@ViewBag.ListData.Rows[i]["ShiftName"]</td>
+                            <td>@ViewBag.ListData.Rows[i]["ProductName"]</td>
+                            <td>@ViewBag.ListData.Rows[i]["Quantity"]</td>
+                          
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        var table = $('#lv_list').DataTable({
+            "processing": true, // for show processing bar
+            "serverSide": false, // for process on server side
+            "orderMulti": false, // for disable multi column order
+            "scrollY": "450px",
+            "scrollCollapse": true,
+            "paging": false,
+            "info": false,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+        });
+    });
+
+</script>

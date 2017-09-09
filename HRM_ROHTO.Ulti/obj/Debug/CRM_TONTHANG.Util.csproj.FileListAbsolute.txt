@@ -1,0 +1,10 @@
+D:\Project\CRM_TONTHANG\MinhTran.Util\bin\Debug\CRM_TONTHANG.Util.dll
+D:\Project\CRM_TONTHANG\MinhTran.Util\bin\Debug\CRM_TONTHANG.Util.pdb
+D:\Project\CRM_TONTHANG\MinhTran.Util\obj\Debug\CRM_TONTHANG.Util.csprojResolveAssemblyReference.cache
+D:\Project\CRM_TONTHANG\MinhTran.Util\obj\Debug\CRM_TONTHANG.Util.dll
+D:\Project\CRM_TONTHANG\MinhTran.Util\obj\Debug\CRM_TONTHANG.Util.pdb
+D:\Project\HRM_ROHTO\HRM_ROHTO.Ulti\bin\Debug\CRM_TONTHANG.Util.dll
+D:\Project\HRM_ROHTO\HRM_ROHTO.Ulti\bin\Debug\CRM_TONTHANG.Util.pdb
+D:\Project\HRM_ROHTO\HRM_ROHTO.Ulti\obj\Debug\CRM_TONTHANG.Util.csprojResolveAssemblyReference.cache
+D:\Project\HRM_ROHTO\HRM_ROHTO.Ulti\obj\Debug\CRM_TONTHANG.Util.dll
+D:\Project\HRM_ROHTO\HRM_ROHTO.Ulti\obj\Debug\CRM_TONTHANG.Util.pdb

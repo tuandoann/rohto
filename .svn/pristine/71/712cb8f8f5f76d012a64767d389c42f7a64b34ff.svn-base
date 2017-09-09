@@ -1,0 +1,166 @@
+﻿@{
+    ViewBag.Title = "Change password";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .lbl {
+        line-height: 35px;
+    }
+
+    .lblErr {
+        line-height: 35px;
+        color: red;
+    }
+</style>
+
+<body>
+    <form action="/User/ChangePassword" method="post">
+        <div class="box-body">
+            <div id="lblError"></div>
+            <div id="lblSuccess"></div>
+            <div id="lblInfo"></div>
+            @if (@ViewBag.ShowError != null && (bool)@ViewBag.ShowError == true)
+            {
+                <div class="alert_error alert alert-danger alert-dismissable">
+                    @Html.Raw(@ViewBag.Error)
+                </div>
+            }
+            @if (@ViewBag.ShowSuccess != null && (bool)@ViewBag.ShowSuccess == true)
+            {
+                <div class="alert alert-success alert-dismissable">
+                    <button type="submit" class="close" data-dismiss="alert" aria-hidden="true">
+                        &times;
+                    </button>
+                    @Html.Raw(@ViewBag.Success)
+                </div>
+            }
+            <section class="content-header">
+                <h1>
+                    Đổi mật khẩu
+                </h1>
+                <ol class="breadcrumb"></ol>
+            </section>
+            <section class="content">
+                <div class="box box-danger color-palette-box">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-md-11 col-sm-10 col-xs-9">
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-3">
+                                <button type="submit" id="btnSave" onclick="return btnSaveClick()" class="btn btn-block btn-primary">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <section class="content">
+                        <div class="row">
+                            <div class="col-xs-12">
+
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-xs-2">
+
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <div class="form-group">
+                                                <span class="lbl">Mật khẩu cũ:</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <div class="form-group">
+                                                <input type="password" name="txtPasswordOld" class="form-control" id="txtPasswordOld" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="form-group">
+                                                <span class="lblErr" id="lblPasswordOld"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-2">
+
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <div class="form-group">
+                                                <span class="lbl">Mật khẩu mới:</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <div class="form-group">
+                                                <input type="password" name="txtPasswordNew" class="form-control" id="txtPasswordNew" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="form-group">
+                                                <span class="lblErr" id="lblPasswordNew"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-2">
+
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <div class="form-group">
+                                                <span class="lbl">Nhập lại mật khẩu:</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <div class="form-group">
+                                                <input type="password" name="txtReplyPassword" class="form-control" id="txtReplyPassword" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="form-group">
+                                                <span class="lblErr" id="lblReplyPassword"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- /.box-body -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </section>
+                </div>
+
+            </section>
+        </div>
+
+    </form>
+</body>
+
+<script src="~/Scripts/jquery-1.7.1.min.js"></script>
+<script>
+    function btnSaveClick() {
+        var oldpass = $("#txtPasswordOld").val();
+        var newpass = $("#txtPasswordNew").val();
+        var reply = $("#txtReplyPassword").val();
+        if (oldpass == "") {
+            document.getElementById('lblPasswordOld').innerHTML = "Nhập mật khẩu cũ !";
+            return false;
+        }
+        else {
+            document.getElementById('lblPasswordOld').innerHTML = "";
+        }
+        if (newpass == "") {
+            document.getElementById('lblPasswordNew').innerHTML = "Nhập mật khẩu mới !";
+            return false;
+        }
+        else {
+            document.getElementById('lblPasswordNew').innerHTML = "";
+        }
+        if (reply != newpass) {
+            document.getElementById('lblReplyPassword').innerHTML = "Mật khẩu không trùng nhau !";
+            return false;
+        }
+        else {
+            document.getElementById('lblReplyPassword').innerHTML = "";
+        }
+        return true;
+    };
+</script>
+
+

@@ -1,0 +1,72 @@
+﻿.Pagination {
+    margin: 15px 0px;
+}
+
+    .Pagination tr {
+        padding: 5px 0px;
+    }
+
+        .Pagination tr td {
+        }
+
+            .Pagination tr td a {
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.42857143;
+                color: #337ab7;
+                text-decoration: none;
+                background-color: #fff;
+                border: 1px solid #ddd;
+            }
+
+                .Pagination tr td a.active {
+                    z-index: 2;
+                    color: #fff;
+                    cursor: default;
+                    background-color: #337ab7;
+                    border-color: #337ab7;
+                }
+
+
+Pagination tr td a.hover {
+    background-color: red;
+}
+/*---------------------*/
+.Pagination1 {
+    margin: 15px 0px;
+}
+
+    .Pagination1 tr {
+        padding: 5px 0px;
+    }
+
+        .Pagination1 tr td {
+        }
+
+            .Pagination1 tr td a {
+                font-size: 14px;
+                font-weight: 400;
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.42857143;
+                color: #00b29f;
+                text-decoration: none;
+                background: #fafafa;
+                border: 1px solid #ddd;
+            }
+
+                .Pagination1 tr td a.active {
+                    z-index: 2;
+                    color: #fff;
+                    cursor: default;
+                    background-color: #337ab7;
+                    border-color: #337ab7;
+                }
+
+Pagination1 tr td a.hover {
+    background-color: red;
+}

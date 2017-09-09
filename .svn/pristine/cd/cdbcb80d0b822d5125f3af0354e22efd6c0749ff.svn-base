@@ -1,0 +1,55 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using HRM_ROHTO.Models.BUS;
+using HRM_ROHTO.Util;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using OfficeOpenXml.Table;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace HRM_ROHTO.Controllers
+{
+    public class ReportSoLuongPhanComHangNgayController : BaseController
+    {
+        //
+        // GET: /TK_SoLuongPhanComHangNgay/
+        static DataTable dtToExcel;
+        public ActionResult Index(DateTime? FromDate, DateTime? ToDate)
+        {
+            if (!CheckPermission("ReportSoLuongPhanComHangNgay", 1))
+                return RedirectToAction("Login", "Login", "Login");
+            DateTime f = DateTime.Now;
+            DateTime t = DateTime.Now;
+            if (!FromDate.HasValue)
+            {
+                FromDate = f;
+            }
+
+            if (!ToDate.HasValue)
+            {
+                ToDate = t;
+            }
+            ViewBag.FromDate = f.ToString("yyyy-MM-dd");
+            ViewBag.ToDate = t.ToString("yyyy-MM-dd");
+            List<SqlParameter> lstParam = new List<SqlParameter>();
+
+            lstParam.Add(new SqlParameter("@fromdate", FromDate));
+            lstParam.Add(new SqlParameter("@todate", ToDate));
+
+            //  ViewBag.store = DA_ScheduleMenu.Instance.Exec("pr_ReportMealCardByDay", lstParam.ToArray());
+            // DateTime FromDate = getFromDateFromNow();
+            // ViewBag.FromDate = FromDate.ToString("yyyy-MM-dd");
+            ViewBag.store = DA_ScheduleMenu.Instance.Exec("pr_ReportSLPhanComHangNgay", lstParam.ToArray());
+            return View();
+        }
+
+    }
+}

@@ -1,0 +1,342 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="HRM_ROHTOModelStoreContainer" CdmEntityContainer="HRM_ROHTOEntities">
+    <FunctionImportMapping FunctionImportName="pr_getScheduleMenu" FunctionName="HRM_ROHTOModel.Store.pr_getScheduleMenu" />
+    <EntitySetMapping Name="SYS_CONFIG">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_CONFIG">
+        <MappingFragment StoreEntitySet="SYS_CONFIG">
+          <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+          <ScalarProperty Name="SourceTable" ColumnName="SourceTable" />
+          <ScalarProperty Name="ValueType" ColumnName="ValueType" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="Description2" ColumnName="Description2" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ConfigID" ColumnName="ConfigID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SYS_FUNCTION">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_FUNCTION">
+        <MappingFragment StoreEntitySet="SYS_FUNCTION">
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="IconURL" ColumnName="IconURL" />
+          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+          <ScalarProperty Name="ModuleCode" ColumnName="ModuleCode" />
+          <ScalarProperty Name="Path" ColumnName="Path" />
+          <ScalarProperty Name="Description2" ColumnName="Description2" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="FunctionName" ColumnName="FunctionName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SYS_POS">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_POS">
+        <MappingFragment StoreEntitySet="SYS_POS">
+          <ScalarProperty Name="ShiftListID" ColumnName="ShiftListID" />
+          <ScalarProperty Name="POSName" ColumnName="POSName" />
+          <ScalarProperty Name="POSID" ColumnName="POSID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SYS_PRODUCT_TYPE">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_PRODUCT_TYPE">
+        <MappingFragment StoreEntitySet="SYS_PRODUCT_TYPE">
+          <ScalarProperty Name="ProductTypeCode" ColumnName="ProductTypeCode" />
+          <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
+          <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SYS_ROLE">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_ROLE">
+        <MappingFragment StoreEntitySet="SYS_ROLE">
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SYS_ROLEPERMISSION">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_ROLEPERMISSION">
+        <MappingFragment StoreEntitySet="SYS_ROLEPERMISSION">
+          <ScalarProperty Name="Cancel" ColumnName="Cancel" />
+          <ScalarProperty Name="Accept" ColumnName="Accept" />
+          <ScalarProperty Name="Import" ColumnName="Import" />
+          <ScalarProperty Name="Export" ColumnName="Export" />
+          <ScalarProperty Name="Print" ColumnName="Print" />
+          <ScalarProperty Name="Delete" ColumnName="Delete" />
+          <ScalarProperty Name="Edit" ColumnName="Edit" />
+          <ScalarProperty Name="Add" ColumnName="Add" />
+          <ScalarProperty Name="View" ColumnName="View" />
+          <ScalarProperty Name="FunctionName" ColumnName="FunctionName" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SYS_SHIFT">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_SHIFT">
+        <MappingFragment StoreEntitySet="SYS_SHIFT">
+          <ScalarProperty Name="ShiftName" ColumnName="ShiftName" />
+          <ScalarProperty Name="ShiftCode" ColumnName="ShiftCode" />
+          <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SYS_USER">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.SYS_USER">
+        <MappingFragment StoreEntitySet="SYS_USER">
+          <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_AUDIT">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_AUDIT">
+        <MappingFragment StoreEntitySet="TBL_AUDIT">
+          <ScalarProperty Name="NewData" ColumnName="NewData" />
+          <ScalarProperty Name="OldData" ColumnName="OldData" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="FunctionName" ColumnName="FunctionName" />
+          <ScalarProperty Name="AuditDate" ColumnName="AuditDate" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="AuditID" ColumnName="AuditID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_BROADCAST">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_BROADCAST">
+        <MappingFragment StoreEntitySet="TBL_BROADCAST">
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+          <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+          <ScalarProperty Name="DateCreate" ColumnName="DateCreate" />
+          <ScalarProperty Name="UserCreate" ColumnName="UserCreate" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="BeginTime" ColumnName="BeginTime" />
+          <ScalarProperty Name="BroadcastID" ColumnName="BroadcastID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_DEPARTMENT">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_DEPARTMENT">
+        <MappingFragment StoreEntitySet="TBL_DEPARTMENT">
+          <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+          <ScalarProperty Name="DepartmentCode" ColumnName="DepartmentCode" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_EMPLOYEE">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_EMPLOYEE">
+        <MappingFragment StoreEntitySet="TBL_EMPLOYEE">
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="LeaveDate" ColumnName="LeaveDate" />
+          <ScalarProperty Name="IsLeaveOut" ColumnName="IsLeaveOut" />
+          <ScalarProperty Name="PositionID3" ColumnName="PositionID3" />
+          <ScalarProperty Name="PositionID2" ColumnName="PositionID2" />
+          <ScalarProperty Name="PositionID1" ColumnName="PositionID1" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+          <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+          <ScalarProperty Name="EmployeeCode" ColumnName="EmployeeCode" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_EXCEPTION_MEAL">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_EXCEPTION_MEAL">
+        <MappingFragment StoreEntitySet="TBL_EXCEPTION_MEAL">
+          <ScalarProperty Name="ExceptionDate" ColumnName="ExceptionDate" />
+          <ScalarProperty Name="ExceptionMealID" ColumnName="ExceptionMealID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_EXCEPTION_MEAL_SHIFT">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_SHIFT">
+        <MappingFragment StoreEntitySet="TBL_EXCEPTION_MEAL_SHIFT">
+          <ScalarProperty Name="ExceptionQtyUsed" ColumnName="ExceptionQtyUsed" />
+          <ScalarProperty Name="ExceptionQty" ColumnName="ExceptionQty" />
+          <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+          <ScalarProperty Name="ExceptionMealID" ColumnName="ExceptionMealID" />
+          <ScalarProperty Name="ExceptionMealShiftID" ColumnName="ExceptionMealShiftID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_EXCEPTION_MEAL_USED">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_USED">
+        <MappingFragment StoreEntitySet="TBL_EXCEPTION_MEAL_USED">
+          <ScalarProperty Name="POSPrint" ColumnName="POSPrint" />
+          <ScalarProperty Name="POSModified" ColumnName="POSModified" />
+          <ScalarProperty Name="POSCreate" ColumnName="POSCreate" />
+          <ScalarProperty Name="UserPrint" ColumnName="UserPrint" />
+          <ScalarProperty Name="UserCreate" ColumnName="UserCreate" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+          <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="PrintTime" ColumnName="PrintTime" />
+          <ScalarProperty Name="MealDate" ColumnName="MealDate" />
+          <ScalarProperty Name="ExceptionMealUsedID" ColumnName="ExceptionMealUsedID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_EXCEPTION_MEAL_USED_PRODUCT">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_USED_PRODUCT">
+        <MappingFragment StoreEntitySet="TBL_EXCEPTION_MEAL_USED_PRODUCT">
+          <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="ExceptionMealUsedID" ColumnName="ExceptionMealUsedID" />
+          <ScalarProperty Name="ExceptionMealUsedProductID" ColumnName="ExceptionMealUsedProductID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_MENU">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_MENU">
+        <MappingFragment StoreEntitySet="TBL_MENU">
+          <ScalarProperty Name="MenuDay" ColumnName="MenuDay" />
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="UserCreate" ColumnName="UserCreate" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_MENU_PRODUCT">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_MENU_PRODUCT">
+        <MappingFragment StoreEntitySet="TBL_MENU_PRODUCT">
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+          <ScalarProperty Name="MenuProductID" ColumnName="MenuProductID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_MENU_SHIFT">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_MENU_SHIFT">
+        <MappingFragment StoreEntitySet="TBL_MENU_SHIFT">
+          <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+          <ScalarProperty Name="MenuShiftID" ColumnName="MenuShiftID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_POSITION">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_POSITION">
+        <MappingFragment StoreEntitySet="TBL_POSITION">
+          <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+          <ScalarProperty Name="PositionCode" ColumnName="PositionCode" />
+          <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_PRODUCT">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_PRODUCT">
+        <MappingFragment StoreEntitySet="TBL_PRODUCT">
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ImageProduct" ColumnName="ImageProduct" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
+          <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+          <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_REGISTER_MEAL">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_REGISTER_MEAL">
+        <MappingFragment StoreEntitySet="TBL_REGISTER_MEAL">
+          <ScalarProperty Name="POSPrint" ColumnName="POSPrint" />
+          <ScalarProperty Name="POSModified" ColumnName="POSModified" />
+          <ScalarProperty Name="POSCreate" ColumnName="POSCreate" />
+          <ScalarProperty Name="IsAddOn" ColumnName="IsAddOn" />
+          <ScalarProperty Name="MenuIDOld" ColumnName="MenuIDOld" />
+          <ScalarProperty Name="ShiftIDOld" ColumnName="ShiftIDOld" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+          <ScalarProperty Name="PrintTime" ColumnName="PrintTime" />
+          <ScalarProperty Name="IsPrint" ColumnName="IsPrint" />
+          <ScalarProperty Name="IsCancel" ColumnName="IsCancel" />
+          <ScalarProperty Name="UserPrint" ColumnName="UserPrint" />
+          <ScalarProperty Name="UserCreate" ColumnName="UserCreate" />
+          <ScalarProperty Name="MealDate" ColumnName="MealDate" />
+          <ScalarProperty Name="RegisterTime" ColumnName="RegisterTime" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+          <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="RegisterID" ColumnName="RegisterID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_REGISTER_MEAL_PRODUCT">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_REGISTER_MEAL_PRODUCT">
+        <MappingFragment StoreEntitySet="TBL_REGISTER_MEAL_PRODUCT">
+          <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="RegisterMealID" ColumnName="RegisterMealID" />
+          <ScalarProperty Name="RegisterMealProductID" ColumnName="RegisterMealProductID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_REGISTER_MEAL_PRODUCT_OLD">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_REGISTER_MEAL_PRODUCT_OLD">
+        <MappingFragment StoreEntitySet="TBL_REGISTER_MEAL_PRODUCT_OLD">
+          <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="RegisterMealID" ColumnName="RegisterMealID" />
+          <ScalarProperty Name="RegisterMealProductID" ColumnName="RegisterMealProductID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_SCHEDULE_MENU">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_SCHEDULE_MENU">
+        <MappingFragment StoreEntitySet="TBL_SCHEDULE_MENU">
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+          <ScalarProperty Name="UserModified" ColumnName="UserModified" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+          <ScalarProperty Name="MealDate" ColumnName="MealDate" />
+          <ScalarProperty Name="ScheduleMenuID" ColumnName="ScheduleMenuID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_SCHEDULE_MENU_PRODUCT">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_SCHEDULE_MENU_PRODUCT">
+        <MappingFragment StoreEntitySet="TBL_SCHEDULE_MENU_PRODUCT">
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+          <ScalarProperty Name="ScheduleMenuID" ColumnName="ScheduleMenuID" />
+          <ScalarProperty Name="ScheduleMenuProductID" ColumnName="ScheduleMenuProductID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_SCHEDULE_MENU_SHIFT">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_SCHEDULE_MENU_SHIFT">
+        <MappingFragment StoreEntitySet="TBL_SCHEDULE_MENU_SHIFT">
+          <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+          <ScalarProperty Name="ScheduleMenuID" ColumnName="ScheduleMenuID" />
+          <ScalarProperty Name="ScheduleMenuShiftID" ColumnName="ScheduleMenuShiftID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TBL_SHIFT_TIME_RANGE">
+      <EntityTypeMapping TypeName="HRM_ROHTOModel.TBL_SHIFT_TIME_RANGE">
+        <MappingFragment StoreEntitySet="TBL_SHIFT_TIME_RANGE">
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="BeginTime" ColumnName="BeginTime" />
+          <ScalarProperty Name="ShiftID" ColumnName="ShiftID" />
+          <ScalarProperty Name="ShiftTimeRangeID" ColumnName="ShiftTimeRangeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

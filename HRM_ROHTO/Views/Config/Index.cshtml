@@ -1,0 +1,189 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    .td-center{
+        text-align:center;
+        font-weight:bold;
+    }
+</style>
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <div class="row">
+                <div class='col-xs-12'>
+                    <div class='col-xs-10'><h1>Cấu hình thông số</h1></div>
+                    <div class='col-xs-2' style="margin-top:30px;"><button type="button" id="editConfig" class="btn btn-success" disabled style="float:left">Lưu</button></div>
+                </div>
+            </div>
+            
+            <ol class="breadcrumb"></ol>
+        </section>
+        @{
+            int j = 1;
+        List<object> ls = ViewBag.store;
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                        @for (int i = 0; i < ls.Count;i++ )
+                        {
+                            var item = ls.ElementAt(i);
+                            System.Reflection.PropertyInfo id = item.GetType().GetProperty("Id");
+                            System.Reflection.PropertyInfo des = item.GetType().GetProperty("Des");
+                            System.Reflection.PropertyInfo value = item.GetType().GetProperty("Value");
+                            System.Reflection.PropertyInfo type = item.GetType().GetProperty("type");
+                            string contentBody="";
+                            contentBody += "<div class='col-xs-3'>" + des.GetValue(item, null) + "</div><div class='col-xs-3'>";
+                            switch((int)type.GetValue(item,null))
+                            {
+                                case 1:
+                                    contentBody += "<input type='number' class='form-control' onclick='enableButton()' id='" + id.GetValue(item, null) + "' value='" + value.GetValue(item, null) + "'>";
+                                    break;
+                                case 2:
+                                    string checkbox1 = "<label style='margin-right: 10px;'><input name='" + id.GetValue(item, null) + "' type='radio'" + (Convert.ToInt32(value.GetValue(item, null).ToString()) == 1 ? "checked" : "") + ">Có</label>";
+                                    string checkbox2 = "<label><input name='" + id.GetValue(item, null) + "' type='radio'" + (Convert.ToInt32(value.GetValue(item, null).ToString()) == 0 ? "checked" : "") + ">Không</label>";
+                                    contentBody += checkbox1 + checkbox2;
+                                    break;
+                                case 3:
+                                    contentBody += "<input type='text' onclick='enableButton()' class='form-control'id='" + id.GetValue(item, null) + "' value='" + value.GetValue(item, null) + "'>";
+                                    break;
+                                case 4:
+                                    contentBody += "<input type='email' onclick='enableButton()' class='form-control' id='" + id.GetValue(item, null) + "' value='" + value.GetValue(item, null) + "'>";
+                                    break;
+                                case 5:
+                                    contentBody += "<input type='password' onclick='enableButton()' class='form-control' id='" + id.GetValue(item, null) + "' value='" + value.GetValue(item, null) + "'>";
+                                    break;
+                            }
+                            contentBody += "</div>";
+                            @Html.Raw((i % 2 == 0) ? "<div class='row' style='margin-top: 20px;'><div class='col-xs-12'>" + contentBody : contentBody + "</div></div>");
+                        }   
+                    <div class="row">
+                        <div class='col-xs-12'>
+                            <div class='col-xs-9'>
+                            </div>
+                            <div class='col-xs-3'>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+        </section>
+            <script>
+                var dataValue = [];
+                var dataValueNew = [];
+                $(function () {
+                    $.ajax({
+                        url: '/Config/getListNameKey',
+                        type: 'post',
+                        datatype: 'json',
+                        async: false,
+                        cache: false,
+                        success: function (data) {
+                            $.each(data, function (key, value) {
+                                var element = {};
+                                element.id = key;
+                                element.type = value;
+                                element.value = $("#" + key).val();
+                                dataValue.push(element);
+                            });
+                        },
+                    });
+                    $("#editConfig").click(function (event) {
+                        $.each(dataValue, function (id, type, value) {
+                            var element = {};
+                            element.id = type.id;
+                            element.type = type.type;
+                            element.value = $("#" + type.id).val();
+                            dataValueNew.push(element);
+                        });
+                        var arrayPara = [];
+                        arrayPara = elmentDifferent(dataValue, dataValueNew);
+                        var error = 0;
+                        var susscess = 0;
+                        $.each(arrayPara, function (key, value) {
+                            $.ajax({
+                                url: '/Config/actionEdit',
+                                type: 'post',
+                                datatype: 'json',
+                                async: false,
+                                cache: false,
+                                traditional: true,
+                                data: {
+                                    id: value.id,
+                                    value: value.value,
+                                },
+                                success: function (data) {
+                                    if(data == "false")
+                                    {
+                                        error += 1;
+                                    }else{
+                                        susscess +=1;
+                                    }
+                                },
+                            });
+                        });
+                        dataValue = dataValueNew;
+                        dataValueNew = [];
+                        arrayPara = [];
+                        if(error>0)
+                        {
+                            ShowError("Có " + error + " cập nhật thất bại");
+                        }
+                        else {
+                            ShowError("Có " + susscess + " cập nhật thành công");
+                        }
+                    });
+                })
+                function enableButton() {
+                    $('#editConfig').prop('disabled', false);
+                }
+                function elmentDifferent(arrayOld,arrayNew)
+                {
+                    var result = [];
+                    $.each(arrayOld, function (idO, typeO, valueO) {
+                        $.each(arrayNew, function (idN, typeN, valueN) {
+                            if (typeO.id == typeN.id)
+                            {
+                                if (typeN.value != typeO.value)
+                                {
+                                    var element = {};
+                                    element.id = typeN.id;
+                                    element.type = typeN.type;
+                                    element.value = typeN.value;
+                                    result.push(element);
+                                }
+                            }
+                        });
+                    });
+                    return result;
+                }
+                function saveEditItem(id, type) {
+                        
+                    $.ajax({
+                        url: '/Config/getListNameKey',
+                        type: 'post',
+                        datatype: 'json',
+                        async: false,
+                        cache: false,
+                        success: function (data) {
+                            namePara = data;
+
+                        },
+                    });
+                }
+            </script>
+        }
+    </div>
+

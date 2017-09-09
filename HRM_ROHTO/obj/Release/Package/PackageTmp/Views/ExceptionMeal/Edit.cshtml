@@ -1,0 +1,147 @@
+﻿@model HRM_ROHTO.Models.TBL_EXCEPTION_MEAL
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .arrow {
+        margin-top: 50px;
+    }
+
+        .arrow span {
+            font-size: 30px;
+        }
+
+        .arrow a:hover {
+            cursor: pointer;
+        }
+
+    #lv_list tbody tr.selected, #lv_list_2 tbody tr.selected {
+        background: #808080;
+        color: #efefef;
+    }
+</style>
+
+@using (@Html.BeginForm(new { id = "form" }))
+{
+    @Html.HiddenFor(x => x.ExceptionMealID)
+    <body onload="setFocus()">
+        <div class="box-body">
+            <div id="lblError"></div>
+            <div id="lblSuccess"></div>
+            <div id="lblInfo"></div>
+            <section class="content-header">
+                <h1 class="MT_Title">
+                    Cập nhật cơm dự phòng
+                </h1>
+                <ol class="breadcrumb"></ol>
+            </section>
+            <section class="content">
+                <div class="box box-success color-palette-box">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-md-10 col-sm-8 col-xs-6">
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-3">
+                                <button type="submit" class="btn btn-block btn-google" onclick="return btnEditSaveExceptionMealClick();">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-3">
+                                <a class="btn btn-block bg-purple" href="/ExceptionMeal/Index"><i class="fa fa-arrow-left"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="content">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box-body">
+                                    <div class="row" style="padding-bottom:20px;">
+                                        <div class="col-md-2">Ngày<span style="color:red;">*</span></div>
+                                        <div class="col-md-3">
+                                            @Html.TextBoxFor(x => x.ExceptionDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-5"> </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-bottom:5px;">
+                                    <div class="col-md-2">Danh sách ca</div>
+                                    <div class="col-md-5">
+                                        <table id="lv_list" class="table table-bordered table-striped">
+                                            <tbody>
+                                                @foreach (var shift in ViewBag.LstShift)
+                                                {
+                                                    bool Check = true;
+                                                    int ExceptionQty = 0;
+                                                    int ExceptionQtyUsed = 0;
+                                                    foreach (var mealQty in ViewBag.lstMealShift)
+                                                    {
+                                                        if (shift.ShiftID == mealQty.ShiftID)
+                                                        {
+                                                            Check = true;
+                                                            ExceptionQty = mealQty.ExceptionQty;
+                                                            ExceptionQtyUsed = mealQty.ExceptionQtyUsed;
+                                                            break;
+                                                        }
+                                                        else
+                                                        {
+                                                            Check = false;
+                                                        }
+                                                    }
+                                                    if (Check)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <label for="ShiftName" class="col-sm-5 control-label">Ca @shift.ShiftCode</label>
+                                                                    <div class="col-sm-5">
+                                                                        <input type="text" hidden="hidden" id="ShiftID" value="@shift.ShiftID" />
+                                                                        <input type="text" hidden="hidden" id="ExceptionQtyUsed" value="@ExceptionQtyUsed" />
+                                                                        <input type="number" min="0" class="form-control" id="ExceptionQty" value="@ExceptionQty" placeholder="0">
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <label for="ShiftName" class="col-sm-5 control-label">Ca: @shift.ShiftCode</label>
+                                                                    <div class="col-sm-5">
+                                                                        <input type="text" hidden="hidden" id="ShiftID" value="@shift.ShiftID" />
+                                                                        <input type="number" min="0" class="form-control" id="ExceptionQty" value="0" placeholder="0">
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </section>
+                </div><!-- /.row -->
+            </section>
+        </div>
+    </body>
+}
+
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="../../Content/plugins/select2/select2.full.min.js"></script>
+    <script src="~/App_Script/ExceptionMeal.js"></script>
+    <script src="~/App_Script/Gobal.js"></script>
+    <script>
+        $(".select2").select2();
+        function setFocus() { document.getElementById("ExceptionDate").focus(); }
+    </script>
+}
+
+

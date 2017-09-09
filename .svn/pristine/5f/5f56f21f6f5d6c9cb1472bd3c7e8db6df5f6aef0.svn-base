@@ -1,0 +1,207 @@
+﻿@model HRM_ROHTO.Models.ListExt.Schedule_All_Ext
+@using HRM_ROHTO.Models.BUS
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+</style>
+@using (Html.BeginForm("Index", "ReportMealCardTomorrow", FormMethod.Post, new { @id = "frmSearch" }))
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                SỐ LƯỢNG CƠM LÝ THUYẾT
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-2 text-right">
+
+                                <button type="button" class="btn btn-warning" onclick="btnExport_Click();">Xuất báo cáo</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-1" style="margin-top:5px;">
+                                <label for="date_year">Ngày: </label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="date" class="form-control" id="date_year" value="@ViewBag.FromDate" name="date_year" />
+                            </div>
+                            <div class="col-md-1" style="padding-left:0;">
+                                <button type="button" onclick="return filterByMonthAndYear()" class="btn btn-block btn-vimeo btn-group">Tìm</button>
+                            </div>
+                            @*return filterByMonthAndYear()*@
+                            <div class="col-md-6">
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                            <div class="col-md-1">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:center">TÊN CA</th>
+                                            <th style="text-align:center">TÊN MÓN ĂN</th>
+                                            <th style="text-align:center">SỐ LƯỢNG PHẦN</th>
+                                            <th style="text-align:center">TỔNG</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            List<int> lsCount = ViewBag.lsCount;
+                                            List<long> lsSum = ViewBag.lsSum;
+                                            var result_store = ViewBag.store;
+                                            int index_result_store = 0;
+                                            for (int i = 0; i < lsCount.Count; i++)
+                                            {
+                                                int count_item = lsCount.ElementAt(i);
+                                                String style_ca = count_item !=1 ? "position: absolute; top: 35%; left: 8px" : "";
+                                                String style_tong = count_item != 1 ? "position: absolute; top: 35%; right: 8px" : "text-align: right;";
+                                                for (int j = 0; j < count_item; j++)
+                                                {
+                                                    <tr>
+                                                        @if (j == 0)
+                                                        {
+                                                            <td rowspan="@count_item" style="position:relative">
+                                                                <p style="@style_ca">@result_store.Rows[index_result_store]["ShiftName"].ToString()</p>
+                                                            </td>
+                                                        }
+                                                        <td>@result_store.Rows[index_result_store]["ProductName"].ToString()</td>
+                                                        <td align="right">@result_store.Rows[index_result_store]["Quantity"].ToString()</td>
+                                                        @if (j == 0)
+                                                        {
+                                                            <td rowspan="@count_item" style="position:relative">
+                                                                <p style="@style_tong">@lsSum.ElementAt(i)</p>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                        index_result_store += 1;
+                                                }
+                                            }
+                                        }
+                                        <tr style="font-weight:bold">
+                                                <td colspan="3" style="text-align:center">Tổng cộng:</td>
+                                                <td align="right">@ViewBag.Tong</td>
+                                            </tr>*
+                                    </tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+<script src="../Scripts/bootstrap-datetimepicker.js" type="text/javascript"></script>*@
+<script>
+     $(function () {
+         $('#lv_list tbody').on('click', '#edit', function () {
+             var data = table.row($(this).parents('tr')).data();
+             window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?ScheduleMenuID=" + data["ScheduleMenuID"];
+         });
+         var arrTr = $("#lv_list tbody tr");
+
+         //$('#date_year').datetimepicker({
+         //    viewMode: 'days',
+         //    format: 'dd/MM/YYYY',
+         //    showClear: true,
+         //    showClose: true
+         //});
+     });
+    //hàm dùng để lấy giá trị biến url theo name
+     $.urlParam = function (name) {
+         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+         if (results == null) {
+             return null;
+         }
+         else {
+             return results[1] || 0;
+         }
+     }
+    //Đỗ dữ liệu cho datetimepicker
+     var date = new Date();
+     var year_current = $.urlParam('year') == null ? date.getFullYear() : $.urlParam('year');
+     var month_current = $.urlParam('month') == null ? ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1)) : $.urlParam('month') ;
+     var day_current = $.urlParam('day') == null ? ((date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate())): $.urlParam('day');
+    $("#date_year").val(year_current + "-" + month_current + "-" + day_current);
+
+    //hàm được sử dụng khi nhấn sumbit
+    function filterByMonthAndYear() {
+        debugger;
+        //ReloadPartialViewIndex();
+        if ($("#date_year").val() == "") {
+            ShowError("Vui lòng nhập ngày");
+            $("#date_year").focus();
+            return false;
+        }
+        else {
+            var arrDate = $("#date_year").val().split("-");
+            location.href = "/ReportMealCardTomorrow/Index?year=" + arrDate[0] + "&&month=" + arrDate[1] + "&&day=" + arrDate[2];
+        }
+    }
+
+    function ReloadPartialViewIndex() {
+        $('#partial_Invoice').load('/ReportMealCardTomorrow/Index', $("#frmSearch").serializeArray());
+    }
+
+    function btnSearch_Click() {
+        ReloadPartialViewIndex();
+    }
+
+    function btnExport_Click() {
+
+        $.ajax({
+            url: '/ReportMealCardTomorrow/ExportMealCardTomorrow',
+            type: 'post',
+            datatype: 'json',
+            data: $("#frmSearch").serializeArray(),
+            async: false,
+            cache: false,
+            success: function (data) {
+                if (data.split('!')[0] == "0") {
+                    ShowError("Xuất báo cáo thất bại");
+                    console.log(data.split('!')[1]);
+                    flag = false;
+                }
+                else {
+                    debugger;
+                    window.location.href = window.location.origin + (data.split('!')[1]);
+                }
+            }
+        })
+    }
+    </script>

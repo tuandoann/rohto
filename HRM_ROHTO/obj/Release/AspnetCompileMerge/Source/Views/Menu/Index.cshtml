@@ -1,0 +1,153 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                Thực đơn
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                            <div class="col-md-1">
+                                @if (ViewBag.Add == true)
+                                {
+                                    <a class="btn btn-block btn-primary" href="/Menu/Create"><i class="fa fa-plus"></i></a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Ngày</th>
+                                            <th>Ghi chú</th>
+                                            <th>Trạng thái</th>
+                                            <th style="min-width:80px; width:100px;" data-orderable="false"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+
+<script>
+    $(function () {
+        var table = $('#lv_list').DataTable({
+            "processing": true, // for show processing bar
+            "serverSide": false, // for process on server side
+            "orderMulti": false, // for disable multi column order
+            "paging": false,
+            "iDisplayLength": 50,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "info": false,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+            "ajax": {
+                "url": "/Menu/GetAllMenu",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "MenuDay", "name": "MenuDay" },
+                { "data": "MenuName", "name": "MenuName" },
+                {
+                    "data": "IsActive",
+                    "name": "IsActive",
+                    "render": function (data) {
+                        return data == false ? "Hết dùng" : "Đang dùng";
+                    }
+                },
+                {
+                    "targets": -1,
+                    "data": null,
+                    "defaultContent": `
+                        @if (ViewBag.Edit == true) {
+                            <a class ='btn btn-info btn-xs' id='edit'><i class ='fa fa-pencil'></i> Sửa</a>
+                        }
+                        @if (ViewBag.Delete == true)
+	                    {
+		                     <a class ='btn btn-danger btn-xs' id='delete'><i class ='fa fa-trash-o'></i> Xóa</a>
+	                    }`
+                }
+            ]
+        });
+
+        $('#lv_list tbody').on('click', '#edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?menuID=" + data["MenuID"];
+        });
+
+        $('#lv_list tbody').on('click', '#delete', function () {
+            var data = table.row($(this).parents('tr')).data();
+            var flag = DeleteConfirm(data["MenuID"]);
+            if (flag) {
+                debugger;
+                table.ajax.reload();
+            }
+        });
+    });
+
+    function DeleteConfirm(id) {
+        var flag = false;
+        if (confirm("Bạn thật sự muốn xóa dòng dữ liệu đang chọn?")) {
+            $.ajax({
+                url: "/Menu/Delete",
+                type: 'POST',
+                data: {
+                    MenuID: id,
+                },
+                dataType: "json",
+                async: false,
+                cache: false,
+                success: function (data) {
+                    if (data == "1") { // co the xoa
+                        flag = true;
+                    }
+                    else {
+                        ShowError('Dữ liệu đang được sử dụng, không thể xóa');
+                    }
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+        return flag;
+    }
+</script>

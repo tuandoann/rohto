@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using HRM_ROHTO.Models.BUS;
+using HRM_ROHTO.Util;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using OfficeOpenXml.Table;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace HRM_ROHTO.Controllers
+{
+    public class ReportSoLuongPhanComTheoNhanVienController : BaseController
+    {
+        //
+        // GET: /ReportSoLuongPhanComTheoNhanVien/
+        static DataTable dtToExcel;
+        public ActionResult Index(int year=0, int month=0, bool dk=true)
+        {
+            if (!CheckPermission("ReportSoLuongPhanComTheoNhanVien", 1))
+                return RedirectToAction("Login", "Login", "Login");
+           
+            int Year = year == 0 ? DateTime.Now.Year : year;
+            int Month = month == 0 ? DateTime.Now.Month : month;
+            int lastDay = DateTime.DaysInMonth(Year, Month);
+
+
+            List<SqlParameter> lstParam = new List<SqlParameter>();
+            lstParam.Add(new SqlParameter("@FromDate", Year + "-" + Month + "-01"));
+            lstParam.Add(new SqlParameter("@ToDate", Year + "-" + Month + "-" + lastDay));
+            ViewBag.store = DA_ScheduleMenu.Instance.Exec("pr_ReportSLPhanComTheoNhanVien", lstParam.ToArray());
+            ViewBag.dk = dk;
+
+            return View();
+        }
+
+    }
+}

@@ -1,0 +1,230 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    .td-center{
+        text-align:center;
+        font-weight:bold;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                Trường hợp đặc biệt
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-11">
+                            </div>
+                            <div class="col-xs-1">
+                                @if (ViewBag.Add == true)
+                                {
+                                    <a class="btn btn-block btn-primary" href="/SpecialCase/Create"><i class="fa fa-plus"></i></a>
+                                }
+                            </div>
+                        </div>   
+                    </div>
+                    <div class="row" style="margin-top:5px">
+                        <div class="col-md-12">
+                            <div class="col-md-2" style="margin-top:5px;">
+                                <label for="date_year">Từ ngày: </label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" class="form-control" id="dateFrom" name="dateFrom" />
+                            </div>
+                            <div class="col-md-2" style="margin-top:5px;">
+                                <label for="date_year">Đến ngày: </label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" class="form-control" id="dateTo" name="dateTo" />
+                            </div>
+                            <div class="col-md-2">
+                                <button id="btnSearch" class="btn btn-block btn-warning" type="button">
+                                    Tìm kiếm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <section class="content" style="margin-top: 10px; border: black solid thin;">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Ngày</th>
+                                            <th>Số lượng</th>
+                                            <th>Ghi chú</th>
+                                            <th style="min-width:80px; width:100px;" data-orderable="false"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script>
+    var table;
+    $(function () {
+        
+        //load data for datapicker
+        //var date = new Date(2017,12,5);
+        //var dateStart = new Date(date.getFullYear(), ( date.getMonth() + 1 ), 1);
+        //var dateFinsh = new Date(date.getFullYear(), ( date.getMonth() + 1 ), 0);
+        //$("#dateFrom").val( dateStart.getFullYear() + "-" + ( dateStart.getMonth()) + "-" + dateStart.getDate() );
+        //$("#dateTo").val( dateFinsh.getFullYear() + "-" + ( dateFinsh.getMonth() + 1 ) + "-" + dateFinsh.getDate() );
+
+        var date = new Date();
+        var dateStart = new Date(date.getFullYear(), ( date.getMonth()), 1);
+        var year_current = dateStart.getFullYear() ;
+        var month_current = (dateStart.getMonth() + 1) < 10 ? "0" + (dateStart.getMonth() + 1) : (dateStart.getMonth() + 1) ;
+        var day_current = (dateStart.getDate()) < 10 ? "0" + (dateStart.getDate()) : (dateStart.getDate());
+        $("#dateFrom").val(year_current + "-" + month_current + "-" + day_current);
+
+        var dateFinsh = new Date(date.getFullYear(), ( date.getMonth() + 1 ), 0);
+        year_current = dateFinsh.getFullYear() ;
+        month_current = (dateFinsh.getMonth() + 1) < 10 ? "0" + (dateFinsh.getMonth() + 1) : (dateFinsh.getMonth() + 1) ;
+        day_current = (dateFinsh.getDate()) < 10 ? "0" + (dateFinsh.getDate()) : (dateFinsh.getDate());
+        $("#dateTo").val(year_current + "-" + month_current + "-" + day_current);
+
+        loadDataTable(table);
+
+        $('#lv_list tbody').on('click', '#edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?specialID=" + data["SpecialID"];
+        });
+
+        $('#lv_list tbody').on('click', '#delete', function () {
+            var data = table.row($(this).parents('tr')).data();
+            var flag = DeleteConfirm(data["SpecialID"]);
+            if (flag) {
+                debugger;
+                table.ajax.reload();
+            }
+        });
+
+        $("#btnSearch").click(function () {
+            table.destroy();
+            //$('#lv_list').empty();
+            loadDataTable(table);
+        });
+    });
+    
+
+    function DeleteConfirm(id) {
+        var flag = false;
+        if (confirm("Bạn thật sự muốn xóa dòng dữ liệu đang chọn?")) {
+            $.ajax({
+                    url: "/SpecialCase/DeleteSpecialCase",
+                    type: 'POST',
+                    data: {
+                        ID: id,
+                    },
+                    dataType: "json",
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        if (data == "1") { // co the xoa
+                            flag = true;
+                        }
+                        else {
+                            ShowError('Dữ liệu đang được sử dụng, không thể xóa');
+                        }
+                    },
+                    error: function (xhr) {
+                    }
+                });
+        }
+        return flag;
+    }
+      function loadDataTable()
+    {
+      table = $('#lv_list').DataTable({
+            "processing": true, // for show processing bar
+            "serverSide": true, // for process on server side
+            "orderMulti": false, // for disable multi column order
+            "iDisplayLength": 20,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "info": false,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+                },
+            "ajax": {
+                "url": "/SpecialCase/GetAllSpecialCase",
+                "type": "POST",
+                "datatype": "json",
+                "data" : {
+                    "dateFrom" : $("#dateFrom").val(),
+                    "dateTo": $("#dateTo").val()
+                    }
+                },
+            "order": [[ 0, "asc" ]],
+            "columnDefs": [
+                {"targets": [0],"visible": false,},
+                { "width": "15%", "targets": 1 , 'className': 'td-center',},
+                { "width": "15%", "targets": 2 },
+                { "width": "75%", "targets": 3 },
+                ],
+            "columns": [
+                { "data": "SpecialID", "name": "SpecialID", "class": "sr-only" ,},
+                {
+                    "data": "SpecialDate",
+                    "name": "SpecialDate",
+                    "orderable": true,
+                    "render": function (data) {
+                        if (data != null) {
+                            var pattern = /Date\(([^)]+)\)/;
+                            var results = pattern.exec(data);
+                            var dt = new Date(parseFloat(results[1]));
+                            var date = (dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear());
+                            return date;
+                        }
+                        return null;
+                    }
+                    },
+                { "data": "Quantity", "name": "Quantity" , "className":"td-center",  "orderable": true },
+                { "data": "Notes", "name": "Notes",  "orderable": true, "searchable": true, },
+                {
+                    "targets": -1,
+                    "data": null,
+                    "defaultContent": `
+                        @if (ViewBag.Edit == true) {
+                            <a class ='btn btn-info btn-xs' id='edit'><i class ='fa fa-pencil'></i> Sửa</a>
+      }
+                        @if (ViewBag.Delete == true)
+      {
+		                     <a class ='btn btn-danger btn-xs' id='delete'><i class ='fa fa-trash-o'></i> Xóa</a>
+                        }`
+      }
+      ]
+      });
+    }
+</script>

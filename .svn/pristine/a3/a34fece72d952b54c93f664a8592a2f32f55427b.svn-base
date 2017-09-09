@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5bd3942e03ab41dc9ae0a04d6a4ba030" Name="Diagram1">
+        <EntityTypeShape EntityType="HRM_ROHTOModel.SYS_CONFIG" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.SYS_FUNCTION" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.SYS_POS" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.SYS_PRODUCT_TYPE" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.SYS_ROLE" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.SYS_ROLEPERMISSION" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.SYS_SHIFT" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.SYS_USER" Width="1.5" PointX="6.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_AUDIT" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_BROADCAST" Width="1.5" PointX="2.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_DEPARTMENT" Width="1.5" PointX="4.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_EMPLOYEE" Width="1.5" PointX="6.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_SHIFT" Width="1.5" PointX="8.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_USED" Width="1.5" PointX="8.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_EXCEPTION_MEAL_USED_PRODUCT" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_MENU" Width="1.5" PointX="10.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_MENU_PRODUCT" Width="1.5" PointX="10.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_MENU_SHIFT" Width="1.5" PointX="8.75" PointY="10.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_POSITION" Width="1.5" PointX="10.75" PointY="10.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_PRODUCT" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_REGISTER_MEAL" Width="1.5" PointX="2.75" PointY="11.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_REGISTER_MEAL_PRODUCT" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_REGISTER_MEAL_PRODUCT_OLD" Width="1.5" PointX="12.75" PointY="3.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_SCHEDULE_MENU" Width="1.5" PointX="4.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_SCHEDULE_MENU_PRODUCT" Width="1.5" PointX="12.75" PointY="6.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_SCHEDULE_MENU_SHIFT" Width="1.5" PointX="12.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HRM_ROHTOModel.TBL_SHIFT_TIME_RANGE" Width="1.5" PointX="12.75" PointY="12.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

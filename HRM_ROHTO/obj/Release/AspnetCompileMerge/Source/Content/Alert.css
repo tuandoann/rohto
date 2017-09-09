@@ -1,0 +1,10 @@
+﻿.center
+{
+    text-align:center;
+}
+.alert_error
+{
+    padding: 5px;
+    margin: 10px;
+    background-color: rgba(221, 75, 57, 0.78) !important;
+}

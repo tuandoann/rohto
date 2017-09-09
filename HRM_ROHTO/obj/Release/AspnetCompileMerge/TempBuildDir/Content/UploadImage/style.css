@@ -1,0 +1,38 @@
+/* CSS3 STYLE GENERIC */
+.view {
+    /*width: 150px;
+   height: 160px;*/
+    margin: 10px;
+    margin-top: 0px;
+    float: left;
+    border: 5px solid #fff;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    box-shadow: 0px 0px 5px #aaa;
+    cursor: default;
+}
+
+    .view .mask, .view .content {
+        width: 145px;
+        height: 160px;
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+    }
+
+    .view img {
+        display: block;
+        position: relative;
+    }
+
+    /*.view label.info {
+        background: url(../UploadImage/img/link.png) center no-repeat;
+        display: inline-block;
+        text-decoration: none;
+        padding: 0;
+        text-indent: -9999px;
+        width: 20px;
+        height: 20px;
+    }*/

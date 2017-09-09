@@ -1,0 +1,284 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section featured {
+}
+<style>
+    .boldColumn {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+</style>
+@using (Html.BeginForm("Index", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="box-body">
+        <div id="lblError">
+            @Html.Raw(ViewBag.errorDetails)
+        </div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1>
+                Nhân viên
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-danger color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-8">
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <button type="button" class="btn btn-warning" id="exportExcel">Xuất dữ liệu</button>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                @if (ViewBag.Add == true && ViewBag.Edit == true)
+                                {
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal">Nhập dữ liệu</button>
+                                }
+                            </div>
+                            <div class="col-md-1">
+                                @if (ViewBag.Add == true)
+                                {
+                                    <a class="btn btn-block btn-primary" href="/Employee/Create"><i class="fa fa-plus"></i></a>
+                                }
+                            </div>
+                            <div class="col-md-1">
+                                @if (ViewBag.Delete == true)
+                                {
+                                    <button type="button" class="btn btn-danger" id="DeleteMulti">Xóa</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                                </button>
+                                <h4 class="modal-title">Nhập dữ liệu</h4>
+                            </div>
+                            <div class="modal-body modal-row">
+                                <p id="error" class="text-red"></p>
+                                <label class="control-label">Chọn file excel</label>
+                                @Html.Hidden("Path")
+                                <input id="fileUpload" name="fileUpload" type="file" accept=".xlsx,.csv">
+                                <br />
+                                <button type="submit" onclick="return CheckFileUpload()" class="btn btn-primary">Xử lý</button>
+                                <p style="margin-top:10px"><b><span class="fa fa-exclamation-triangle"> Lưu ý</span></b></p>
+                                <ul>
+                                    <li>Cấu trúc file tải lên phải giống với file mẫu và có dạng *.xlsx hoặc *.csv</li>
+                                    <li>Tải file mẫu tại đây: <a href="~/Content/Excel/FileMau/02_Import_Employee.xlsx"><span class="fa fa-cloud-download"></span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <table id="lv_list" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th class="text-center" data-orderable="false" style="padding-right:10px;"><input type="checkbox" name="select_all" value="1" id="example-select-all"></th>
+                                            <th>Mã</th>
+                                            <th>Tên</th>
+                                            <th>Số hợp đồng</th>
+                                            <th>Số thẻ</th>
+                                            <th>Phòng ban</th>
+                                            <th>Chức vụ</th>
+                                            <th>Đã nghỉ</th>
+                                            <th style="min-width:80px; width:100px;" data-orderable="false"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+
+<script>
+    $(function () {
+        var table = $('#lv_list').DataTable({
+            "processing": true, // for show processing bar
+            "serverSide": false, // for process on server side
+            "orderMulti": false, // for disable multi column order
+            "iDisplayLength": 50,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "info": false,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+            "ajax": {
+                "url": "/Employee/GetAllEmployee",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": null, 'visible': false },
+                {
+                    'data': 'EmployeeID',
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center text-center',
+                    'render': function (data, type, full, meta) {
+                        return '<input type="checkbox" class="chkID" name="id[]" value="' + data + '">';
+                    }
+                },
+                { "data": "EmployeeCode", "name": "EmployeeCode" },
+                { "data": "FullName", "name": "FullName" },
+                { "data": "ContractNo", "name": "ContractNo" },
+                { "data": "CardNumber", "name": "CardNumber" },
+                { "data": "DepartmentName", "name": "DepartmentName" },
+                { "data": "PositionName", "name": "PositionName" },
+                { "data": "IsLeaveOut", "name": "IsLeaveOut" },
+                {
+                    "targets": -1,
+                    "data": null,
+                    "defaultContent": `
+                        @if (ViewBag.Edit == true) {
+                            <a class ='btn btn-info btn-xs' id='edit'><i class ='fa fa-pencil'></i> Sửa</a>
+                        }
+                        @if (ViewBag.Delete == true)
+	                    {
+		                     <a class ='btn btn-danger btn-xs' id='delete'><i class ='fa fa-trash-o'></i> Xóa</a>
+	                    }`
+                }
+            ]
+        });
+
+        // Handle click on "Select all" control
+        $('#example-select-all').on('click', function () {
+            // Get all rows with search applied
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            // Check/uncheck checkboxes for all rows in the table
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+
+        $('#lv_list tbody').on('change', 'input[type="checkbox"]', function () {
+            // If checkbox is not checked
+            if (!this.checked) {
+                var el = $('#example-select-all').get(0);
+                // If "Select all" control is checked and has 'indeterminate' property
+                if (el && el.checked && ('indeterminate' in el)) {
+                    // Set visual state of "Select all" control
+                    // as 'indeterminate'
+                    el.indeterminate = true;
+                }
+            }
+        });
+
+        $('#exportExcel').on('click', function (e) {
+            $.ajax({
+                    url: '/Employee/exportExcel',
+                    type: 'post',
+                    datatype: 'json',
+                    data: $("#frmSearch").serializeArray(),
+                    async: false,
+                    cache: false,
+                        success: function (data) {
+                        debugger;
+                        var res = data.split("!")
+                        if (res[0] == false) {
+                            ShowError("Xuất báo cáo thất bại.");
+                            console.log("Lỗi xuất file excel " + res[1]);
+                            flag = false;
+                        }
+                        else {
+                            window.location.href = window.location.origin + (res[1]);
+                        }
+                    }
+                })
+        });
+
+        $('#DeleteMulti').on('click', function (e) {
+            if (confirm("Bạn thật sự muốn xóa những dòng dữ liệu đang chọn?")) {
+                debugger;
+                var arr = [];
+                $("#lv_list tbody tr").each(function () {
+                    debugger;
+                    var Check = $(this).find('.chkID')[0];
+                    if (Check != null) {
+                        if (Check.checked) {
+                            arr.push(Check.value)
+                        }
+                    }
+                });
+                if (arr.length == 0)
+                    ShowError("Không tìm thấy dòng dữ liệu nào để xóa");
+                else {
+                    var lstEmployeeID = JSON.stringify(arr);
+                    $.ajax({
+                        "url": "/Employee/DeleteMultiEmployee",
+                        "type": "post",
+                        "datatype": "json",
+                        data: {
+                            lstEmployeeID: lstEmployeeID
+                        },
+                        success: function () {
+                            table.ajax.reload();
+                        }
+                    })
+                }
+            }
+        });
+
+        $('#lv_list tbody').on('click', '#edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            window.location.href = window.location.pathname.replace("/Index", "") + "/Edit?EmployeeID=" + data["EmployeeID"];
+        });
+
+        $('#lv_list tbody').on('click', '#delete', function () {
+            var data = table.row($(this).parents('tr')).data();
+            var flag = DeleteConfirm(data["EmployeeID"]);
+            if (flag) {
+                debugger;
+                table.ajax.reload();
+            }
+        });
+    });
+
+    function DeleteConfirm(id) {
+        var flag = false;
+        if (confirm("Bạn thật sự muốn xóa dòng dữ liệu đang chọn?")) {
+            $.ajax({
+                url: "/Employee/DeleteEmployee",
+                type: 'POST',
+                data: {
+                    ID: id,
+                },
+                dataType: "json",
+                async: false,
+                cache: false,
+                success: function (data) {
+                    if (data == "1") { // co the xoa
+                        flag = true;
+                    }
+                    else {
+                        ShowError('Dữ liệu đang được sử dụng, không thể xóa');
+                    }
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+        return flag;
+    }
+</script>

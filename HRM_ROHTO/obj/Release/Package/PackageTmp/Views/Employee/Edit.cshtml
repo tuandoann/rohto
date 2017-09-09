@@ -1,0 +1,130 @@
+﻿@model HRM_ROHTO.Models.TBL_EMPLOYEE
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (@Html.BeginForm(new { id = "form" }))
+{
+    @Html.HiddenFor(x => x.EmployeeID)
+    <div class="box-body">
+        <div id="lblError"></div>
+        <div id="lblSuccess"></div>
+        <div id="lblInfo"></div>
+        <section class="content-header">
+            <h1 class="MT_Title">
+                Cập nhật nhân viên
+            </h1>
+            <ol class="breadcrumb"></ol>
+        </section>
+        <section class="content">
+            <div class="box box-success color-palette-box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-md-9 col-sm-6 col-xs-3">
+                        </div>
+                        <div class="col-md-1 col-sm-2 col-xs-3"></div>
+                        <div class="col-md-1 col-sm-2 col-xs-3">
+                            <button type="submit" class="btn btn-block btn-google" onclick="return btnSaveEditEmployeeClick();">
+                                <i class="fa fa-save"></i>
+                            </button>
+                        </div>
+                        <div class="col-md-1 col-sm-2 col-xs-3">
+                            <a class="btn btn-block bg-purple" href="/Employee/Index"><i class="fa fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <div class="row" style="padding-bottom:5px;">
+                                    <div class="col-md-2">Mã nhân viên</div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(x => x.EmployeeCode, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-2">Họ tên<span style="color:red;">*</span></div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(x => x.FullName, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-bottom:5px;">
+                                    <div class="col-md-2">Số hợp đồng</div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(x => x.ContractNo, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-2">Mã thẻ</div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(x => x.CardNumber, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-bottom:5px;">
+                                    <div class="col-md-2">Chức vụ 1</div>
+                                    <div class="col-md-3">
+                                        @Html.DropDownListFor(x => x.PositionID1, (List<SelectListItem>)ViewBag.ListPosition, new { @class = "form-control select2" })
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-2">Phòng ban</div>
+                                    <div class="col-md-3">
+                                        @Html.DropDownListFor(x => x.DepartmentID, (List<SelectListItem>)ViewBag.ListDepartment, new { @class = "form-control select2" })
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-bottom:5px;">
+                                    <div class="col-md-2">Chức vụ 2</div>
+                                    <div class="col-md-3">
+                                        @Html.DropDownListFor(x => x.PositionID2, (List<SelectListItem>)ViewBag.ListPosition2, new { @class = "form-control select2" })
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-2">Chức vụ 3</div>
+                                    <div class="col-md-3">
+                                        @Html.DropDownListFor(x => x.PositionID3, (List<SelectListItem>)ViewBag.ListPosition3, new { @class = "form-control select2" })
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-bottom:5px;">
+                                    <div class="col-md-12">
+                                        <div class="checkbox">
+                                            <label>
+                                                @Html.CheckBoxFor(x => x.IsLeaveOut) Đã nghỉ việc
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">Ngày nghỉ việc<span style="color:red;">*</span></div>
+                                    <div class="col-md-3">
+                                        @ViewBag.test
+                                        @Html.TextBoxFor(x => x.LeaveDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", @readonly = true })
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-3"></div>
+                                </div>
+                                <div class="row" style="padding-bottom:5px;">
+                                    <div class="col-md-2">Ghi chú</div>
+                                    <div class="col-md-9">
+                                        @Html.TextAreaFor(x => x.Remarks, new { @class = "form-control", @rows = 5 })
+                                    </div>
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </section>
+            </div>
+        </section>
+    </div>
+}
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="../../Content/plugins/select2/select2.full.min.js"></script>
+    <script src="~/App_Script/Employee.js"></script>
+    <script src="~/App_Script/Gobal.js"></script>
+    <script>
+        $(".select2").select2();
+        function setFocus() { document.getElementById("EmployeeCode").focus(); }
+    </script>
+}
+
+
+
+

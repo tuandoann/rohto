@@ -1,0 +1,127 @@
+﻿@model HRM_ROHTO.Models.TBL_PRODUCT
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (@Html.BeginForm(new { id = "form" }))
+{
+    @Html.HiddenFor(x => x.ProductID)
+    <body onload="setFocus()">
+        <div class="box-body">
+            <div id="lblError"></div>
+            <div id="lblSuccess"></div>
+            <div id="lblInfo"></div>
+            <section class="content-header">
+                <h1 class="MT_Title">
+                    Cập nhật món ăn
+                </h1>
+                <ol class="breadcrumb"></ol>
+            </section>
+            <section class="content">
+                <div class="box box-success color-palette-box">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-md-10 col-sm-8 col-xs-6">
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-3">
+                                <button type="submit" class="btn btn-block btn-google" onclick="return btnSaveEditProductClick();">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-3">
+                                <a class="btn btn-block bg-purple" href="/Product/Index"><i class="fa fa-arrow-left"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="content">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box-body">
+                                    <div class="row" style="padding-bottom:5px;">
+                                        <div class="col-md-2">Mã món ăn<span style="color:red;">*</span></div>
+                                        <div class="col-md-3">
+                                            @Html.TextBoxFor(u => u.ProductCode, new { @class = "form-control" })
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-2">
+                                            <div class="checkbox">
+                                                <label>
+                                                    @Html.CheckBoxFor(x => x.IsActive, new { @checked = "true" }) Sử dụng
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3"></div>
+                                    </div>
+                                    <div class="row" style="padding-bottom:5px;">
+                                        <div class="col-md-2">Tên món ăn<span style="color:red;">*</span></div>
+                                        <div class="col-md-3">
+                                            @Html.TextBoxFor(u => u.ProductName, new { @class = "form-control" })
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-2">Loại</div>
+                                        <div class="col-md-3">
+                                            @Html.DropDownListFor(u => u.ProductTypeID, (IEnumerable<SelectListItem>)ViewBag.ListProductType, new { @class = "form-control select2" })
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-bottom:5px;">
+                                        @{
+                                            var imgSrc = "";
+                                            if (Model.ImageProduct != null)
+                                            {
+                                                var base64 = Convert.ToBase64String(Model.ImageProduct);
+                                                imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                            }
+
+                                        }
+                                        <input class="sr-only" id="src" value="@imgSrc" />
+                                        <div class="col-md-2">Hình</div>
+                                        <div class="col-md-9">
+                                            <label for="FileUpload">File input</label>
+                                            <input type="file" id="FileUpload">
+                                            @*<input id="FileUpload" type="file" class="file" />*@
+                                            @Html.Hidden("hdImage", "")
+                                            <div>
+                                                @Html.Hidden("hdImage", "")
+                                                <img style="margin-top: 10px;" height="100" width="100" src="@imgSrc" id="profileImage" />
+                                                <span class="fa fa-times-circle" id="removeImg"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-bottom:5px;">
+                                        <div class="col-md-2">Mô tả</div>
+                                        <div class="col-md-9">
+                                            @Html.TextAreaFor(x => x.Description, new { @class = "form-control", @rows = 5 })
+                                        </div>
+                                    </div>
+                                </div><!-- /.box-body -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </section>
+                </div>
+            </section>
+        </div>
+    </body>
+                                            }
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="../../Content/plugins/select2/select2.full.min.js"></script>
+    <script src="~/App_Script/Product.js"></script>
+    <script src="~/App_Script/Gobal.js"></script>
+    <script>
+        $(".select2").select2();
+        function setFocus() { document.getElementById("ProductName").focus(); }
+        $(function () {
+    //        $("#FileUpload").fileinput({
+    //            'showUpload': false,
+    //            'language': 'vi',
+    //            initialPreview: [       
+    //"<img src='" + $("#src").val() + "' class='file-preview-image' height='160px'>",
+    //            ],
+    //        });
+        })
+    </script>
+}
+
+

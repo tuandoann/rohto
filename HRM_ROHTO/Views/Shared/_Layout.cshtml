@@ -1,0 +1,406 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/dist/img/MT.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ROHTO</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link href="../../Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/plugins/FileInput/css/fileinput.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link href="~/Content/Alert.css" rel="stylesheet" />
+    <link href="../../Content/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/plugins/iCheck/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../Content/plugins/select2/select2.min.css">
+    <link href="~/Content/Pagination.css" rel="stylesheet" />
+    <link href="../../Content/plugins/jvectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/plugins/timepicker/bootstrap-timepicker.css" rel="stylesheet" />
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link href="../../Content/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Content/plugins/jQuery/jquery-3.2.1.min.js"></script>
+    <!-- datepicker -->
+    <script src="~/App_Script/Alert.js"></script>
+    <script src="~/Scripts/jquery.number.js"></script>
+    <link href="~/Content/bootstrap/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/Content/plugins/FileInput/css/fileinput.min.css" rel="stylesheet" />
+    <script src="../../Content/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        /* For all the scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background-color: #F5F5F5;
+        }
+
+        /* For specific scrollbar */
+        .mybox::-webkit-scrollbar {
+            width: 12px;
+            background-color: #434343;
+        }
+
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            background-color: #F5F5F5;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            background-color: #F5F5F5;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(60, 141, 188, 0.66);
+            background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+        }
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="/Home" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini" style="font-family: cursive;">ROHTO</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg" style="font-family: cursive;">ROHTO</span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown notifications-menu">
+
+                            @*
+                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-bell-o"></i>
+                                    <span class="label label-danger">4</span>
+                                </a>
+                                        <ul class="dropdown-menu">
+                                        <li class="header">Bạn có 4 thông báo mới</li>
+                                        <li>
+                                            <!-- inner menu: contains the actual data -->
+                                            <ul class="menu" style="height:100%;">
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                    </ul>
+
+                            *@
+                        </li>
+                        @{ if (Session["FullName"] == null)
+                         {
+                             Session["FullName"] = "";
+                         }
+                        }
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                @{
+                                    var imgSrc = "";
+                                    if (Session["UserImage"] != null)
+                                    {
+                                        var base64 = Convert.ToBase64String((byte[])Session["UserImage"]);
+                                        imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                    }
+                                    else
+                                    {
+                                        imgSrc = "../../Content/dist/img/User.png";
+                                    }
+                                }
+
+                                <img src="@imgSrc" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@Session["FullName"].ToString()</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="user-header">
+                                    <img src="@imgSrc" class="img-circle" alt="User Image">
+                                    <p>
+                                        @Session["FullName"].ToString()
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="/User/Profile" class="btn btn-warning">Hồ sơ</a>
+                                        @*<a href="/Profile/Profile/@Session["UserID"].ToString()" class="btn btn-success">Đổi mật khẩu</a>*@
+                                        <a href="/User/ChangePassword" class="btn btn-success">Đổi mật khẩu</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="@Url.Action("Logout","Login")" class="btn btn-danger">Đăng xuất</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <div class="user-panel">
+                    <div class="pull-left image" style="height:40px;">
+                        <img src="@imgSrc" class="img-circle" alt="User Image" style="height:100%;">
+                    </div>
+                    <div class="pull-left info">
+                        <p>@Session["FullName"].ToString()</p>
+                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    </div>
+                </div>
+
+                @{ Html.RenderAction("Menu", "Home"); }
+            </section>
+        </aside>
+        <div class="content-wrapper">
+
+            @RenderSection("featured", required: false)
+            @RenderBody()
+
+            <section class="content"></section>
+        </div>
+        <div id="spinner" style="text-align:center; vertical-align:middle; height:100%;">
+            <img src="~/Images/bg_loader.gif" style="padding-top:10%;" />
+        </div>
+        <div class="loader">
+            <div class="spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+
+
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                @*<b>Version</b> 1.0*@
+            </div>
+            @*<strong data-toggle="tooltip" title="MT2412">Copyright &copy; MAPLE JSC - All Rights Reserved </strong>*@
+            <strong><span>Copyright &copy; </span><a href="http://www.maple.com.vn" target="_blank">MAPLE JSC</a> <span>- All Rights Reserved </span></strong>
+
+        </footer>
+
+        <div class="control-sidebar-bg">
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+
+    @RenderSection("scripts", required: false)
+    <!-- jQuery 3.2.1 -->
+    <script src="~/Content/plugins/jQuery/jQuery-3.2.1.min.js"></script>
+    <script src="~/Content/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!--File Input-->
+    <script src="~/Content/plugins/FileInput/js/plugins/canvas-to-blob.min.js"></script>
+    <script src="~/Content/plugins/FileInput/js/plugins/sortable.min.js"></script>
+    <script src="~/Content/plugins/FileInput/js/plugins/purify.min.js"></script>
+    <script src="~/Content/plugins/FileInput/js/fileinput.js"></script>
+    <script src="~/Content/plugins/FileInput/js/theme.js"></script>
+    <script src="~/Content/plugins/FileInput/js/vi.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    @*<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>*@
+    <script src="~/Content/plugins/jQueryUI/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="../../Content/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <!-- Morris.js charts -->
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script src="../../Content/plugins/morris/morris.min.js" type="text/javascript"></script>*@
+    <!-- Sparkline -->
+    <script src="../../Content/plugins/sparkline/jquery.sparkline.min.js" type="text/javascript"></script>
+    <!-- jvectormap -->
+    <script src="../../Content/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" type="text/javascript"></script>
+    <script src="../../Content/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"
+            type="text/javascript"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="../../Content/plugins/knob/jquery.knob.js" type="text/javascript"></script>
+    <!-- daterangepicker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+    <script src="../../Content/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+    <script src="../../Content/plugins/select2/select2.full.min.js"></script>
+    <!-- Bootstrap WYSIHTML5 -->
+    <script src="../../Content/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"
+            type="text/javascript"></script>
+    <!-- Slimscroll -->
+    <script src="../../Content/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <!-- FastClick -->
+    <script src="../../Content/plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
+    <!-- AdminLTE App -->
+    <script src="../../Content/dist/js/app.min.js" type="text/javascript"></script>
+    <script src="../../Content/plugins/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="../../Content/plugins/datatables/dataTables.bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables/dataTables.select.min.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="~/Content/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/Content/plugins/iCheck/icheck.min.js"></script>
+    <script src="../../Content/dist/js/demo.js" type="text/javascript"></script>
+    <script src="~/Scripts/autoNumeric.js"></script>
+    <script src="~/Scripts/jquery.number.js"></script>
+    <script src="~/App_Script/ConfirmDelete.js"></script>
+
+    @* Dung cho date picker cua fire fox *@
+    <script src="http://cdn.jsdelivr.net/webshim/1.12.4/extras/modernizr-custom.js"></script>
+    <script src="http://cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"></script>
+
+    <script type="text/javascript">
+        $('.isNumber').autoNumeric('init', { vMin: -10000, mDec: 0 });
+        $('.timeonly').datetimepicker({ format: 'HH:mm' });
+        $('.dateonly').datetimepicker({ format: 'MM/DD/YYYY' });
+        //$(".select2").select2();
+
+        // Dung cho date picker cua fire fox
+        webshims.setOptions('waitReady', false);
+        webshims.setOptions('forms-ext', { types: 'date' });
+        webshims.polyfill('forms forms-ext');
+
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass: 'iradio_minimal-red'
+        });
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-blue, input[type="radio"].minimal-blue').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+
+        $('input').on('ifClicked', function (event) {
+            var checked = !event.currentTarget.checked;
+
+            checkAllRole(checked, event.currentTarget.id, "View");
+            checkAllRole(checked, event.currentTarget.id, "Add");
+            checkAllRole(checked, event.currentTarget.id, "Edit");
+            checkAllRole(checked, event.currentTarget.id, "Delete");
+            checkAllRole(checked, event.currentTarget.id, "Print");
+
+            if (event.currentTarget.id == "ckAll") {
+                if (checked) {
+                    $(".ck").prop("checked", true);
+                    $(".ck").iCheck('update');
+                }
+                else {
+                    $(".ck").prop('checked', false);
+                    $(".ck").iCheck('update');
+                }
+            }
+            else {
+                if (!checked) {
+                    $("#ckAll").prop('checked', false);
+                    $("#ckAll").iCheck('update');
+                }
+            }
+        });
+
+        function checkAllRole(checked, id, name) {
+            if (id == "ckAll_" + name) {
+                if (checked) {
+                    $(".ck_" + name).prop("checked", true);
+                    $(".ck_" + name).iCheck('update');
+                }
+                else {
+                    $(".ck_" + name).prop('checked', false);
+                    $(".ck_" + name).iCheck('update');
+                }
+            }
+        }
+
+    </script>
+    <script>
+        function setHeartbeat() {
+            setTimeout("heartbeat()", 10000); // every 15 min
+        }
+
+        function heartbeat() {
+            $.ajax({
+                url: "/Home/KeepSession",
+                type: 'GET',
+                dataType: "json",
+                cache: false,
+                success: function () {
+                    setHeartbeat();
+                },
+
+                error: function (xhr) {
+                }
+            });
+        }
+
+        $(document).ready()
+        {
+            CheckPermission();
+            $('#spinner').fadeIn();
+            setHeartbeat();
+        }
+
+        function CheckPermission() {
+            var pathname = window.location.pathname;
+            $.ajax({
+                url: "/Home/CheckPermission",
+                type: 'GET',
+                data: {
+                    Path: pathname
+                },
+                dataType: "json",
+                async: false,
+                cache: false,
+                success: function (data) {
+                    if (data == false) {
+                        window.location.href = "/Login/Login";
+                    }
+                },
+
+                error: function (xhr) {
+                }
+            });
+        }
+
+        $(window).load(function () {
+            $("#spinner").fadeOut(200);
+        });
+    </script>
+</body>
+</html>
